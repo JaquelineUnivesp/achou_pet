@@ -1,0 +1,17 @@
+# Ocultar configurações sensíveis
+.env
+
+# Arquivos do Python
+*.pyc
+__pycache__/
+
+# Dependências
+venv/
+.venv/
+env/
+
+# Arquivos de cache e logs
+*.log
+db.sqlite3
+staticfiles/
+media/

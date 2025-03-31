@@ -1,0 +1,108 @@
+{% extends "core/base.html" %}
+{% block content %}
+<div class="container ">
+    <div class="row justify-content-center">
+
+            <div class="card border-0">
+                <div class="card-body ">
+                    <!-- Título e subtítulo -->
+                    <h1 class="display-1 text-center color_project" >Registre-se</h1>
+                    <p class="text-muted mb-4 text-center">Faça seu cadastro para a usar o Achou Pet</p>
+
+                    <!-- Mensagem de erro -->
+                    {% if form.errors %}
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <strong>Erro ao registrar:</strong> {{ form.errors }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% endif %}
+
+                    <!-- Formulário -->
+                    <form method="post" enctype="multipart/form-data" >
+                        {% csrf_token %}
+                        <div class="row">
+                            <!-- Nome de usuário -->
+                            <div class="col-md-6 mb-3">
+                                <label for="id_username" class="form-label">Nome de usuário</label><br>
+                                {{ form.username }}
+                            </div>
+                            <!-- Email -->
+                            <div class="col-md-6 mb-3">
+                                <label for="id_email" class="form-label">Email</label><br>
+                                {{ form.email }}
+                            </div>
+                            <!-- Primeiro nome -->
+                            <div class="col-md-6 mb-3">
+                                <label for="id_first_name" class="form-label">Nome</label><br>
+                                {{ form.first_name }}
+                            </div>
+                            <!-- Sobrenome -->
+                            <div class="col-md-6 mb-3">
+                                <label for="id_last_name" class="form-label">Sobrenome</label><br>
+                                {{ form.last_name }}
+                            </div>
+                            <!-- CPF -->
+                            <div class="col-md-6 mb-3">
+                                <label for="id_cpf" class="form-label">CPF</label><br>
+                                {{ form.cpf }}
+                            </div>
+                            <!-- Telefone -->
+                            <div class="col-md-6 mb-3">
+                                <label for="id_notification_phone" class="form-label">Digite seu telefone</label><br>
+                                {{ form.notification_phone }}
+                            </div>
+                            <!-- Senha -->
+                            <div class="col-md-6 mb-3">
+                                <label for="id_password" class="form-label">Senha</label><br>
+                                {{ form.password }}
+                            </div>
+                            <!-- Confirmar senha -->
+                            <div class="col-md-6 mb-3">
+                                <label for="id_confirm_password" class="form-label">Confirmar senha</label><br>
+                                {{ form.confirm_password }}
+                            </div>
+                            <!-- Notificações -->
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Receber notificações</label>
+                                <div class="d-flex gap-3">
+                                    <div class="form-check">
+                                        {{ form.notify_chat }}
+                                        <label class="form-check-label" for="id_notify_chat">Chat</label>
+                                    </div>
+                                    <div class="form-check">
+                                        {{ form.notify_pet_found }}
+                                        <label class="form-check-label" for="id_notify_pet_found">Pet encontrado</label>
+                                    </div>
+                                    <div class="form-check">
+                                        {{ form.notify_other }}
+                                        <label class="form-check-label" for="id_notify_other">Outras</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Campo de foto -->
+                            <div class="col-12 mb-3">
+                                <label for="id_photo" class="form-label">Anexar foto</label>
+                                {{ form.photo }}
+                            </div>
+                        </div>
+
+                        <!-- Botão de envio -->
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-success btn-lg rounded-pill background_project">
+                                Cadastrar
+                            </button>
+                        </div>
+                    </form>
+
+                    <!-- Link para login -->
+                    <p class="text-center mt-3 text-muted">
+                        Já tem uma conta? <a href="{% url 'login' %}">Faça login</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+</div>
+
+
+{% endblock %}

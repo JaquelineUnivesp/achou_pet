@@ -1,0 +1,83 @@
+<!-- backend/apps/notifications/templates/notifications/chat.html -->
+{% extends 'core/base.html' %}
+{% block title %}Chat - Achou Pet{% endblock %}
+{% block content %}
+<p>Usuário atual: {{ request.user.username }} (ID: {{ request.user.id }})</p>
+<div class="container mt-5">
+    <h1>Chat em Tempo Real</h1>
+    <div class="row">
+        <div class="col-md-4">
+            <h3>Usuários</h3>
+            {% if users %}
+                <ul class="list-group" id="user-list">
+                    {% for user in users %}
+                        <li class="list-group-item" data-user-id="{{ user.id }}">{{ user.username }}</li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>Nenhum outro usuário encontrado.</p>
+            {% endif %}
+        </div>
+        <div class="col-md-8">
+            <h3>Conversa</h3>
+            <div id="chat-messages" class="border p-3" style="height: 300px; overflow-y: scroll;"></div>
+            <form id="chat-form" class="mt-3">
+                <div class="input-group">
+                    <input type="text" id="message-input" class="form-control" placeholder="Digite sua mensagem">
+                    <button type="submit" class="btn btn-primary">Enviar</button>
+                </div>
+            </form>
+            <div id="notification" class="alert alert-info mt-3" style="display: none;"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const userId = '{{ request.user.id }}';
+    const chatSocket = new WebSocket('ws://' + window.location.host + '/ws/chat/');
+    let selectedUserId = null;
+
+    chatSocket.onmessage = function(e) {
+        const data = JSON.parse(e.data);
+        const messagesDiv = document.getElementById('chat-messages');
+        messagesDiv.innerHTML += `<p><strong>${data.sender}:</strong> ${data.message}</p>`;
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+
+        if (data.sender !== '{{ request.user.username }}') {
+            document.getElementById('notification').innerHTML = `Nova mensagem de ${data.sender}!`;
+            document.getElementById('notification').style.display = 'block';
+            setTimeout(() => { document.getElementById('notification').style.display = 'none'; }, 3000);
+        }
+    };
+
+    chatSocket.onclose = function(e) {
+        console.error('WebSocket fechado inesperadamente');
+    };
+
+    chatSocket.onerror = function(e) {
+        console.error('Erro no WebSocket:', e);
+    };
+
+    document.querySelectorAll('#user-list li').forEach(item => {
+        item.addEventListener('click', function() {
+            selectedUserId = this.getAttribute('data-user-id');
+            document.getElementById('chat-messages').innerHTML = '';
+            document.querySelectorAll('#user-list li').forEach(li => li.classList.remove('active'));
+            this.classList.add('active');
+        });
+    });
+
+    document.getElementById('chat-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const messageInput = document.getElementById('message-input');
+        const message = messageInput.value;
+        if (selectedUserId && message) {
+            chatSocket.send(JSON.stringify({
+                'message': message,
+                'recipient_id': selectedUserId
+            }));
+            messageInput.value = '';
+        }
+    });
+</script>
+{% endblock %}

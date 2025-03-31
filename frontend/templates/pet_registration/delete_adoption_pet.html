@@ -1,0 +1,14 @@
+{% extends "core/base.html" %}
+
+{% block content %}
+<h2>Deletar Pet</h2>
+<form method="POST">
+    {% csrf_token %}
+    <p>Tem certeza de que deseja deletar este pet?</p>
+    <button type="submit">Sim, deletar</button>
+
+
+     <a href="http://127.0.0.1:8000/pet_registration/pets_user/" class="nav-link">Cancelar</a>
+</form>
+
+{% endblock %}

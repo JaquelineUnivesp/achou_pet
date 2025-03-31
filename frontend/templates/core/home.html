@@ -1,0 +1,130 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Achou Pet - Página Inicial{% endblock %}
+
+{% block content %}
+<section class="cadastro p-5 rounded-3">
+   <div class="container">
+      <div class="row align-items-center">
+
+         <div class="col-md-6">
+         {% load static %}
+            <img src="{% static 'images/pets.jpg' %}" alt="{{ pet.pet_name }}" class="figure-img img-fluid rounded">
+
+         </div>
+         <div class="col-md-6 mb-5">
+            <h1>Conecte-se com outros tutores de pets!</h1>
+            <p class="lead">Cadastre, busque pets perdidos, adote ou cruze seu pet com facilidade. Juntos, ajudamos mais animais!</p>
+
+            <a class="btn btn-primary mt-3 rounded-pill" href="{% url 'register' %}">Cadastro</a>
+            <a class="btn btn-primary mt-3 rounded-pill" href="{% url 'login' %}">Login</a>
+            </p>
+         </div>
+      </div>
+   </div>
+     </div>
+</section>
+
+<div class=" background_project">
+   <section class="services">
+      <div class="container">
+         <h2 class="h2 text-center mb-5">O que você busca?</h2>
+         <div class="row">
+            <div class="col-md-4 mb-5">
+               <a class="text-decoration-none" href="{% url 'pet_registration:register_lost_pet' %}">
+                  <div class="h-100 border-0" role="button" tabindex="0">
+                     <div class="service-card">
+                        <div class="icon-circle text-center">
+                           <i class="bi bi-search"></i> <!-- Ícone de busca -->
+                        </div>
+                        <h3 class="h1 mb-3 font3">Pet Perdido</h3>
+                        <h5 class="card-subtitle h3 mb-3 text-muted">Encontre seu melhor amigo de volta!</h5>
+                        <p class="card-text flex-grow-1">Seu pet desapareceu? Não se desespere! Aqui, unimos forças para reencontrar animais perdidos. Com a ajuda da comunidade e ferramentas inteligentes, cada patinha perdida tem uma história feliz para contar.</p>
+                        <button class="btn background_box3 rounded-pill">Cadastre um Pet Perdido</button>
+                     </div>
+                  </div>
+               </a>
+            </div>
+
+            <div class="col-md-4 mb-5">
+               <a class="text-decoration-none" href="http://127.0.0.1:8000/pet_registration/adoption/register">
+                  <div class="h-100 border-0" role="button" tabindex="0">
+                     <div class="service-card">
+                        <div class="icon-circle text-center">
+                           <i class="bi bi-heart"></i> <!-- Ícone de coração -->
+                        </div>
+                        <h3 class="h1 mb-3 font2">Pets para Adoção</h3>
+                        <h5 class="card-subtitle h3 mb-3 text-muted">Dê um lar, ganhe um amor!</h5>
+                        <p class="card-text flex-grow-1">Adotar é um ato de amor que transforma vidas. Conheça nossos peludos cheios de personalidade e prontos para encher sua casa de alegria. Adoção é cuidar, amar e ser amado incondicionalmente. Que tal encontrar seu novo melhor amigo?</p>
+                        <button class="btn background_box2 rounded-pill">Adote um Pet</button>
+                     </div>
+                  </div>
+               </a>
+            </div>
+
+            <div class="col-md-4 mb-5">
+               <a class="text-decoration-none" href="http://localhost:8000/pet_registration/breeding/register/">
+                  <div class="h-100 border-0" role="button" tabindex="0">
+                     <div class="service-card">
+                        <div class="icon-circle text-center">
+                           <i class="bi bi-paw"></i> <!-- Ícone de pata -->
+                        </div>
+                        <h3 class="h1 mb-3 font4">Pets para Reproduçao</h3>
+                        <h5 class="card-subtitle h3 mb-3 text-muted">Ajude a criar novas vidas cheias de amor!</h5>
+                        <p class="card-text flex-grow-1">Se você tem um pet saudável e deseja contribuir para a continuidade de sua raça, este é o lugar certo. Conectamos tutores responsáveis para reproduções seguras e éticas, para que cada filhote seja recebido com carinho e cuidado.</p>
+                        <button class="btn background_box4 rounded-pill">Conecte-se para Reprodução</button>
+                     </div>
+                  </div>
+               </a>
+            </div>
+         </div>
+      </div>
+   </section>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section class="p-5 text-center bg-body-tertiary rounded-3">
+   <div class="container mb-5">
+      <h2 class="text-center mb-5">Como funciona o Achou Pet?</h2>
+      <div class="row">
+         <div class="col-md-3">
+            <div class="card2-card h-100">
+               <h3>1 - Cadastre-se</h3>
+               <p>Crie uma conta com CPF, telefone, e-mail e foto.</p>
+            </div>
+         </div>
+         <div class="col-md-3">
+            <div class="card2-card h-100">
+               <h3>2 - Registre um Pet:</h3>
+               <p>Informe se ele está perdido, disponível para adoção ou reprodução.</p>
+            </div>
+         </div>
+         <div class="col-md-3">
+            <div class="card2-card h-100">
+               <h3>3 - Busque Pets</h3>
+               <p>Use a página de busca para encontrar pets por categoria.</p>
+            </div>
+         </div>
+         <div class="col-md-3">
+            <div class="card2-card h-100">
+               <h3>4 - Conecte-se</h3>
+               <p>Entre em contato com outros usuários para e organize encontros, adoções e reprodução.</p>
+            </div>
+         </div>
+      </div>
+   </div>
+</section>
+{% endblock %}

@@ -1,0 +1,11 @@
+<!-- backend/templates/pet_registration/delete_pet_confirmation.html -->
+{% extends 'core/base.html' %}
+{% block content %}
+  <h2>Confirmar Exclusão</h2>
+  <p>Tem certeza de que deseja excluir o pet {{ pet.name }}?</p>
+  <form method="POST">
+    {% csrf_token %}
+    <button type="submit">Sim, excluir</button>
+    <a href="{% url 'pet_registration:user_pets_list' %}">Cancelar</a>
+  </form>
+{% endblock %}

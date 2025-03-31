@@ -1,0 +1,80 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+
+
+
+    <h1>Busca de Pets</h1>
+
+    <!-- Formulário de Filtro -->
+    <div class="filter">
+        <form method="GET" action="{% url 'search:search_pets' %}">
+            <label for="type">Filtrar por tipo:</label>
+            <select name="type" id="type">
+                <option value="all" {% if filter_type == 'all' %}selected{% endif %}>Todos</option>
+                <option value="lost" {% if filter_type == 'lost' %}selected{% endif %}>Perdidos</option>
+                <option value="adoption" {% if filter_type == 'adoption' %}selected{% endif %}>Adoção</option>
+                <option value="breeding" {% if filter_type == 'breeding' %}selected{% endif %}>Cruzamento</option>
+            </select>
+
+            <label for="q">Buscar por nome ou descrição:</label>
+            <input type="text" name="q" id="q" value="{{ search_query|default:'' }}" placeholder="Digite aqui...">
+
+            <button type="submit">Filtrar</button>
+        </form>
+    </div>
+
+    <!-- Resultados -->
+    <div class="pet-list">
+        {% if lost_pets or adoption_pets or breeding_pets %}
+            {% if lost_pets %}
+                <h2>Pets Perdidos</h2>
+                {% for pet in lost_pets %}
+                    <div class="pet">
+                        <h3>{{ pet.name|title }}</h3>
+                        <p>{{ pet.description|truncatewords:20 }}</p>
+                        {% if pet.photo1 %}
+                            <img src="{{ pet.photo1.url }}" alt="{{ pet.name }}" loading="lazy">
+                        {% endif %}
+                    </div>
+                {% empty %}
+                    <p class="no-results">Nenhum pet perdido encontrado.</p>
+                {% endfor %}
+            {% endif %}
+
+            {% if adoption_pets %}
+                <h2>Pets para Adoção</h2>
+                {% for pet in adoption_pets %}
+                    <div class="pet">
+                        <h3>{{ pet.pet_name|title }}</h3>
+                        <p>{{ pet.description|truncatewords:20 }}</p>
+                        {% if pet.photo_1 %}
+                            <img src="{{ pet.photo_1.url }}" alt="{{ pet.pet_name }}" loading="lazy">
+                        {% endif %}
+                    </div>
+                {% empty %}
+                    <p class="no-results">Nenhum pet para adoção encontrado.</p>
+                {% endfor %}
+            {% endif %}
+
+            {% if breeding_pets %}
+                <h2>Pets para Cruzamento</h2>
+                {% for pet in breeding_pets %}
+                    <div class="pet">
+                        <h3>{{ pet.pet_name|title }}</h3>
+                        <p>{{ pet.description|truncatewords:20 }}</p>
+                        {% if pet.photo_1 %}
+                            <img src="{{ pet.photo_1.url }}" alt="{{ pet.pet_name }}" loading="lazy">
+                        {% endif %}
+                    </div>
+                {% empty %}
+                    <p class="no-results">Nenhum pet para cruzamento encontrado.</p>
+                {% endfor %}
+            {% endif %}
+        {% else %}
+            <p class="no-results">Nenhum pet encontrado com os filtros aplicados.</p>
+        {% endif %}
+    </div>
+
+
+{% endblock %}

@@ -1,0 +1,2 @@
+<!-- frontend/templates/account/email/email_confirmation_signup_subject.txt -->
+Confirme seu e-mail no Achou Pet

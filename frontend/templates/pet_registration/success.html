@@ -1,0 +1,10 @@
+<!-- backend/apps/pet_registration/templates/pet_registration/success.html -->
+{% extends 'core/base.html' %}
+{% block title %}Sucesso - Achou Pet{% endblock %}
+{% block content %}
+<div class="container mt-5">
+    <h1>Pet Registrado com Sucesso!</h1>
+    <p>Seu pet perdido foi cadastrado. Entraremos em contato se ele for encontrado.</p>
+    <a href="{% url 'pet_registration:register_lost_pet' %}" class="btn btn-primary">Cadastrar Outro Pet</a>
+</div>
+{% endblock %}

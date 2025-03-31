@@ -1,0 +1,10 @@
+<!-- frontend/templates/account/email/email_confirmation_signup_message.txt -->
+Olá {{ user.username }},
+
+Por favor, confirme seu e-mail clicando no link abaixo:
+
+{{ activate_url }}
+
+Se você não se cadastrou no Achou Pet, ignore este e-mail.
+
+Equipe Achou Pet

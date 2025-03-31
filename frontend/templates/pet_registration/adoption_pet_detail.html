@@ -1,0 +1,43 @@
+{% extends "core/base.html" %}
+
+{% block content %}
+<h2>Detalhes do Pet para Adoção</h2>
+
+<p>Relação com o Pet: {{ pet.relationship_with_pet }}</p>
+<p>Nome: {{ pet.pet_name }}</p>
+<p>Idade Aproximada: {{ pet.approximate_age }}</p>
+<p>É castrado: {{ pet.is_neutered|yesno:"Sim,Não" }}</p>
+<p>Peso Aproximado: {{ pet.approximate_weight }} kg</p>
+<p>É vacinado: {{ pet.is_vaccinated|yesno:"Sim,Não" }}</p>
+
+<h3>Características</h3>
+<p>Problemas de Saúde: {{ pet.health_issues|default:"Nenhum problema informado" }}</p>
+<p>Sociável com outros animais: {{ pet.sociable_with_animals|yesno:"Sim,Não" }}</p>
+<p>Sociável com crianças: {{ pet.sociable_with_children|yesno:"Sim,Não" }}</p>
+<p>Sociável com estranhos: {{ pet.sociable_with_strangers|yesno:"Sim,Não" }}</p>
+<p>Comportamento: {{ pet.behavior|default:"Não informado" }}</p>
+<p>Observações: {{ pet.observations|default:"Nenhuma observação" }}</p>
+
+<h3>Localização</h3>
+<p>Endereço: {{ pet.location }}</p>
+<p>Coordenadas: {{ pet.latitude }}, {{ pet.longitude }}</p>
+
+<h3>Fotos</h3>
+{% if pet.photo_1 %}
+    <img src="{{ pet.photo_1.url }}" alt="Foto 1 do Pet">
+{% endif %}
+{% if pet.photo_2 %}
+    <img src="{{ pet.photo_2.url }}" alt="Foto 2 do Pet">
+{% endif %}
+{% if pet.photo_3 %}
+    <img src="{{ pet.photo_3.url }}" alt="Foto 3 do Pet">
+{% endif %}
+
+<h3>Termos e Política</h3>
+<p>Termos aceitos: {{ pet.terms_accepted|yesno:"Sim,Não" }}</p>
+<p>Política de privacidade aceita: {{ pet.privacy_policy_accepted|yesno:"Sim,Não" }}</p>
+
+<a href="{% url 'pet_registration:edit_adoption_pet' pet.id %}">Editar</a>
+<a href="{% url 'pet_registration:delete_adoption_pet' pet.id %}">Deletar</a>
+
+{% endblock %}

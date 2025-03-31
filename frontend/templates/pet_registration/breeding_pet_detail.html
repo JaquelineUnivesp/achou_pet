@@ -1,0 +1,46 @@
+{% extends "core/base.html" %}
+
+{% block content %}
+<h2>Detalhes do Pet para Reprodução</h2>
+
+<p><strong>Nome:</strong> {{ pet.pet_name }}</p>
+<p><strong>Idade Aproximada:</strong> {{ pet.approximate_age }}</p>
+<p><strong>É castrado:</strong> {{ pet.is_neutered|yesno:"Sim,Não" }}</p>
+<p><strong>Peso Aproximado:</strong> {{ pet.approximate_weight }} kg</p>
+<p><strong>Está vacinado:</strong> {{ pet.is_vaccinated|yesno:"Sim,Não" }}</p>
+<p><strong>Problemas de Saúde:</strong> {{ pet.health_issues|default:"Nenhum problema informado" }}</p>
+<p><strong>Tem pedigree:</strong> {{ pet.has_pedigree|yesno:"Sim,Não" }}</p>
+<p><strong>Detalhes do Pedigree:</strong> {{ pet.pedigree_details|default:"Nenhum detalhe informado" }}</p>
+<p><strong>Já cruzou antes:</strong> {{ pet.has_bred_before|yesno:"Sim,Não" }}</p>
+<p><strong>Histórico de Reprodução:</strong> {{ pet.breeding_history|default:"Nenhum histórico informado" }}</p>
+<p><strong>Razão para Reprodução:</strong> {{ pet.breeding_reason|default:"Nenhuma razão informada" }}</p>
+<p><strong>Preferências para Filhotes:</strong> {{ pet.puppy_preferences|default:"Nenhuma preferência informada" }}</p>
+<p><strong>Divisão de Custos:</strong> {{ pet.cost_sharing|default:"Nenhuma informação sobre custos" }}</p>
+<p><strong>Localização:</strong> {{ pet.location|default:"Localização não informada" }}</p>
+<p><strong>Latitude:</strong> {{ pet.latitude|default:"Não disponível" }}</p>
+<p><strong>Longitude:</strong> {{ pet.longitude|default:"Não disponível" }}</p>
+<p><strong>Termos Aceitos:</strong> {{ pet.terms_accepted|yesno:"Sim,Não" }}</p>
+<p><strong>Política de Privacidade Aceita:</strong> {{ pet.privacy_policy_accepted|yesno:"Sim,Não" }}</p>
+
+<h3>Fotos</h3>
+{% if pet.photo_1 %}
+    <img src="{{ pet.photo_1.url }}" alt="Foto do Pet 1" style="max-width: 300px;">
+{% else %}
+    <p>Foto 1 não disponível</p>
+{% endif %}
+{% if pet.photo_2 %}
+    <img src="{{ pet.photo_2.url }}" alt="Foto do Pet 2" style="max-width: 300px;">
+{% else %}
+    <p>Foto 2 não disponível</p>
+{% endif %}
+{% if pet.photo_3 %}
+    <img src="{{ pet.photo_3.url }}" alt="Foto do Pet 3" style="max-width: 300px;">
+{% else %}
+    <p>Foto 3 não disponível</p>
+{% endif %}
+
+<div>
+    <a href="{% url 'pet_registration:edit_breeding_pet' pet.id %}">Editar</a>
+    <a href="{% url 'pet_registration:delete_breeding_pet' pet.id %}">Deletar</a>
+</div>
+{% endblock %}

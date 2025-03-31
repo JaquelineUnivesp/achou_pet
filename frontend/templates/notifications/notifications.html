@@ -1,0 +1,42 @@
+{% extends "core/base.html" %}
+{% block content %}
+<div class="container mt-5">
+    <h1>Notificações</h1>
+    <div id="notifications-list">
+        {% for notification in notifications %}
+            <div class="alert {% if notification.is_read %}alert-secondary{% else %}alert-info{% endif %}">
+                <p>{{ notification.message }} ({{ notification.timestamp|date:"d/m/Y H:i" }})</p>
+                {% if not notification.is_read %}
+                    <form method="post" style="display:inline;">
+                        {% csrf_token %}
+                        <input type="hidden" name="notification_id" value="{{ notification.id }}">
+                        <button type="submit" name="mark_read" class="btn btn-sm btn-primary">Marcar como lida</button>
+                    </form>
+                {% endif %}
+            </div>
+        {% empty %}
+            <p>Sem notificações.</p>
+        {% endfor %}
+    </div>
+</div>
+
+<script>
+    const ws = new WebSocket('ws://' + window.location.host + '/ws/chat/');
+    ws.onmessage = function(event) {
+        const data = JSON.parse(event.data);
+        if (data.type === 'notification') {
+            const list = document.getElementById('notifications-list');
+            const newNotification = `
+                <div class="alert alert-info">
+                    <p>${data.message} (${new Date().toLocaleString()})</p>
+                    <form method="post" style="display:inline;">
+                        {% csrf_token %}
+                        <input type="hidden" name="notification_id" value="new">
+                        <button type="submit" name="mark_read" class="btn btn-sm btn-primary">Marcar como lida</button>
+                    </form>
+                </div>`;
+            list.insertAdjacentHTML('afterbegin', newNotification);
+        }
+    };
+</script>
+{% endblock %}

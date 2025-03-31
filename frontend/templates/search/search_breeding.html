@@ -1,0 +1,48 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+<h1>Busca de Pets para Reprodução</h1>
+
+<div class="search-container">
+    <!-- Sidebar com filtros -->
+    <aside class="sidebar">
+        <form method="GET" action="{% url 'search:breeding_pets' %}">
+            <label for="has_pedigree">Possui Pedigree:</label>
+            <select name="has_pedigree" id="has_pedigree">
+                <option value="">Todos</option>
+                <option value="yes" {% if has_pedigree == 'yes' %}selected{% endif %}>Sim</option>
+                <option value="no" {% if has_pedigree == 'no' %}selected{% endif %}>Não</option>
+            </select>
+
+            <label for="has_bred_before">Já Cruzou Antes:</label>
+            <select name="has_bred_before" id="has_bred_before">
+                <option value="">Todos</option>
+                <option value="yes" {% if has_bred_before == 'yes' %}selected{% endif %}>Sim</option>
+                <option value="no" {% if has_bred_before == 'no' %}selected{% endif %}>Não</option>
+            </select>
+
+            <label for="cost_sharing">Divisão de Custos:</label>
+            <input type="text" name="cost_sharing" id="cost_sharing" value="{{ cost_sharing|default:'' }}">
+
+            <button type="submit">Filtrar</button>
+        </form>
+    </aside>
+
+    <!-- Resultados -->
+    <section class="results">
+        {% if breeding_pets %}
+            {% for pet in breeding_pets %}
+                <div class="pet">
+                    <h3>{{ pet.pet_name|title }}</h3>
+                    <p>{{ pet.breeding_reason|truncatewords:20 }}</p>
+                    {% if pet.photo_1 %}
+                        <img src="{{ pet.photo_1.url }}" alt="{{ pet.pet_name }}" loading="lazy">
+                    {% endif %}
+                </div>
+            {% endfor %}
+        {% else %}
+            <p class="no-results">Nenhum pet para reprodução encontrado.</p>
+        {% endif %}
+    </section>
+</div>
+{% endblock %}

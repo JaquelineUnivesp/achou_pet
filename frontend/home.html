@@ -1,0 +1,52 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Achou Pet - Página Inicial{% endblock %}
+
+{% block content %}
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'home' %}">Achou Pet</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    {% if user.is_authenticated %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'change_email' %}">Trocar E-mail</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'logout' %}">Sair</a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'login' %}">Entrar</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'register' %}">Cadastrar</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="hero">
+        <div class="container">
+            <h1>Bem-vindo ao Achou Pet!</h1>dddddd
+            <p>Ajude a encontrar e reunir pets perdidos com seus humanos.</p>
+            {% if user.is_authenticated %}
+                <p>Olá, {{ user.username }}! O que você gostaria de fazer hoje?</p>
+                <a href="#" class="btn btn-primary">Reportar um Pet Perdido</a>
+                <a href="#" class="btn btn-secondary">Procurar Pets Encontrados</a>
+            {% else %}
+                <p>Faça parte da nossa comunidade! Cadastre-se ou entre agora.</p>
+                <a href="{% url 'register' %}" class="btn btn-primary">Cadastrar</a>
+                <a href="{% url 'login' %}" class="btn btn-secondary">Entrar</a>
+            {% endif %}
+        </div>
+    </div>
+
+{% endblock %}

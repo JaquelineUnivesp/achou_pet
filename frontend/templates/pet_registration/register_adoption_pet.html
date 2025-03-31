@@ -1,0 +1,242 @@
+{% extends 'core/base.html' %}
+{% block title %}Cadastrar Pet para Adoção - Achou Pet{% endblock %}
+{% block content %}
+
+<div class="container mt-5">
+   <div class="row">
+      <div class="col-3">
+         {% include "core/sidebar_user.html" %}
+      </div>
+      <div class="col-9">
+         <h1 class="display-1 text-center">Cadastro de pet para <span class="color_project">adoção</span></h1>
+         <p class="text-center">Ajude um pet a encontrar um novo lar!</p>
+
+         {% if form.errors %}
+         <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <strong>Erro ao cadastrar:</strong>
+            <ul>
+               {% for field in form %}
+               {% for error in field.errors %}
+               <li>{{ field.label }}: {{ error }}</li>
+               {% endfor %}
+               {% endfor %}
+               {% for error in form.non_field_errors %}
+               <li>{{ error }}</li>
+               {% endfor %}
+            </ul>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+         </div>
+         {% endif %}
+
+         <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="container">
+               <div class="row mb-4">
+                  <div class="col-md-6">
+                     <label for="id_relationship_with_pet" class="form-label fw-bold">Relação com o Pet</label><br>
+                     {{ form.relationship_with_pet }}
+                  </div>
+                  <div class="col-md-6">
+                     <label for="id_pet_name" class="form-label fw-bold">Nome do Pet</label><br>
+                     {{ form.pet_name }}
+                  </div>
+               </div>
+               <div class="row mb-4">
+                  <div class="col-md-4">
+                     <label for="id_species" class="form-label fw-bold">Espécie</label><br>
+                     {{ form.species }}
+                  </div>
+                  <div class="col-md-4">
+                     <label for="id_sex" class="form-label fw-bold">Sexo</label><br>
+                     {{ form.sex }}
+                  </div>
+                  <div class="col-md-4">
+                     <label for="id_size_by_age" class="form-label fw-bold">Tamanho (Idade)</label><br>
+                     {{ form.size_by_age }}  <!-- Corrigido de size_age para size_by_age -->
+                  </div>
+               </div>
+               <div class="row mb-4">
+                  <div class="col-md-6">
+                     <label for="id_breed" class="form-label fw-bold">Raça</label><br>
+                     {{ form.breed }}
+                  </div>
+                  <div class="col-md-6">
+                     <label for="id_color" class="form-label fw-bold">Cor</label><br>
+                     {{ form.color }}
+                  </div>
+               </div>
+               <div class="row mb-4">
+                  <div class="col-md-6">
+                     <label for="id_approximate_age" class="form-label fw-bold">Idade Aproximada</label><br>
+                     {{ form.approximate_age }}
+                  </div>
+                  <div class="col-md-6">
+                     <label for="id_approximate_weight" class="form-label fw-bold">Peso Aproximado</label><br>
+                     {{ form.approximate_weight }}
+                  </div>
+               </div>
+               <div class="row mb-4">
+                  <div class="col-md-4">
+                     <label for="id_is_neutered" class="form-label fw-bold">Castrado?</label><br>
+                     {{ form.is_neutered }}
+                  </div>
+                  <div class="col-md-4">
+                     <label for="id_is_vaccinated" class="form-label fw-bold">Vacinado?</label><br>
+                     {{ form.is_vaccinated }}
+                  </div>
+                  <div class="col-md-4">
+                     <label for="id_phone_for_notifications" class="form-label fw-bold">Telefone de Notificação</label><br>
+                     {{ form.phone_for_notifications }}  <!-- Corrigido de notification_phone -->
+                  </div>
+               </div>
+               <div class="row mb-4">
+                  <div class="col-md-4">
+                     <label for="id_sociable_with_animals" class="form-label fw-bold">Sociável com Animais</label><br>
+                     {{ form.sociable_with_animals }}
+                  </div>
+                  <div class="col-md-4">
+                     <label for="id_sociable_with_children" class="form-label fw-bold">Sociável com Crianças</label><br>
+                     {{ form.sociable_with_children }}
+                  </div>
+                  <div class="col-md-4">
+                     <label for="id_sociable_with_strangers" class="form-label fw-bold">Sociável com Estranhos</label><br>
+                     {{ form.sociable_with_strangers }}
+                  </div>
+               </div>
+               <div class="mb-4">
+                  <label for="id_behavior" class="form-label fw-bold">Comportamento</label><br>
+                  {{ form.behavior }}
+               </div>
+               <div class="mb-4">
+                  <label for="id_health_issues" class="form-label fw-bold">Problemas de Saúde</label><br>
+                  {{ form.health_issues }}
+               </div>
+               <div class="mb-4">
+                  <label for="id_observations" class="form-label fw-bold">Observações</label><br>
+                  {{ form.observations }}
+               </div>
+               <div class="row mb-4">
+                  <div class="col-md-4">
+                     <label for="id_photo_1" class="form-label fw-bold">Foto 1</label><br>
+                     {{ form.photo_1 }}
+                  </div>
+                  <div class="col-md-4">
+                     <label for="id_photo_2" class="form-label fw-bold">Foto 2</label><br>
+                     {{ form.photo_2 }}
+                  </div>
+                  <div class="col-md-4">
+                     <label for="id_photo_3" class="form-label fw-bold">Foto 3</label><br>
+                     {{ form.photo_3 }}
+                  </div>
+               </div>
+               <!-- Localização com Mapa -->
+               <div class="mb-4">
+                  <label for="id_location" class="form-label fw-bold">Endereço</label><br>
+                  {{ form.location }}
+                  {{ form.latitude }}
+                  {{ form.longitude }}
+                  <div id="map" style="height: 300px; width: 100%; margin-top: 10px; background-color: #e0e0e0;"></div>
+                  <small class="text-muted">Arraste o ícone ou clique no mapa para definir a localização (obrigatório)</small>
+               </div>
+               <!-- Termos -->
+               <div class="mb-4">
+                  <div class="form-check">
+                     {{ form.terms_accepted }}
+                     <label class="form-check-label" for="id_terms_accepted">Concordo com os <a href="#">Termos de Uso</a> <span class="text-danger">*</span></label>
+                  </div>
+                  <div class="form-check">
+                     {{ form.privacy_policy_accepted }}
+                     <label class="form-check-label" for="id_privacy_policy_accepted">Concordo com a <a href="#">Política de Privacidade</a> <span class="text-danger">*</span></label>
+                  </div>
+                  <small class="text-muted">* Campos obrigatórios</small>
+               </div>
+               <button type="submit" class="btn rounded-pill background_project">Cadastrar</button>
+            </div>
+         </form>
+      </div>
+   </div>
+</div>
+
+<!-- Bootstrap CSS and JS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Leaflet and LocationIQ Geocoder -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://tiles.locationiq.com/v3/libs/leaflet-geocoder/1.9.6/leaflet-geocoder-locationiq.min.js"></script>
+<link rel="stylesheet" href="https://tiles.locationiq.com/v3/libs/leaflet-geocoder/1.9.6/leaflet-geocoder-locationiq.min.css">
+<script>
+    var map = L.map('map').setView([-23.5489, -46.6388], 13); // São Paulo como padrão
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(map);
+    var marker = null;
+
+    // Função para arredondar coordenadas
+    function roundToSixDecimals(num) {
+        return Number(num.toFixed(6));
+    }
+
+    // Geolocalização inicial
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+            var lat = roundToSixDecimals(position.coords.latitude);
+            var lon = roundToSixDecimals(position.coords.longitude);
+            map.setView([lat, lon], 13);
+            reverseGeocode(lat, lon);
+            marker = L.marker([lat, lon]).addTo(map);
+            document.getElementById('id_latitude').value = lat;
+            document.getElementById('id_longitude').value = lon;
+        });
+    }
+
+    // Adicionar o controle de busca LocationIQ
+    var geocoder = L.control.geocoder('pk.227bb16be8af10a97550047d4932e148', {
+        url: "https://api.locationiq.com/v1",
+        expanded: true,
+        panToPoint: true,
+        focus: false,
+        position: "topleft"
+    }).addTo(map);
+
+    // Evento quando um local é selecionado no autocomplete
+    geocoder.on('select', function(e) {
+        var lat = roundToSixDecimals(e.latlng.lat);
+        var lon = roundToSixDecimals(e.latlng.lng);
+        var address = e.feature.display_name;
+        console.log('Local selecionado:', lat, lon, address);
+        document.getElementById('id_location').value = address;
+        document.getElementById('id_latitude').value = lat;
+        document.getElementById('id_longitude').value = lon;
+        if (marker) marker.remove();
+        marker = L.marker([lat, lon]).addTo(map);
+    });
+
+    // Clique no mapa para ajustar
+    map.on('click', function(e) {
+        var lat = roundToSixDecimals(e.latlng.lat);
+        var lon = roundToSixDecimals(e.latlng.lng);
+        fetch(`https://api.locationiq.com/v1/reverse?key=pk.227bb16be8af10a97550047d4932e148&lat=${lat}&lon=${lon}&format=json`)
+            .then(response => response.json())
+            .then(data => {
+                console.log('Reverse geocode data:', data);
+                document.getElementById('id_location').value = data.display_name;
+                document.getElementById('id_latitude').value = lat;
+                document.getElementById('id_longitude').value = lon;
+                if (marker) marker.remove();
+                marker = L.marker([lat, lon]).addTo(map);
+            })
+            .catch(error => console.error('Erro no reverse geocode:', error));
+    });
+
+    // Função para reverse geocode (chamada na geolocalização)
+    function reverseGeocode(lat, lon) {
+        fetch(`https://api.locationiq.com/v1/reverse?key=pk.227bb16be8af10a97550047d4932e148&lat=${lat}&lon=${lon}&format=json`)
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('id_location').value = data.display_name;
+                document.getElementById('id_latitude').value = lat;
+                document.getElementById('id_longitude').value = lon;
+            })
+            .catch(error => console.error('Erro no reverse geocode:', error));
+    }
+</script>
+{% endblock %}

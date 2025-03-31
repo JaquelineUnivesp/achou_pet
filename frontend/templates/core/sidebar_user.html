@@ -1,0 +1,173 @@
+<!-- Sidebar -->
+<div id="sidebar">
+    <!-- Título da Sidebar -->
+    <h2 class="sidebar-title text-center mb-4">
+        <i class="fas fa-cogs me-2"></i> Configurações
+    </h2>
+
+    <!-- Botão de Toggle para Mobile -->
+    <button class="navbar-toggler d-md-none w-100 mb-3" type="button" onclick="toggleSidebar()">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Lista de Navegação -->
+    <ul class="nav nav-pills flex-column mb-auto">
+        <!-- Grupo: Conta -->
+        <li class="nav-group">
+            <h4 class="nav-group-title">
+                <i class="fas fa-user-circle me-2"></i> Conta
+            </h4>
+            <ul>
+
+
+http://127.0.0.1:8000/search/ <br>
+http://127.0.0.1:8000/search/lost/  <br>
+http://127.0.0.1:8000/search/adoption/  <br>
+http://127.0.0.1:8000/search/breeding/  <br>
+
+                http://127.0.0.1:8000/search/lost
+
+                 <li class="nav-item">
+                    <a href="http://127.0.0.1:8000/search/" class="nav-link">
+                        <i class="fas fa-user me-2"></i> Busca
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="http://127.0.0.1:8000/account/profile/" class="nav-link">
+                        <i class="fas fa-user me-2"></i> Perfil
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="http://127.0.0.1:8000/pet_registration/pets_user/" class="nav-link">
+                        <i class="fas fa-paw me-2"></i> Seus Pets
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="fas fa-cogs me-2"></i> Gerenciamento da Conta
+                    </a>
+                </li>
+            </ul>
+        </li>
+
+        <!-- Grupo: Cadastros -->
+        <li class="nav-group">
+            <h4 class="nav-group-title">
+                <i class="fas fa-pen me-2"></i> Cadastros
+            </h4>
+            <ul>
+                <li class="nav-item">
+                    <a href="{% url 'pet_registration:register_lost_pet' %}" class="nav-link">
+                        <i class="fas fa-search me-2"></i> Pet Perdido
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{% url 'pet_registration:register_adoption_pet' %}" class="nav-link">
+                        <i class="fas fa-heart me-2"></i> Pet para Adoção
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="http://localhost:8000/pet_registration/breeding/register" class="nav-link">
+                        <i class="fas fa-paw me-2"></i> Pet para Reprodução
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="fas fa-search me-2"></i> Busca
+                    </a>
+                </li>
+            </ul>
+        </li>
+
+        <!-- Grupo: Segurança -->
+        <li class="nav-group">
+            <h4 class="nav-group-title">
+                <i class="fas fa-shield-alt me-2"></i> Segurança
+            </h4>
+            <ul>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="fas fa-lock me-2"></i> Segurança
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="http://localhost:8000/account/password_reset/" class="nav-link">
+                        <i class="fas fa-key me-2"></i> Esqueci a Senha
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="http://localhost:8000/account/change_email/" class="nav-link">
+                        <i class="fas fa-envelope me-2"></i> Trocar E-mail
+                    </a>
+                </li>
+            </ul>
+        </li>
+
+        <!-- Grupo: Aparência -->
+        <li class="nav-group">
+            <h4 class="nav-group-title">
+                <i class="fas fa-paint-brush me-2"></i> Aparência
+            </h4>
+            <ul>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="fas fa-eye me-2"></i> Visibilidade do Perfil
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="fas fa-palette me-2"></i> Ajustar Visual
+                    </a>
+                </li>
+            </ul>
+        </li>
+
+        <!-- Grupo: Notificações -->
+        <li class="nav-group">
+            <h4 class="nav-group-title">
+                <i class="fas fa-bell me-2"></i> Notificações
+            </h4>
+            <ul>
+                <li class="nav-item">
+                    <a href="http://127.0.0.1:8000/notifications/notifications/" class="nav-link">
+                        <i class="fas fa-bell me-2"></i> Notificações
+                    </a>
+                </li>
+            </ul>
+        </li>
+
+        <!-- Grupo: Autenticação -->
+        <li class="nav-group">
+            <h4 class="nav-group-title">
+                <i class="fas fa-sign-in-alt me-2"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+    <path d="M12 15.5A3.5 3.5 0 0 1 8.5 12 3.5 3.5 0 0 1 12 8.5a3.5 3.5 0 0 1 3.5 3.5 3.5 3.5 0 0 1-3.5 3.5m7.43-2.53c.04-.32.07-.64.07-.97 0-.33-.03-.66-.07-1l2.11-1.63c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.31-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.37-2.65A.506.506 0 0 0 14 2h-4c-.25 0-.46.18-.5.42l-.37 2.65c-.61.25-1.17.59-1.69.98l-2.49-1c-.23-.09-.5 0-.61.22l-2 3.46c-.13.22-.07.49.12.64L4.57 11c-.04.34-.07.67-.07 1 0 .33.03.65.07.97l-2.11 1.66c-.19.15-.24.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1.01c.52.4 1.08.73 1.69.98l.37 2.65c.04.24.25.42.5.42h4c.25 0 .46-.18.5-.42l.37-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1.01c.23.09.5 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.66z"/>
+</svg></i> Autenticação
+            </h4>
+            <ul>
+                <li class="nav-item">
+                    <a href="http://localhost:8000/account/login/" class="nav-link">
+                        <i class="fas fa-sign-in-alt me-2"></i> Login
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="http://localhost:8000/account/logout/" class="nav-link">
+                        <i class="fas fa-sign-out-alt me-2"></i> Logout
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="http://127.0.0.1:8000/account/register/" class="nav-link">
+                        <i class="fas fa-user-plus me-2"></i> Criar Conta
+                    </a>
+                </li>
+            </ul>
+        </li>
+    </ul>
+</div>
+
+<script>
+    function toggleSidebar() {
+        const sidebar = document.getElementById('sidebar');
+        sidebar.classList.toggle('active');
+    }
+</script>

@@ -1,0 +1,317 @@
+{% extends 'core/base.html' %}
+{% load static %} <!-- Carregar as tags estáticas -->
+{% block title %}Cadastrar Pet Perdido - Achou Pet{% endblock %}
+{% block content %}
+
+<div class="container mt-5">
+   <div class="row">
+      <div class="col-3">
+         {% include "core/sidebar_user.html" %}
+      </div>
+      <div class="col-9">
+         <h1 class="display-1 text-center">Cadastro de pet <span class="color_project">perdido</span></h1>
+         <p class="text-center">Se você está procurando um pet perdido ou quer cadastrar um pet que você encontrou, você está no lugar certo.</p>
+
+         {% if form.errors %}
+         <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <strong>Erro ao cadastrar:</strong>
+            <ul>
+               {% for field in form %}
+               {% for error in field.errors %}
+               <li>{{ field.label }}: {{ error }}</li>
+               {% endfor %}
+               {% endfor %}
+               {% for error in form.non_field_errors %}
+               <li>{{ error }}</li>
+               {% endfor %}
+            </ul>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+         </div>
+         {% endif %}
+
+         <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="container">
+               <div class="row mb-4">
+                  <div class="col-md-3">
+                     <label for="id_status" class="form-label fw-bold">Status</label><br>
+                     {{ form.status }}
+                  </div>
+                  <div class="col-md-3">
+                     <label for="id_species" class="form-label fw-bold">Espécie</label><br>
+                     {{ form.species }}
+                  </div>
+                  <div class="col-md-3">
+                     <label for="id_size" class="form-label fw-bold">Tamanho</label><br>
+                     {{ form.size }}
+                  </div>
+                  <div class="col-md-3">
+                     <label for="id_sex" class="form-label fw-bold">Sexo</label><br>
+                     {{ form.sex }}
+                  </div>
+               </div>
+
+               <div class="row mb-4">
+                  <div class="col-md-6">
+                     <label for="id_name" class="form-label fw-bold">Nome</label><br>
+                     {{ form.name }}
+                  </div>
+                  <div class="col-md-6">
+                     <label for="id_lost_date" class="form-label fw-bold">Data que aconteceu</label><br>
+                     {{ form.lost_date }}
+                  </div>
+               </div>
+
+               <div class="row mb-4">
+                  <div class="col-md-6">
+                     <label for="id_breed" class="form-label fw-bold">Raça</label><br>
+                     {{ form.breed }}
+                  </div>
+                  <div class="col-md-6">
+                     <label for="id_notification_phone" class="form-label fw-bold">Telefone para Notificação</label><br>
+                     {{ form.notification_phone }}
+                  </div>
+               </div>
+
+               <div class="row mb-4">
+                  <div class="col-md-6">
+                     <label for="id_color" class="form-label fw-bold">Cor</label><br>
+                     {{ form.color }}
+                  </div>
+               </div>
+
+               <div class="row mb-4">
+                  <div class="col-md-4">
+                     <label for="id_photo1" class="form-label fw-bold">Foto</label><br>
+                     {{ form.photo1 }}
+                  </div>
+                  <div class="col-md-4">
+                     <label for="id_photo2" class="form-label fw-bold">Foto 2</label><br>
+                     {{ form.photo2 }}
+                  </div>
+                  <div class="col-md-4">
+                     <label for="id_photo3" class="form-label fw-bold">Foto 3</label><br>
+                     {{ form.photo3 }}
+                  </div>
+               </div>
+
+               <div class="mb-4">
+                  <label for="id_details" class="form-label fw-bold">Detalhes sobre o Pet</label><br>
+                  {{ form.details }}
+               </div>
+
+               <div class="mb-4">
+                  <label for="id_lost_location" class="form-label fw-bold">Endereço</label>
+                  <input type="text" id="id_lost_location" name="lost_location" class="form-control" required>
+                  <input type="hidden" id="id_latitude" name="latitude">
+                  <input type="hidden" id="id_longitude" name="longitude">
+                  <div id="map" style="height: 300px; width: 100%; margin-top: 10px; background-color: #e0e0e0;"></div>
+                  <small class="text-muted">Arraste o ícone ou use a busca para definir a localização</small>
+               </div>
+
+               <div class="mb-4">
+                  <div class="form-check">
+                     {{ form.terms_accepted }}
+                     <label for="id_terms_accepted" class="form-check-label">Concordo com os Termos de Uso</label>
+                  </div>
+                  <div class="form-check">
+                     {{ form.privacy_accepted }}
+                     <label for="id_privacy_accepted" class="form-check-label">Concordo com a Política de Privacidade</label>
+                  </div>
+               </div>
+
+               <button type="submit" class="btn rounded-pill background_project">Cadastrar</button>
+            </div>
+         </form>
+      </div>
+   </div>
+</div>
+
+<!-- Estilos do segundo código -->
+<style>
+   .info-box {
+      font-family: Arial, sans-serif;
+      font-size: 14px;
+      padding: 10px;
+      border-radius: 5px;
+      background-color: #fff;
+      border: 1px solid #ddd;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+      width: 200px;
+      min-width: 150px;
+   }
+
+   .info-box h3 {
+      font-size: 16px;
+      margin-top: 0;
+      color: #333;
+   }
+
+   .info-box p {
+      margin: 5px 0;
+   }
+
+   .info-box strong {
+      color: #333;
+   }
+
+   .info-box p {
+      color: #666;
+   }
+
+   .info-box p a {
+      color: #007bff;
+      text-decoration: none;
+   }
+
+   .info-box p a:hover {
+      text-decoration: underline;
+   }
+</style>
+
+<!-- Dependências -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+<script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+
+<script>
+   // Inicializa o mapa
+   var map = L.map('map').setView([-23.5489, -46.6388], 13);
+   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(map);
+   var marker;
+
+   // Tenta obter a localização do usuário via navegador
+   if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(function(position) {
+         const { latitude, longitude } = position.coords;
+         map.setView([latitude, longitude], 13);
+         addMarker(latitude, longitude);
+      }, function() {
+         // Caso falhe, tenta via IP
+         obterLocalizacaoUsuario();
+      });
+   } else {
+      obterLocalizacaoUsuario();
+   }
+
+   // Função para adicionar marcador
+   function addMarker(lat, lon) {
+      if (marker) marker.remove();
+      marker = L.marker([lat, lon], { draggable: true }).addTo(map);
+      marker.on('dragend', function(e) {
+         const { lat, lng } = e.target.getLatLng();
+         reverseGeocode(lat, lng);
+      });
+      reverseGeocode(lat, lon);
+   }
+
+   // Reverse geocoding com LocationIQ
+   function reverseGeocode(lat, lon) {
+      fetch(`https://api.locationiq.com/v1/reverse?key=pk.227bb16be8af10a97550047d4932e148&lat=${lat}&lon=${lon}&format=json`)
+         .then(response => response.json())
+         .then(data => {
+            const roundedLat = Math.round(lat * 1e6) / 1e6;
+            const roundedLon = Math.round(lon * 1e6) / 1e6;
+            document.getElementById('id_lost_location').value = data.display_name;
+            document.getElementById('id_latitude').value = roundedLat;
+            document.getElementById('id_longitude').value = roundedLon;
+         })
+         .catch(console.error);
+   }
+
+   // Evento de clique no mapa
+   map.on('click', function(e) {
+      const { lat, lng } = e.latlng;
+      addMarker(lat, lng);
+   });
+
+   // Adiciona controle de busca
+   L.Control.geocoder({
+      defaultMarkGeocode: false
+   }).on('markgeocode', function(e) {
+      const latlng = e.geocode.center;
+      addMarker(latlng.lat, latlng.lng);
+      map.setView(latlng, 16);
+   }).addTo(map);
+
+   // Ícones personalizados
+   const iconEncontrado = L.icon({
+      iconUrl: '{% static "img/small-green-cutout.png" %}',
+      iconSize: [31, 43],
+      iconAnchor: [15, 30],
+      popupAnchor: [0, -30]
+   });
+
+   const iconPerdido = L.icon({
+      iconUrl: '{% static "img/small-red-cutout.png" %}',
+      iconSize: [31, 43],
+      iconAnchor: [15, 30],
+      popupAnchor: [0, -30]
+   });
+
+   // Formatar data
+   function formatarData(dataISO) {
+      const data = new Date(dataISO);
+      const dia = String(data.getDate()).padStart(2, '0');
+      const mes = String(data.getMonth() + 1).padStart(2, '0');
+      const ano = data.getFullYear();
+      return `${dia}/${mes}/${ano}`;
+   }
+
+   // Adicionar marcadores de pets
+   function adicionarMarcadores(pets) {
+      pets.forEach(pet => {
+         if (pet.latitude && pet.longitude) {
+            let markerIcon = pet.tipo === 'encontrado' ? iconEncontrado : iconPerdido;
+            let marker = L.marker([pet.latitude, pet.longitude], { icon: markerIcon }).addTo(map);
+            const dataFormatada = formatarData(pet.data_hora);
+            let content = `
+               <div class="info-box">
+                  ${pet.imagem1 ? `<img src="${pet.imagem1}" alt="Imagem do ${pet.nome}" style="width: 100%; height: 100px; object-fit: cover;">` : ''}
+                  <br><br>
+                  <h3>${pet.nome}</h3>
+                  <p><strong style="text-transform: uppercase;">${pet.tipo} em ${dataFormatada}</strong><br>
+                  <strong>Espécie:</strong> ${pet.especie}<br>
+                  <strong>Endereço:</strong> ${pet.address}</p>
+                  <button class="btn btn-primary" onclick="openModal('${pet.id}')">Ver detalhes</button>
+               </div>
+            `;
+            marker.bindPopup(content);
+         }
+      });
+   }
+
+   // Carregar pets da API
+   function carregarPets() {
+      fetch('/api/pets/')
+         .then(response => response.json())
+         .then(pets => {
+            if (pets.length === 0) {
+               console.log("Nenhum pet encontrado!");
+            } else {
+               adicionarMarcadores(pets);
+            }
+         })
+         .catch(error => console.error('Erro ao carregar pets:', error));
+   }
+
+   // Obter localização via IP
+   function obterLocalizacaoUsuario() {
+      fetch('https://ipinfo.io/json?token=91e3040b4f78f5')
+         .then(response => response.json())
+         .then(data => {
+            const { loc } = data;
+            const [latitude, longitude] = loc.split(',');
+            map.setView([latitude, longitude], 12);
+            addMarker(latitude, longitude);
+         })
+         .catch(error => console.error('Erro ao obter localização:', error));
+   }
+
+   // Carregar pets ao iniciar
+   carregarPets();
+</script>
+{% endblock %}

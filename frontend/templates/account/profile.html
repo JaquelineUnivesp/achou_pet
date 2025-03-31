@@ -1,0 +1,46 @@
+{% extends "core/base.html" %}
+{% block content %}
+<div class="container mt-5">
+   <div class="row">
+      <div class="col-3">
+         {% include "core/sidebar_user.html" %}
+      </div>
+
+      <div class="col-9">
+         <div class="row">
+            <p class="display-1">Meu  <span class="color_project">Perfil</span></p>
+            <figure class="p-3 mb-0">
+               <div class="card p-3">
+                  <p class="h6"><strong>Nome</strong> </p>
+                  <p class="h3">  {{ user.first_name }} {{ user.last_name }}</p>
+               </div>
+            </figure>
+            <figure class="p-3 mb-0">
+               <div class="card p-3">
+                  <p class="h6"><strong>Nome de Usuário</strong></p>
+                  <p class="h3">  {{ user.username }}</p>
+               </div>
+            </figure>
+            <figure class="p-3 mb-0">
+               <div class="card p-3">
+                  <p class="h6"><strong>E-mail</strong></p>
+                  <p class="h3"> {{ user.email }}</p>
+               </div>
+            </figure>
+            <figure class="p-3 mb-0">
+               <div class="card p-3">
+                  <p class="h6"><strong>Verificado</strong> </p>
+                  <p class="h3"> {% if user.is_verified %}Sim{% else %}Não{% endif %}</p>
+               </div>
+            </figure>
+            <figure class="p-3 mb-0">
+               <div class="card p-3">
+                  <p class="h6"><strong>Último Login</strong> </p>
+                  <p class="h3"> {{ user.last_login|date:"d/m/Y H:i" }}</p>
+               </div>
+            </figure>
+         </div>
+      </div>
+   </div>
+</div>
+{% endblock %}

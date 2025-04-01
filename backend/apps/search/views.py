@@ -131,13 +131,9 @@ def search_adoption_pets(request):
     location = request.GET.get('location', '')
     distance = request.GET.get('distance', '')
 
+    logger.info(f"Parâmetros recebidos: {request.GET}")
     adoption_pets = PetAdoption.objects.filter(status='adoption')
-    total_pets = adoption_pets.count()  # Contagem inicial para depuração
-    logger.info(f"Pets iniciais com status 'adoption': {total_pets}")
-
-    logger.info(f"Parâmetros: q={search_query}, age={age}, neutered={is_neutered}, vaccinated={vaccinated}, "
-                f"animals={sociable_animals}, children={sociable_children}, strangers={sociable_strangers}, "
-                f"sex={sex}, size={size_by_age}, loc={location}, dist={distance}")
+    logger.info(f"Pets iniciais com status 'adoption': {adoption_pets.count()}")
 
     if search_query:
         adoption_pets = adoption_pets.filter(
@@ -149,7 +145,7 @@ def search_adoption_pets(request):
         logger.info(f"Filtro genérico: {adoption_pets.count()} pets")
 
     if age:
-        adoption_pets = adoption_pets.filter(approximate_age__exact=age)
+        adoption_pets = adoption_pets.filter(approximate_age__iexact=age)
         logger.info(f"Filtro idade ({age}): {adoption_pets.count()} pets")
 
     if is_neutered:
@@ -177,7 +173,7 @@ def search_adoption_pets(request):
     if sex:
         valid_sex = ['macho', 'fêmea']
         if sex in valid_sex:
-            adoption_pets = adoption_pets.filter(sex=sex)
+            adoption_pets = adoption_pets.filter(sex__iexact=sex)
             logger.info(f"Filtro sexo ({sex}): {adoption_pets.count()} pets")
         else:
             logger.warning(f"Sexo inválido: {sex}. Esperado: {valid_sex}")
@@ -185,7 +181,7 @@ def search_adoption_pets(request):
     if size_by_age:
         valid_sizes = ['filhote', 'adulto', 'idoso']
         if size_by_age in valid_sizes:
-            adoption_pets = adoption_pets.filter(size_by_age=size_by_age)
+            adoption_pets = adoption_pets.filter(size_by_age__iexact=size_by_age)
             logger.info(f"Filtro tamanho ({size_by_age}): {adoption_pets.count()} pets")
         else:
             logger.warning(f"Tamanho inválido: {size_by_age}. Esperado: {valid_sizes}")
@@ -196,22 +192,27 @@ def search_adoption_pets(request):
                 distance_km = float(distance)
                 user_location = location_to_point(location)
                 if user_location:
-                    try:
-                        adoption_pets = adoption_pets.filter(
-                            latitude__isnull=False,
-                            longitude__isnull=False
-                        ).extra(
-                            where=["ST_Distance_Sphere(ST_MakePoint(longitude, latitude), ST_MakePoint(%s, %s)) <= %s * 1000"],
-                            params=[user_location.x, user_location.y, distance_km]
+                    adoption_pets = adoption_pets.filter(
+                        latitude__isnull=False,
+                        longitude__isnull=False
+                    )
+                    if hasattr(adoption_pets, 'annotate'):
+                        adoption_pets = adoption_pets.annotate(
+                            distance=DistanceFunc(
+                                'point',
+                                user_location,
+                                spheroid=True
+                            )
+                        ).filter(
+                            distance__lte=distance_km * 1000
                         )
-                        logger.info(f"Filtro distância ({distance_km} km): {adoption_pets.count()} pets")
-                    except Exception as e:
-                        logger.error(f"Erro no filtro de distância (PostGIS não configurado?): {str(e)}")
+                        logger.info(f"Filtro distância GIS ({distance_km} km): {adoption_pets.count()} pets")
+                    else:
                         adoption_pets = adoption_pets.filter(location__icontains=location)
-                        logger.info(f"Filtro texto (fallback PostGIS): {adoption_pets.count()} pets")
+                        logger.info(f"Filtro texto (sem PostGIS): {adoption_pets.count()} pets")
                 else:
                     adoption_pets = adoption_pets.filter(location__icontains=location)
-                    logger.info(f"Filtro texto (fallback geocode): {adoption_pets.count()} pets")
+                    logger.info(f"Filtro texto (geocode falhou): {adoption_pets.count()} pets")
             except ValueError:
                 logger.error(f"Distância inválida: {distance}")
                 adoption_pets = adoption_pets.filter(location__icontains=location)
@@ -222,11 +223,8 @@ def search_adoption_pets(request):
 
     logger.info(f"Total de pets após todos os filtros: {adoption_pets.count()}")
 
-    # Converter range para lista para garantir compatibilidade com o template
     months = list(range(0, 12))
     years = list(range(1, 31))
-    logger.info(f"Contexto - months: {months}")
-    logger.info(f"Contexto - years: {years}")
 
     context = {
         'adoption_pets': adoption_pets,
@@ -241,8 +239,8 @@ def search_adoption_pets(request):
         'size_by_age': size_by_age,
         'location': location,
         'distance': distance,
-        'months': months,  # Lista de 0 a 11 meses
-        'years': years,   # Lista de 1 a 30 anos
+        'months': months,
+        'years': years,
     }
     return render(request, 'search/search_adoption.html', context)
 

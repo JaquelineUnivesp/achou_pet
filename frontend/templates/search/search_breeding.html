@@ -159,69 +159,189 @@
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        console.log("DOM carregado. Inicializando mapa e formatando endereços...");
+    // Inicializa o mapa com uma localização padrão (São Paulo)
+    var map = L.map('map').setView([-23.5489, -46.6388], 13);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(map);
 
-        if (typeof L === 'undefined') {
-            console.error("Leaflet não foi carregado. Verifique a conexão ou os arquivos.");
+    // Ícones personalizados para macho e fêmea com tamanho ajustado (31x43)
+    const iconMacho = L.icon({
+        iconUrl: '{% static "images/macho.png" %}',
+        iconSize: [31, 43],  // Tamanho ajustado conforme solicitado
+        iconAnchor: [15.5, 21.5],  // Metade da largura (31/2) e metade da altura (43/2)
+        popupAnchor: [0, -21.5]  // Popup ancorado acima do ícone
+    });
+
+    const iconFemea = L.icon({
+        iconUrl: '{% static "images/femea.png" %}',
+        iconSize: [31, 43],  // Tamanho ajustado conforme solicitado
+        iconAnchor: [15.5, 21.5],  // Metade da largura (31/2) e metade da altura (43/2)
+        popupAnchor: [0, -21.5]  // Popup ancorado acima do ícone
+    });
+
+    // Função para obter a localização do usuário via API do Django
+    function obterLocalizacaoUsuario() {
+        console.log("Obtendo localização do usuário...");
+        fetch('/search/api/user-location/')
+            .then(response => {
+                if (!response.ok) throw new Error("Erro na API de localização: " + response.status);
+                return response.json();
+            })
+            .then(data => {
+                if (data.error) {
+                    console.error("Erro retornado pela API:", data.error);
+                    return;
+                }
+                const latitude = data.latitude;
+                const longitude = data.longitude;
+                console.log(`Localização obtida: [${latitude}, ${longitude}]`);
+                map.setView([latitude, longitude], 12);
+            })
+            .catch(error => {
+                console.error('Erro ao obter a localização do usuário:', error);
+                map.setView([-23.5489, -46.6388], 13); // Fallback para São Paulo
+            });
+    }
+
+    // Formatar data
+    function formatarData(dataISO) {
+        const data = new Date(dataISO);
+        const dia = String(data.getDate()).padStart(2, '0');
+        const mes = String(data.getMonth() + 1).padStart(2, '0');
+        const ano = data.getFullYear();
+        return `${dia}/${mes}/${ano}`;
+    }
+
+    // Função para formatar o endereço
+    function formatAddress(address) {
+        if (!address || address === "Não especificado") return "Não especificado";
+        const parts = address.split(", ").map(part => part.trim());
+        try {
+            const street = parts[1] || "";
+            const neighborhood = parts[2] || "";
+            const city = parts[parts.length - 3] || "";
+            const state = parts[parts.length - 2] || "";
+            return `${street}, ${neighborhood}, ${city}, ${state}`.replace(/, ,/g, ", ").trim();
+        } catch (e) {
+            return address;
+        }
+    }
+
+    // Adicionar marcadores de pets
+    function adicionarMarcadores(pets) {
+        console.log("Pets recebidos para o mapa:", pets);
+        map.eachLayer(layer => {
+            if (layer instanceof L.Marker) map.removeLayer(layer);
+        });
+
+        if (!pets || pets.length === 0) {
+            console.log("Nenhum pet recebido para adicionar ao mapa.");
             return;
         }
 
-        const map = L.map('map', {
-            center: [-23.5489, -46.6388], // São Paulo como padrão
-            zoom: 10
-        });
-        console.log("Mapa inicializado.");
+        pets.forEach(pet => {
+            console.log(`Processando pet: ${pet.nome} | Latitude: ${pet.latitude} | Longitude: ${pet.longitude}`);
+            if (pet.latitude && pet.longitude && !isNaN(pet.latitude) && !isNaN(pet.longitude)) {
+                console.log(`Pet: ${pet.nome} | Sexo bruto: "${pet.sexo}" | Tipo: ${typeof pet.sexo}`);
+                const sexoNormalizado = pet.sexo ? pet.sexo.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '') : '';
+                console.log(`Sexo normalizado: "${sexoNormalizado}"`);
 
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            maxZoom: 19,
-            attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-        }).addTo(map);
-        console.log("Tiles adicionados.");
+                let markerIcon;
+                if (sexoNormalizado === 'femea') {
+                    markerIcon = iconFemea;
+                    console.log(`Atribuído ícone fêmea para ${pet.nome}`);
+                } else if (sexoNormalizado === 'macho') {
+                    markerIcon = iconMacho;
+                    console.log(`Atribuído ícone macho para ${pet.nome}`);
+                } else {
+                    console.warn(`Sexo desconhecido ou ausente para ${pet.nome}: "${pet.sexo}" (normalizado: "${sexoNormalizado}"). Usando ícone padrão (macho).`);
+                    markerIcon = iconMacho;
+                }
 
-        setTimeout(() => {
-            map.invalidateSize();
-            console.log("Mapa redimensionado.");
-        }, 200);
-
-        function formatAddress(location) {
-            if (!location || location === "Não especificado") {
-                return "Não especificado";
-            }
-            const parts = location.split(",").map(part => part.trim());
-            const formatted = parts.slice(0, 4).join(", ");
-            return formatted || location;
-        }
-
-        document.querySelectorAll('.pet-location').forEach(element => {
-            const rawLocation = element.getAttribute('data-raw-location');
-            const formattedLocation = formatAddress(rawLocation);
-            element.textContent = formattedLocation;
-        });
-
-        document.querySelectorAll('.pet-item').forEach(item => {
-            const lat = item.getAttribute('data-lat');
-            const lng = item.getAttribute('data-lng');
-            const name = item.querySelector('.card-title').textContent;
-            const rawLocation = item.getAttribute('data-location');
-            const formattedLocation = formatAddress(rawLocation);
-
-            if (lat && lng) {
-                L.marker([lat, lng]).addTo(map)
-                    .bindPopup(`<b>${name}</b><br>Local: ${formattedLocation}`);
+                const dataFormatada = pet.data_hora ? formatarData(pet.data_hora) : 'Data não disponível';
+                let marker = L.marker([pet.latitude, pet.longitude], { icon: markerIcon }).addTo(map);
+                let content = `
+                    <div class="info-box">
+                        ${pet.imagem1 ? `<img src="${pet.imagem1}" alt="Imagem do ${pet.nome}" style="width: 100%; height: 100px; object-fit: cover;">` : ''}
+                        <br><br>
+                        <h3>${pet.nome}</h3>
+                        <p><strong>Disponível desde ${dataFormatada}</strong><br>
+                        <strong>Espécie:</strong> ${pet.especie || 'Não especificada'}<br>
+                        <strong>Sexo:</strong> ${pet.sexo || 'Não especificado'}<br>
+                        <strong>Tamanho:</strong> ${pet.tamanho || 'Não especificado'}<br>
+                        <strong>Endereço:</strong> ${formatAddress(pet.address) || 'Não especificado'}</p>
+                        <button class="btn btn-primary" onclick="openModal('${pet.id}')">Ver detalhes</button>
+                    </div>
+                `;
+                marker.bindPopup(content);
+                console.log(`Marcador adicionado para ${pet.nome} em [${pet.latitude}, ${pet.longitude}]`);
+            } else {
+                console.warn(`Pet ${pet.nome} não tem coordenadas válidas: latitude=${pet.latitude}, longitude=${pet.longitude}`);
             }
         });
-    });
+    }
 
+    // Carregar pets da API com os filtros do formulário
+    function carregarPets() {
+        console.log("Carregando pets da API...");
+        const form = document.getElementById('filter-form');
+        const formData = new FormData(form);
+        formData.append('source', 'breeding');
+        const params = new URLSearchParams(formData).toString();
+
+        fetch(`/search/api/pets/?${params}`)
+            .then(response => {
+                if (!response.ok) throw new Error("Erro na API de pets: " + response.status);
+                return response.json();
+            })
+            .then(pets => {
+                console.log("Resposta da API recebida:", pets);
+                if (!pets || pets.length === 0) {
+                    console.log("Nenhum pet encontrado!");
+                } else {
+                    console.log(`Pets recebidos da API: ${pets.length} itens`);
+                    adicionarMarcadores(pets);
+                }
+            })
+            .catch(error => {
+                console.error('Erro ao carregar pets:', error);
+            });
+    }
+
+    // Função para limpar os filtros
     function limparFiltros() {
-        document.getElementById('filter-form').reset();
+        const form = document.getElementById('filter-form');
+        form.reset();
+        carregarPets();
         window.location.href = "{% url 'search:breeding_pets' %}";
     }
 
+    // Função placeholder para o modal
     function openModal(petId) {
-        console.log("Abrir modal para pet ID:", petId);
-        // Implemente a lógica do modal aqui, se necessário
+        console.log("Abrir modal para o pet com ID:", petId);
+        // Adicione a lógica do modal aqui, se necessário
     }
+
+    // Carregar localização do usuário e pets ao iniciar
+    obterLocalizacaoUsuario();
+    carregarPets();
+
+    // Atualizar o mapa e a lista de cards quando o formulário for enviado
+    document.getElementById('filter-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+        carregarPets();
+        this.submit();
+    });
+
+    // Atualizar o mapa ao digitar no campo de busca
+    document.getElementById('q').addEventListener('input', function() {
+        carregarPets();
+    });
+
+    // Garantir que o mapa seja redimensionado após carregar
+    setTimeout(() => {
+        map.invalidateSize();
+        console.log("Mapa redimensionado após carregamento.");
+    }, 500);
 </script>
 
 {% endblock %}

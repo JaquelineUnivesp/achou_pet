@@ -60,7 +60,9 @@ def search_pets(request):
         if search_query:
             breeding_pets = breeding_pets.filter(
                 Q(pet_name__icontains=search_query) |
-                Q(breeding_reason__icontains=search_query)
+                Q(breeding_reason__icontains=search_query) |
+                Q(breed__icontains=search_query) |  # Adicionado
+                Q(color__icontains=search_query)    # Adicionado
             )
 
     context = {
@@ -117,7 +119,7 @@ def search_lost_pets(request):
     }
     return render(request, 'search/search_lost.html', context)
 
-# View para busca de pets para adoção (já ajustada, mantida como referência)
+# View para busca de pets para adoção (sem alterações)
 def search_adoption_pets(request):
     search_query = request.GET.get('q', '').strip()
     age = request.GET.get('age', '')
@@ -196,7 +198,6 @@ def search_adoption_pets(request):
                         latitude__isnull=False,
                         longitude__isnull=False
                     )
-                    # Fallback sem PostGIS: filtragem por texto
                     adoption_pets = adoption_pets.filter(location__icontains=location)
                     logger.info(f"Filtro texto (sem PostGIS): {adoption_pets.count()} pets")
                 else:
@@ -247,6 +248,9 @@ def search_breeding_pets(request):
     cost_sharing = request.GET.get('cost_sharing', '').strip()
     location = request.GET.get('location', '').strip()
     distance = request.GET.get('distance', '').strip()
+    breed = request.GET.get('breed', '').strip()  # Adicionado
+    color = request.GET.get('color', '').strip()  # Adicionado
+    phone_for_notifications = request.GET.get('phone_for_notifications', '').strip()  # Adicionado
 
     logger.info(f"Parâmetros recebidos: {request.GET}")
     breeding_pets = BreedingPet.objects.all()
@@ -255,14 +259,16 @@ def search_breeding_pets(request):
     if search_query:
         breeding_pets = breeding_pets.filter(
             Q(pet_name__icontains=search_query) |
-            Q(breeding_reason__icontains=search_query)
+            Q(breeding_reason__icontains=search_query) |
+            Q(breed__icontains=search_query) |  # Adicionado
+            Q(color__icontains=search_query)    # Adicionado
         )
         logger.info(f"Filtro genérico ({search_query}): {breeding_pets.count()} pets")
 
     if species:
         valid_species = ['dog', 'cat']
         if species in valid_species:
-            breeding_pets = breeding_pets.filter(species=species)
+            breeding_pets = breeding_pets.filter(species__iexact=species)
             logger.info(f"Filtro espécie ({species}): {breeding_pets.count()} pets")
         else:
             logger.warning(f"Espécie inválida: {species}. Esperado: {valid_species}")
@@ -311,6 +317,18 @@ def search_breeding_pets(request):
         breeding_pets = breeding_pets.filter(cost_sharing__icontains=cost_sharing)
         logger.info(f"Filtro divisão de custos ({cost_sharing}): {breeding_pets.count()} pets")
 
+    if breed:
+        breeding_pets = breeding_pets.filter(breed__icontains=breed)
+        logger.info(f"Filtro raça ({breed}): {breeding_pets.count()} pets")
+
+    if color:
+        breeding_pets = breeding_pets.filter(color__icontains=color)
+        logger.info(f"Filtro cor ({color}): {breeding_pets.count()} pets")
+
+    if phone_for_notifications:
+        breeding_pets = breeding_pets.filter(phone_for_notifications__icontains=phone_for_notifications)
+        logger.info(f"Filtro telefone ({phone_for_notifications}): {breeding_pets.count()} pets")
+
     if location:
         if distance:
             try:
@@ -321,7 +339,6 @@ def search_breeding_pets(request):
                         latitude__isnull=False,
                         longitude__isnull=False
                     )
-                    # Fallback sem PostGIS: filtragem por texto
                     breeding_pets = breeding_pets.filter(location__icontains=location)
                     logger.info(f"Filtro texto (sem PostGIS): {breeding_pets.count()} pets")
                 else:
@@ -351,6 +368,9 @@ def search_breeding_pets(request):
         'cost_sharing': cost_sharing,
         'location': location,
         'distance': distance,
+        'breed': breed,  # Adicionado
+        'color': color,  # Adicionado
+        'phone_for_notifications': phone_for_notifications,  # Adicionado
     }
     return render(request, 'search/search_breeding.html', context)
 
@@ -366,6 +386,7 @@ def api_pets(request):
         breed = request.GET.get('breed', '').strip()
         color = request.GET.get('color', '').strip()
         sex = request.GET.get('sex', '')
+        size_by_age = request.GET.get('size_by_age', '')  # Adicionado para BreedingPet
 
         pet_data = []
 
@@ -392,11 +413,13 @@ def api_pets(request):
                 lost_pets = lost_pets.filter(sex=sex)
 
             for pet in lost_pets:
+                logger.info(f"LostPet {pet.name}: Sexo={pet.sex}")
                 pet_data.append({
                     'id': str(pet.id),
                     'nome': pet.name if pet.name else "Sem nome",
                     'tipo': pet.status,
                     'especie': pet.get_species_display() if pet.species else "Não especificada",
+                    'sexo': pet.sex if pet.sex else "Não especificado",
                     'address': pet.lost_location if pet.lost_location else "Local não informado",
                     'data_hora': pet.lost_date.isoformat() if pet.lost_date else pet.created_at.isoformat(),
                     'latitude': float(pet.latitude) if pet.latitude is not None else None,
@@ -422,17 +445,20 @@ def api_pets(request):
             if sex:
                 valid_sex_values = ['macho', 'fêmea']
                 if sex in valid_sex_values:
-                    adoption_pets = adoption_pets.filter(sex=sex)
+                    adoption_pets = adoption_pets.filter(sex__iexact=sex)
                     logger.info(f"API: Após filtro de sexo ({sex}): {adoption_pets.count()} pets")
                 else:
                     logger.warning(f"API: Valor inválido para sexo: {sex}")
 
             for pet in adoption_pets:
+                logger.info(f"AdoptionPet {pet.pet_name}: Sexo={pet.sex}")
                 pet_data.append({
                     'id': str(pet.id),
                     'nome': pet.pet_name if pet.pet_name else "Sem nome",
                     'tipo': 'adoption',
                     'especie': pet.get_species_display() if pet.species else "Não especificada",
+                    'sexo': pet.sex if pet.sex else "Não especificado",
+                    'tamanho': pet.get_size_by_age_display() if pet.size_by_age else "Não especificado",
                     'address': pet.location if pet.location else "Local não informado",
                     'data_hora': pet.created_at.isoformat(),
                     'latitude': float(pet.latitude) if pet.latitude is not None else None,
@@ -445,12 +471,14 @@ def api_pets(request):
             if search_query:
                 breeding_pets = breeding_pets.filter(
                     Q(pet_name__icontains=search_query) |
-                    Q(breeding_reason__icontains=search_query)
+                    Q(breeding_reason__icontains=search_query) |
+                    Q(breed__icontains=search_query) |  # Adicionado
+                    Q(color__icontains=search_query)    # Adicionado
                 )
             if species:
                 valid_species = ['dog', 'cat']
                 if species in valid_species:
-                    breeding_pets = breeding_pets.filter(species=species)
+                    breeding_pets = breeding_pets.filter(species__iexact=species)
                     logger.info(f"API: Após filtro de espécie ({species}): {breeding_pets.count()} pets")
                 else:
                     logger.warning(f"API: Espécie inválida: {species}")
@@ -468,15 +496,25 @@ def api_pets(request):
                     logger.info(f"API: Após filtro de tamanho ({size_by_age}): {breeding_pets.count()} pets")
                 else:
                     logger.warning(f"API: Tamanho inválido: {size_by_age}")
+            if breed:
+                breeding_pets = breeding_pets.filter(breed__icontains=breed)
+                logger.info(f"API: Após filtro de raça ({breed}): {breeding_pets.count()} pets")
+            if color:
+                breeding_pets = breeding_pets.filter(color__icontains=color)
+                logger.info(f"API: Após filtro de cor ({color}): {breeding_pets.count()} pets")
 
             for pet in breeding_pets:
+                logger.info(f"BreedingPet {pet.pet_name}: Sexo={pet.sex}")
                 pet_data.append({
                     'id': str(pet.id),
                     'nome': pet.pet_name if pet.pet_name else "Sem nome",
                     'tipo': 'breeding',
                     'especie': pet.get_species_display() if pet.species else "Não especificada",
-                    'sexo': pet.get_sex_display() if pet.sex else "Não especificado",
+                    'sexo': pet.sex if pet.sex else "Não especificado",
                     'tamanho': pet.get_size_by_age_display() if pet.size_by_age else "Não especificado",
+                    'breed': pet.breed if pet.breed else "Não especificada",  # Adicionado
+                    'color': pet.color if pet.color else "Não especificada",  # Adicionado
+                    'phone_for_notifications': pet.phone_for_notifications if pet.phone_for_notifications else "Não informado",  # Adicionado
                     'address': pet.location if pet.location else "Local não informado",
                     'data_hora': pet.created_at.isoformat(),
                     'latitude': float(pet.latitude) if pet.latitude is not None else None,

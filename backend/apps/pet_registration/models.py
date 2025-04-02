@@ -90,59 +90,203 @@ class PetAdoption(models.Model):
         verbose_name = 'Pet para Adoção'
         verbose_name_plural = 'Pets para Adoção'
 
+from django.db import models
+from django.contrib.auth import get_user_model
+from django.utils import timezone
+
+
 class BreedingPet(models.Model):
     YES_NO_CHOICES = [('yes', 'Sim'), ('no', 'Não')]
     SPECIES_CHOICES = [('dog', 'Cachorro'), ('cat', 'Gato')]
     SEX_CHOICES = [('macho', 'Macho'), ('fêmea', 'Fêmea')]
     SIZE_BY_AGE_CHOICES = [('filhote', 'Filhote'), ('adulto', 'Adulto'), ('idoso', 'Idoso')]
 
-    owner = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name='breeding_pets', verbose_name='Dono')  # Adicionado
-    pet_name = models.CharField(max_length=100, verbose_name="Nome do Pet")
-    approximate_age = models.CharField(max_length=50, verbose_name="Idade Aproximada")
-    approximate_weight = models.CharField(max_length=50, verbose_name="Peso Aproximado", blank=True, null=True)
-    is_neutered = models.CharField(max_length=3, choices=YES_NO_CHOICES, verbose_name="Castrado?")
-    is_vaccinated = models.CharField(max_length=3, choices=YES_NO_CHOICES, verbose_name="Vacinado?")
-    has_pedigree = models.CharField(max_length=3, choices=YES_NO_CHOICES, verbose_name="Possui Pedigree?")
-    has_bred_before = models.CharField(max_length=3, choices=YES_NO_CHOICES, verbose_name="Já Cruzou Antes?")
-    health_issues = models.TextField(blank=True, null=True, verbose_name="Problemas de Saúde")
-    pedigree_details = models.TextField(blank=True, null=True, verbose_name="Detalhes do Pedigree")
-    breeding_history = models.TextField(blank=True, null=True, verbose_name="Histórico de Cruzamento")
-    breeding_reason = models.TextField(verbose_name="Motivo do Cruzamento")
-    puppy_preferences = models.TextField(blank=True, null=True, verbose_name="Preferências de Filhotes")
-    cost_sharing = models.TextField(blank=True, null=True, verbose_name="Divisão de Custos")
-    location = models.CharField(max_length=255, blank=True, null=True, verbose_name="Localização")
-    latitude = models.DecimalField(max_digits=9, decimal_places=6, blank=True, null=True)
-    longitude = models.DecimalField(max_digits=9, decimal_places=6, blank=True, null=True)
-    photo_1 = models.ImageField(upload_to='breeding_pets/photos/', blank=True, null=True, verbose_name="Foto 1")
-    photo_2 = models.ImageField(upload_to='breeding_pets/photos/', blank=True, null=True, verbose_name="Foto 2")
-    photo_3 = models.ImageField(upload_to='breeding_pets/photos/', blank=True, null=True, verbose_name="Foto 3")
-    terms_accepted = models.BooleanField(default=False, verbose_name="Termos Aceitos")
-    privacy_policy_accepted = models.BooleanField(default=False, verbose_name="Política de Privacidade Aceita")
-    created_at = models.DateTimeField(auto_now_add=True)
+    # Relacionamento com o usuário
+    owner = models.ForeignKey(
+        get_user_model(),
+        on_delete=models.CASCADE,
+        related_name='breeding_pets',
+        verbose_name='Dono'
+    )
+
+    # Informações básicas do pet
+    pet_name = models.CharField(max_length=100, verbose_name="Nome do Pet", blank=True, null=True)
     species = models.CharField(
-        max_length=50,
+        max_length=10,  # Alinhado com LostPet e PetAdoption
         choices=SPECIES_CHOICES,
         verbose_name="Espécie",
         blank=True,
-        null=True
+        null=True  # Mantido opcional, ajuste para blank=False se quiser obrigatório
     )
     sex = models.CharField(
         max_length=10,
         choices=SEX_CHOICES,
         verbose_name="Sexo",
         blank=True,
-        null=True
+        null=True  # Mantido opcional, ajuste para blank=False se quiser obrigatório
     )
     size_by_age = models.CharField(
         max_length=20,
         choices=SIZE_BY_AGE_CHOICES,
         verbose_name="Tamanho por Idade",
         blank=True,
+        null=True  # Mantido opcional
+    )
+    breed = models.CharField(
+        max_length=100,
+        verbose_name="Raça",
+        blank=True,
+        null=True  # Mantido opcional, ajuste para blank=False se quiser obrigatório
+    )
+    color = models.CharField(
+        max_length=100,  # Aumentado para alinhar com LostPet
+        verbose_name="Cor",
+        blank=True,
+        null=True  # Mantido opcional, ajuste para blank=False se quiser obrigatório
+    )
+    approximate_age = models.CharField(
+        max_length=50,
+        verbose_name="Idade Aproximada",
+        blank=True,
         null=True
     )
-    breed = models.CharField(max_length=100, blank=True, null=True, verbose_name="Raça")  # Adicionado
-    color = models.CharField(max_length=50, blank=True, null=True, verbose_name="Cor")  # Adicionado
-    phone_for_notifications = models.CharField(max_length=15, blank=True, null=True, verbose_name="Telefone para Notificações")  # Adicionado
+    approximate_weight = models.CharField(
+        max_length=50,
+        verbose_name="Peso Aproximado",
+        blank=True,
+        null=True
+    )
+
+    # Saúde e características
+    is_neutered = models.CharField(
+        max_length=3,
+        choices=YES_NO_CHOICES,
+        verbose_name="Castrado?",
+        blank=True,
+        null=True
+    )
+    is_vaccinated = models.CharField(
+        max_length=3,
+        choices=YES_NO_CHOICES,
+        verbose_name="Vacinado?",
+        blank=True,
+        null=True
+    )
+    has_pedigree = models.CharField(
+        max_length=3,
+        choices=YES_NO_CHOICES,
+        verbose_name="Possui Pedigree?",
+        blank=True,
+        null=True
+    )
+    has_bred_before = models.CharField(
+        max_length=3,
+        choices=YES_NO_CHOICES,
+        verbose_name="Já Cruzou Antes?",
+        blank=True,
+        null=True
+    )
+    health_issues = models.TextField(
+        verbose_name="Problemas de Saúde",
+        blank=True,
+        null=True
+    )
+
+    # Detalhes de reprodução
+    pedigree_details = models.TextField(
+        verbose_name="Detalhes do Pedigree",
+        blank=True,
+        null=True
+    )
+    breeding_history = models.TextField(
+        verbose_name="Histórico de Cruzamento",
+        blank=True,
+        null=True
+    )
+    breeding_reason = models.TextField(
+        verbose_name="Motivo do Cruzamento",
+        blank=True,
+        null=True  # Ajuste para blank=False se quiser obrigatório
+    )
+    puppy_preferences = models.TextField(
+        verbose_name="Preferências de Filhotes",
+        blank=True,
+        null=True
+    )
+    cost_sharing = models.CharField(
+        max_length=100,  # Alterado de TextField para CharField para consistência
+        verbose_name="Divisão de Custos",
+        blank=True,
+        null=True
+    )
+
+    # Contato
+    phone_for_notifications = models.CharField(
+        max_length=15,
+        verbose_name="Telefone para Notificações",
+        blank=True,
+        null=True  # Mantido opcional, ajuste para blank=False se quiser obrigatório
+    )
+
+    # Fotos
+    photo_1 = models.ImageField(
+        upload_to='breeding_pets/photos/',
+        verbose_name="Foto 1",
+        blank=True,
+        null=True
+    )
+    photo_2 = models.ImageField(
+        upload_to='breeding_pets/photos/',
+        verbose_name="Foto 2",
+        blank=True,
+        null=True
+    )
+    photo_3 = models.ImageField(
+        upload_to='breeding_pets/photos/',
+        verbose_name="Foto 3",
+        blank=True,
+        null=True
+    )
+
+    # Localização
+    location = models.CharField(
+        max_length=255,
+        verbose_name="Localização",
+        blank=True,
+        null=True
+    )
+    latitude = models.DecimalField(
+        max_digits=9,
+        decimal_places=6,
+        blank=True,
+        null=True,
+        verbose_name="Latitude"
+    )
+    longitude = models.DecimalField(
+        max_digits=9,
+        decimal_places=6,
+        blank=True,
+        null=True,
+        verbose_name="Longitude"
+    )
+
+    # Termos e criação
+    terms_accepted = models.BooleanField(
+        default=False,
+        verbose_name="Termos Aceitos"
+    )
+    privacy_policy_accepted = models.BooleanField(
+        default=False,
+        verbose_name="Política de Privacidade Aceita"
+    )
+    created_at = models.DateTimeField(
+        auto_now_add=True,
+        verbose_name="Criado em"
+    )
 
     def __str__(self):
         return self.pet_name or "Pet sem nome"
+
+    class Meta:
+        verbose_name = "Pet para Reprodução"
+        verbose_name_plural = "Pets para Reprodução"

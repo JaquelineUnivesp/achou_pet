@@ -56,6 +56,20 @@
                      </div>
                  </div>
                  <div class="row mb-4">
+                     <div class="col-md-4">
+                         <label for="id_breed" class="form-label fw-bold">Raça</label><br>
+                         {{ form.breed }}
+                     </div>
+                     <div class="col-md-4">
+                         <label for="id_color" class="form-label fw-bold">Cor</label><br>
+                         {{ form.color }}
+                     </div>
+                     <div class="col-md-4">
+                         <label for="id_phone_for_notifications" class="form-label fw-bold">Telefone para Notificações</label><br>
+                         {{ form.phone_for_notifications }}
+                     </div>
+                 </div>
+                 <div class="row mb-4">
                      <div class="col-md-6">
                          <label for="id_approximate_weight" class="form-label fw-bold">Peso Aproximado</label><br>
                          {{ form.approximate_weight }}
@@ -95,7 +109,7 @@
                  </div>
                  <div class="mb-4">
                      <label for="id_breeding_reason" class="form-label fw-bold">Motivo do Cruzamento</label><br>
-                     {{ form.breeding_reason }}
+                         {{ form.breeding_reason }}
                  </div>
                  <div class="mb-4">
                      <label for="id_puppy_preferences" class="form-label fw-bold">Preferências de Filhotes</label><br>

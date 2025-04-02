@@ -19,9 +19,7 @@
                 <li class="nav-item"><a class="nav-link" href="http://127.0.0.1:8000/sobre">Sobre</a></li>
                  <li class="nav-item"><a class="nav-link" href="http://127.0.0.1:8000/search/lost/">Pets Perdidos</a></li>
                 <li class="nav-item"><a class="nav-link" href="http://127.0.0.1:8000/pet_registration/search/adoption/">Pets para Adoção</a></li>
-
-
-
+                 <li class="nav-item"><a class="nav-link" href="http://127.0.0.1:8000/search/breeding">Pets para Cruzamento</a></li>
 
 
 
@@ -30,13 +28,7 @@
             <!-- Botões de login/cadastro ou informações do usuário à direita -->
             <ul class="navbar-nav ms-auto">
                 {% if user.is_authenticated %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bell" viewBox="0 0 16 16">
-                                <path d="M8 16a2 2 0 0 1-1.995-1.858l-.76-3.422A7.977 7.977 0 0 1 4 10c-3.98 0-7.162-3.213-7.162-7.199 0-1.012.292-1.923.803-2.712C1.505.37 2.35 2.565 2 3.732 2c1.047 0 1.873.37 2.518 1 .645.63 1.352.923 2.338.923 1 0 1.967-.923 2.337-.923.645-.63 1.472-1 2.518-1 1.167 0 2.227.35 2.932.79C13.708 2.077 14 2.988 14 4c0 3.98-3.182 7.199-7.162 7.199a7.977 7.977 0 0 1-2.158.321l-.76 3.422A2 2 0 0 1 8 16z"/>
-                            </svg>
-                        </a>
-                    </li>
+
                     <li class="nav-item">
                         <a class="nav-link" href="#">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">

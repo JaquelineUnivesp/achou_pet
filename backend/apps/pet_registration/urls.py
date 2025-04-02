@@ -2,7 +2,7 @@
 from django.urls import path
 from . import views
 from .views import user_pets_list
-from .views import pet_detail, edit_pet, delete_pet, user_pets_list
+from .views import pet_detail, edit_pet, delete_pet
 from django.conf.urls.static import static
 
 

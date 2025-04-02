@@ -1,8 +1,5 @@
 from django import forms
 from .models import LostPet, PetAdoption, BreedingPet
-import os
-from django.utils.text import slugify
-from django.utils import timezone
 from decimal import Decimal
 
 class LostPetForm(forms.ModelForm):
@@ -116,7 +113,8 @@ class BreedingPetForm(forms.ModelForm):
         fields = ['pet_name', 'approximate_age', 'is_neutered', 'approximate_weight', 'is_vaccinated',
                   'health_issues', 'has_pedigree', 'pedigree_details', 'has_bred_before', 'breeding_history',
                   'breeding_reason', 'puppy_preferences', 'cost_sharing', 'location', 'latitude', 'longitude',
-                  'photo_1', 'photo_2', 'photo_3', 'terms_accepted', 'privacy_policy_accepted']
+                  'photo_1', 'photo_2', 'photo_3', 'terms_accepted', 'privacy_policy_accepted', 'species', 'sex',
+                  'breed', 'color', 'phone_for_notifications', 'size_by_age']
         widgets = {
             'health_issues': forms.Textarea(attrs={'rows': 3, 'class': 'form-control'}),
             'pedigree_details': forms.Textarea(attrs={'rows': 3, 'class': 'form-control'}),
@@ -134,6 +132,12 @@ class BreedingPetForm(forms.ModelForm):
             'approximate_age': forms.TextInput(attrs={'class': 'form-control'}),
             'approximate_weight': forms.TextInput(attrs={'class': 'form-control'}),
             'location': forms.TextInput(attrs={'class': 'form-control'}),
+            'species': forms.Select(attrs={'class': 'form-control'}),
+            'sex': forms.Select(attrs={'class': 'form-select'}),
+            'breed': forms.TextInput(attrs={'class': 'form-control'}),
+            'color': forms.TextInput(attrs={'class': 'form-control'}),
+            'phone_for_notifications': forms.TextInput(attrs={'class': 'form-control'}),
+            'size_by_age': forms.Select(attrs={'class': 'form-select'}),
         }
 
     def clean_latitude(self):

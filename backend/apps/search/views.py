@@ -142,7 +142,8 @@ def search_adoption_pets(request):
             Q(pet_name__icontains=search_query) |
             Q(observations__icontains=search_query) |
             Q(breed__icontains=search_query) |
-            Q(color__icontains=search_query)
+            Q(color__icontains=search_query) |
+            Q(location__icontains=search_query)
         )
         logger.info(f"Filtro genérico: {adoption_pets.count()} pets")
 

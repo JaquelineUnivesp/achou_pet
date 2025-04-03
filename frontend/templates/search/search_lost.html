@@ -13,6 +13,16 @@
     <form method="get" class="mb-4" id="filter-form">
         <div class="row">
             <div class="col-md-2">
+                        <div class="row mt-2">
+            <div class="col-md-9">
+                <label for="q">Pesquisar</label>
+                <input type="text" name="q" id="q" class="form-control" value="{{ search_query }}" placeholder="Nome, cor, endereço...">
+            </div>
+            <div class="col-md-3">
+                <button type="submit" class="btn btn-primary mt-4">Filtrar</button>
+                <button type="button" class="btn btn-secondary mt-4" onclick="limparFiltros()">Limpar Filtros</button>
+            </div>
+        </div>
                 <label for="status">Status</label>
                 <select name="status" id="status" class="form-control">
                     <option value="">Todos</option>
@@ -54,16 +64,19 @@
                 </select>
             </div>
         </div>
-        <div class="row mt-2">
-            <div class="col-md-9">
-                <label for="q">Pesquisar</label>
-                <input type="text" name="q" id="q" class="form-control" value="{{ search_query }}" placeholder="Nome, cor, endereço...">
-            </div>
-            <div class="col-md-3">
-                <button type="submit" class="btn btn-primary mt-4">Filtrar</button>
-                <button type="button" class="btn btn-secondary mt-4" onclick="limparFiltros()">Limpar Filtros</button>
-            </div>
-        </div>
+
+        <div class="mb-3">
+    <label for="location" class="form-label fw-bold">Localização:</label>
+    <input type="text" name="location" id="location" class="form-control" placeholder="Cidade, Bairro, CEP" value="{{ location|default:'' }}">
+</div>
+
+<div class="mb-3">
+    <label for="distance" class="form-label fw-bold">Distância Máxima (km):</label>
+    <input type="number" name="distance" id="distance" class="form-control" placeholder="Ex: 10" value="{{ distance|default:'' }}">
+</div>
+
+
+
     </form>
 
     <!-- Resultados em formato de cards -->

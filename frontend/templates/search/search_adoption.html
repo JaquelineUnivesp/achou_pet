@@ -101,13 +101,14 @@
 
                 <div class="mb-3">
                     <label for="location" class="form-label fw-bold">Localização:</label>
-                    <input type="text" name="location" id="location" value="{{ location|default:'' }}" class="form-control" placeholder="Cidade, Bairro ou CEP">
+                    <input type="text" name="location" id="location" class="form-control" placeholder="Cidade, Bairro, CEP" value="{{ location|default:'' }}">
                 </div>
 
                 <div class="mb-3">
                     <label for="distance" class="form-label fw-bold">Distância Máxima (km):</label>
-                    <input type="number" name="distance" id="distance" value="{{ distance|default:'' }}" class="form-control" placeholder="Ex: 10">
+                    <input type="number" name="distance" id="distance" class="form-control" placeholder="Ex: 10" value="{{ distance|default:'' }}">
                 </div>
+
 
                 <button type="submit" class="btn btn-primary w-100">Filtrar</button>
                 <button type="button" class="btn btn-secondary w-100 mt-2" onclick="limparFiltros()">Limpar Filtros</button>

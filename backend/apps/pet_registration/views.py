@@ -9,6 +9,8 @@ from .models import PetAdoption, BreedingPet, LostPet
 from .forms import LostPetForm, AdoptionPetForm, BreedingPetForm
 from django.contrib.gis.geos import Point
 from geopy.geocoders import Nominatim
+from apps.pet_registration.services.pet_filter import filter_by_location
+
 import logging
 
 # Configuração do logger
@@ -291,6 +293,12 @@ def search_lost_pets(request):
         'search_query': search_query,
     }
     return render(request, 'search/search_lost.html', context)
+
+
+
+
+
+
 
 def search_adoption_pets(request):
     search_query = request.GET.get('q', '').strip()

@@ -157,6 +157,44 @@
     </div>
 </div>
 
+
+<!-- Modal para detalhes do pet -->
+<div class="modal fade" id="petModal" tabindex="-1" aria-labelledby="petModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="petModalLabel">Detalhes do Pet</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <img id="modalPetImage" src="" class="img-fluid" alt="Foto do Pet" style="max-height: 300px; object-fit: cover;">
+                    </div>
+                    <div class="col-md-6">
+                        <h3 id="modalPetName"></h3>
+                        <ul class="list-unstyled">
+                            <li><strong>Idade:</strong> <span id="modalPetAge"></span></li>
+                            <li><strong>Castrado:</strong> <span id="modalPetNeutered"></span></li>
+                            <li><strong>Vacinado:</strong> <span id="modalPetVaccinated"></span></li>
+                            <li><strong>Sociável com Animais:</strong> <span id="modalPetSociableAnimals"></span></li>
+                            <li><strong>Sociável com Crianças:</strong> <span id="modalPetSociableChildren"></span></li>
+                            <li><strong>Sociável com Estranhos:</strong> <span id="modalPetSociableStrangers"></span></li>
+                            <li><strong>Gênero:</strong> <span id="modalPetSex"></span></li>
+                            <li><strong>Tamanho:</strong> <span id="modalPetSize"></span></li>
+                            <li><strong>Localização:</strong> <span id="modalPetLocation"></span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <!-- Estilos -->
 <style>
     .info-box {
@@ -208,14 +246,14 @@
     // Ícones personalizados para macho e fêmea com tamanho correto (50x82)
     const iconMacho = L.icon({
         iconUrl: '{% static "images/macho.png" %}',
-        iconSize: [50, 82],  // Tamanho exato da imagem
+        iconSize: [31, 43],  // Tamanho exato da imagem
         iconAnchor: [25, 41],  // Metade da largura (50/2) e metade da altura (82/2)
         popupAnchor: [0, -41]  // Popup ancorado acima do ícone
     });
 
     const iconFemea = L.icon({
         iconUrl: '{% static "images/femea.png" %}',
-        iconSize: [50, 82],  // Tamanho exato da imagem
+        iconSize: [31, 43],  // Tamanho exato da imagem
         iconAnchor: [25, 41],  // Metade da largura (50/2) e metade da altura (82/2)
         popupAnchor: [0, -41]  // Popup ancorado acima do ícone
     });
@@ -374,6 +412,12 @@
     document.getElementById('query').addEventListener('input', function() {
         carregarPets();
     });
+
+
+    
+
+
+
 </script>
 
 {% endblock %}

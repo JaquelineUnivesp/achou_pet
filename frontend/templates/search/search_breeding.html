@@ -166,16 +166,16 @@
     // Ícones personalizados para macho e fêmea com tamanho ajustado (31x43)
     const iconMacho = L.icon({
         iconUrl: '{% static "images/macho.png" %}',
-        iconSize: [31, 43],  // Tamanho ajustado conforme solicitado
-        iconAnchor: [15.5, 21.5],  // Metade da largura (31/2) e metade da altura (43/2)
-        popupAnchor: [0, -21.5]  // Popup ancorado acima do ícone
+        iconSize: [31, 43],
+        iconAnchor: [15.5, 21.5],
+        popupAnchor: [0, -21.5]
     });
 
     const iconFemea = L.icon({
         iconUrl: '{% static "images/femea.png" %}',
-        iconSize: [31, 43],  // Tamanho ajustado conforme solicitado
-        iconAnchor: [15.5, 21.5],  // Metade da largura (31/2) e metade da altura (43/2)
-        popupAnchor: [0, -21.5]  // Popup ancorado acima do ícone
+        iconSize: [31, 43],
+        iconAnchor: [15.5, 21.5],
+        popupAnchor: [0, -21.5]
     });
 
     // Função para obter a localização do usuário via API do Django
@@ -224,6 +224,17 @@
         } catch (e) {
             return address;
         }
+    }
+
+    // Função para preencher os locais nos cards
+    function preencherLocaisNosCards() {
+        const locationElements = document.querySelectorAll('.pet-location');
+        locationElements.forEach(element => {
+            const rawLocation = element.getAttribute('data-raw-location');
+            const formattedLocation = formatAddress(rawLocation);
+            element.textContent = formattedLocation;
+            console.log(`Local preenchido para card: ${formattedLocation}`);
+        });
     }
 
     // Adicionar marcadores de pets
@@ -321,20 +332,25 @@
         // Adicione a lógica do modal aqui, se necessário
     }
 
-    // Carregar localização do usuário e pets ao iniciar
-    obterLocalizacaoUsuario();
-    carregarPets();
+    // Carregar localização do usuário, pets e preencher locais nos cards ao iniciar
+    document.addEventListener('DOMContentLoaded', function() {
+        obterLocalizacaoUsuario();
+        carregarPets();
+        preencherLocaisNosCards();
+    });
 
     // Atualizar o mapa e a lista de cards quando o formulário for enviado
     document.getElementById('filter-form').addEventListener('submit', function(event) {
         event.preventDefault();
         carregarPets();
         this.submit();
+        setTimeout(preencherLocaisNosCards, 500); // Aguarda o DOM atualizar
     });
 
     // Atualizar o mapa ao digitar no campo de busca
     document.getElementById('q').addEventListener('input', function() {
         carregarPets();
+        setTimeout(preencherLocaisNosCards, 500); // Aguarda o DOM atualizar
     });
 
     // Garantir que o mapa seja redimensionado após carregar

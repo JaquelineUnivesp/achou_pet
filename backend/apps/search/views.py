@@ -558,3 +558,6 @@ def get_user_location(request):
     except ValueError as e:
         logger.error(f"Erro ao processar localização: {str(e)}")
         return JsonResponse({'error': 'Erro ao processar a localização', 'detail': str(e)}, status=500)
+
+
+

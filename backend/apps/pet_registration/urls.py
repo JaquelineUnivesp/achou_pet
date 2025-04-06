@@ -23,6 +23,7 @@ urlpatterns = [
     path('reverse_geocode/', views.reverse_geocode, name='reverse_geocode'),
     path('pets_user/', views.user_pets_list, name='user_pets_list'),
     path('pet/<int:pet_id>/', pet_detail, name='pet_detail'),
+
     path('pet/<int:pet_id>/editar/', edit_pet, name='edit_pet'),
     path('pet/<int:pet_id>/deletar/', delete_pet, name='delete_pet'),
     path('adoption/register/', views.register_adoption_pet, name='register_adoption_pet'),
@@ -36,6 +37,7 @@ urlpatterns = [
     path('adoption_pet/<int:pet_id>/delete/', views.delete_adoption_pet, name='delete_adoption_pet'),
     path('breeding_pet/<int:pet_id>/delete/', views.delete_breeding_pet, name='delete_breeding_pet'),
     path('search/adoption/', views.search_adoption_pets, name='search_adoption_pets'),
+
 
 
 ]

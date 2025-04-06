@@ -2,423 +2,400 @@
 {% load static %}
 {% block title %}Busca de Pets para Adoção - Achou Pet{% endblock %}
 {% block content %}
-
 <div class="container mt-5">
-    <h1 class="display-1 text-center">Busca de Pets para <span class="color_project">Adoção</span></h1>
-    <p class="text-center">Encontre o pet perfeito para você!</p>
-
-    <!-- Mapa -->
-    <div id="map" style="height: 400px; width: 100%; margin-bottom: 20px; background-color: #e0e0e0;"></div>
-
-    <div class="search-container row">
-        <!-- Sidebar com filtros -->
-        <aside class="sidebar col-md-3">
-            <form method="GET" action="{% url 'search:adoption_pets' %}" class="p-3 border rounded" id="filter-form">
-                <div class="mb-3">
-                    <label for="query" class="form-label fw-bold">Busca (ex.: cor, nome):</label>
-                    <input type="text" name="q" id="query" value="{{ search_query|default:'' }}" class="form-control" placeholder="Digite uma palavra-chave">
-                </div>
-
-                <div class="mb-3">
-                    <label for="age" class="form-label fw-bold">Idade Aproximada:</label>
-                    <select name="age" id="age" class="form-select">
-                        <option value="">Todos</option>
-                        {% for i in months %}
-                            <option value="{{ i }} meses" {% if age == i|stringformat:"s meses" %}selected{% endif %}>{{ i }} meses</option>
-                        {% endfor %}
-                        {% for i in years %}
-                            <option value="{{ i }} anos" {% if age == i|stringformat:"s anos" %}selected{% endif %}>{{ i }} anos</option>
-                        {% endfor %}
-                    </select>
-                </div>
-
-                <div class="mb-3">
-                    <label for="is_neutered" class="form-label fw-bold">Castrado:</label>
-                    <select name="is_neutered" id="is_neutered" class="form-select">
-                        <option value="">Todos</option>
-                        <option value="yes" {% if is_neutered == 'yes' %}selected{% endif %}>Sim</option>
-                        <option value="no" {% if is_neutered == 'no' %}selected{% endif %}>Não</option>
-                    </select>
-                </div>
-
-                <div class="mb-3">
-                    <label for="vaccinated" class="form-label fw-bold">Vacinado:</label>
-                    <select name="vaccinated" id="vaccinated" class="form-select">
-                        <option value="">Todos</option>
-                        <option value="yes" {% if vaccinated == 'yes' %}selected{% endif %}>Sim</option>
-                        <option value="no" {% if vaccinated == 'no' %}selected{% endif %}>Não</option>
-                    </select>
-                </div>
-
-                <div class="mb-3">
-                    <label for="sociable_animals" class="form-label fw-bold">Sociável com Animais:</label>
-                    <select name="sociable_animals" id="sociable_animals" class="form-select">
-                        <option value="">Todos</option>
-                        <option value="yes" {% if sociable_animals == 'yes' %}selected{% endif %}>Sim</option>
-                        <option value="no" {% if sociable_animals == 'no' %}selected{% endif %}>Não</option>
-                        <option value="sometimes" {% if sociable_animals == 'sometimes' %}selected{% endif %}>Às Vezes</option>
-                    </select>
-                </div>
-
-                <div class="mb-3">
-                    <label for="sociable_children" class="form-label fw-bold">Sociável com Crianças:</label>
-                    <select name="sociable_children" id="sociable_children" class="form-select">
-                        <option value="">Todos</option>
-                        <option value="yes" {% if sociable_children == 'yes' %}selected{% endif %}>Sim</option>
-                        <option value="no" {% if sociable_children == 'no' %}selected{% endif %}>Não</option>
-                        <option value="sometimes" {% if sociable_children == 'sometimes' %}selected{% endif %}>Às Vezes</option>
-                    </select>
-                </div>
-
-                <div class="mb-3">
-                    <label for="sociable_strangers" class="form-label fw-bold">Sociável com Estranhos:</label>
-                    <select name="sociable_strangers" id="sociable_strangers" class="form-select">
-                        <option value="">Todos</option>
-                        <option value="yes" {% if sociable_strangers == 'yes' %}selected{% endif %}>Sim</option>
-                        <option value="no" {% if sociable_strangers == 'no' %}selected{% endif %}>Não</option>
-                        <option value="sometimes" {% if sociable_strangers == 'sometimes' %}selected{% endif %}>Às Vezes</option>
-                    </select>
-                </div>
-
-                <div class="mb-3">
-                    <label for="sex" class="form-label fw-bold">Gênero:</label>
-                    <select name="sex" id="sex" class="form-select">
-                        <option value="">Todos</option>
-                        <option value="macho" {% if sex == 'macho' %}selected{% endif %}>Masculino</option>
-                        <option value="fêmea" {% if sex == 'fêmea' %}selected{% endif %}>Feminino</option>
-                    </select>
-                </div>
-
-                <div class="mb-3">
-                    <label for="size_by_age" class="form-label fw-bold">Tamanho:</label>
-                    <select name="size_by_age" id="size_by_age" class="form-select">
-                        <option value="">Todos</option>
-                        <option value="filhote" {% if size_by_age == 'filhote' %}selected{% endif %}>Filhote</option>
-                        <option value="adulto" {% if size_by_age == 'adulto' %}selected{% endif %}>Adulto</option>
-                        <option value="idoso" {% if size_by_age == 'idoso' %}selected{% endif %}>Idoso</option>
-                    </select>
-                </div>
-
-                <div class="mb-3">
-                    <label for="location" class="form-label fw-bold">Localização:</label>
-                    <input type="text" name="location" id="location" class="form-control" placeholder="Cidade, Bairro, CEP" value="{{ location|default:'' }}">
-                </div>
-
-                <div class="mb-3">
-                    <label for="distance" class="form-label fw-bold">Distância Máxima (km):</label>
-                    <input type="number" name="distance" id="distance" class="form-control" placeholder="Ex: 10" value="{{ distance|default:'' }}">
-                </div>
-
-
-                <button type="submit" class="btn btn-primary w-100">Filtrar</button>
-                <button type="button" class="btn btn-secondary w-100 mt-2" onclick="limparFiltros()">Limpar Filtros</button>
-            </form>
-        </aside>
-
-        <!-- Resultados -->
-        <section class="results col-md-9">
-            {% if adoption_pets %}
-                <h3>Resultados ({{ adoption_pets|length }})</h3>
-                <div class="row" id="pets-list">
-                    {% for pet in adoption_pets %}
-                        <div class="col-md-4 mb-4 pet-item" data-lat="{{ pet.latitude }}" data-lng="{{ pet.longitude }}" data-sex="{{ pet.sex }}">
-                            <div class="card h-100">
-                                {% if pet.photo_1 %}
-                                    <img src="{{ pet.photo_1.url }}" class="card-img-top" alt="{{ pet.pet_name }}" style="height: 200px; object-fit: cover;">
-                                {% else %}
-                                    <div class="card-img-top bg-secondary" style="height: 200px; display: flex; align-items: center; justify-content: center;">
-                                        <span class="text-white">Sem foto</span>
-                                    </div>
-                                {% endif %}
-                                <div class="card-body">
-                                    <h5 class="card-title">{{ pet.pet_name|title|default:"Pet sem nome" }}</h5>
-                                    <ul class="list-unstyled">
-                                        <li><strong>Idade:</strong> {{ pet.approximate_age }}</li>
-                                        <li><strong>Castrado:</strong> {{ pet.get_is_neutered_display }}</li>
-                                        <li><strong>Vacinado:</strong> {{ pet.get_is_vaccinated_display }}</li>
-                                        <li><strong>Sociável com Animais:</strong> {{ pet.get_sociable_with_animals_display }}</li>
-                                        <li><strong>Sociável com Crianças:</strong> {{ pet.get_sociable_with_children_display }}</li>
-                                        <li><strong>Sociável com Estranhos:</strong> {{ pet.get_sociable_with_strangers_display }}</li>
-                                        <li><strong>Local:</strong> <span id="location-{{ pet.id }}">{{ pet.location|default:"Não especificado" }}</span></li>
-                                        <li><strong>Gênero:</strong> {{ pet.get_sex_display }}</li>
-                                        <li><strong>Tamanho:</strong> {{ pet.get_size_by_age_display }}</li>
-                                    </ul>
-                                </div>
-                                <div class="card-footer text-center">
-                                    <button class="btn btn-primary" onclick="openModal('{{ pet.id }}')">Ver detalhes</button>
-                                </div>
-                            </div>
-                        </div>
-                    {% endfor %}
-                </div>
-            {% else %}
-                <p class="no-results text-center mt-4">Nenhum pet para adoção encontrado com esses filtros.</p>
-            {% endif %}
-        </section>
-    </div>
+   <h1 class="display-1 text-center">Busca de Pets para <span class="color_project">Adoção</span></h1>
+   <p class="text-center">Encontre o pet perfeito para você!</p>
+   <!-- Mapa -->
+   <div id="map" style="height: 400px; width: 100%; margin-bottom: 20px; background-color: #e0e0e0;"></div>
+   <div class="search-container row">
+      <!-- Sidebar com filtros -->
+      <aside class="sidebar col-md-3">
+         <form method="GET" action="{% url 'search:adoption_pets' %}" class="p-3 border rounded" id="filter-form">
+            <div class="mb-3">
+               <label for="query" class="form-label fw-bold">Busca (ex.: cor, nome):</label>
+               <input type="text" name="q" id="query" value="{{ search_query|default:'' }}" class="form-control" placeholder="Digite uma palavra-chave">
+            </div>
+            <div class="mb-3">
+               <label for="age" class="form-label fw-bold">Idade Aproximada:</label>
+               <select name="age" id="age" class="form-select">
+                  <option value="">Todos</option>
+                  {% for i in months %}
+                  <option value="{{ i }} meses" {% if age == i|stringformat:"s meses" %}selected{% endif %}>{{ i }} meses</option>
+                  {% endfor %}
+                  {% for i in years %}
+                  <option value="{{ i }} anos" {% if age == i|stringformat:"s anos" %}selected{% endif %}>{{ i }} anos</option>
+                  {% endfor %}
+               </select>
+            </div>
+            <div class="mb-3">
+               <label for="is_neutered" class="form-label fw-bold">Castrado:</label>
+               <select name="is_neutered" id="is_neutered" class="form-select">
+                  <option value="">Todos</option>
+                  <option value="yes" {% if is_neutered == 'yes' %}selected{% endif %}>Sim</option>
+                  <option value="no" {% if is_neutered == 'no' %}selected{% endif %}>Não</option>
+               </select>
+            </div>
+            <div class="mb-3">
+               <label for="vaccinated" class="form-label fw-bold">Vacinado:</label>
+               <select name="vaccinated" id="vaccinated" class="form-select">
+                  <option value="">Todos</option>
+                  <option value="yes" {% if vaccinated == 'yes' %}selected{% endif %}>Sim</option>
+                  <option value="no" {% if vaccinated == 'no' %}selected{% endif %}>Não</option>
+               </select>
+            </div>
+            <div class="mb-3">
+               <label for="sociable_animals" class="form-label fw-bold">Sociável com Animais:</label>
+               <select name="sociable_animals" id="sociable_animals" class="form-select">
+                  <option value="">Todos</option>
+                  <option value="yes" {% if sociable_animals == 'yes' %}selected{% endif %}>Sim</option>
+                  <option value="no" {% if sociable_animals == 'no' %}selected{% endif %}>Não</option>
+                  <option value="sometimes" {% if sociable_animals == 'sometimes' %}selected{% endif %}>Às Vezes</option>
+               </select>
+            </div>
+            <div class="mb-3">
+               <label for="sociable_children" class="form-label fw-bold">Sociável com Crianças:</label>
+               <select name="sociable_children" id="sociable_children" class="form-select">
+                  <option value="">Todos</option>
+                  <option value="yes" {% if sociable_children == 'yes' %}selected{% endif %}>Sim</option>
+                  <option value="no" {% if sociable_children == 'no' %}selected{% endif %}>Não</option>
+                  <option value="sometimes" {% if sociable_children == 'sometimes' %}selected{% endif %}>Às Vezes</option>
+               </select>
+            </div>
+            <div class="mb-3">
+               <label for="sociable_strangers" class="form-label fw-bold">Sociável com Estranhos:</label>
+               <select name="sociable_strangers" id="sociable_strangers" class="form-select">
+                  <option value="">Todos</option>
+                  <option value="yes" {% if sociable_strangers == 'yes' %}selected{% endif %}>Sim</option>
+                  <option value="no" {% if sociable_strangers == 'no' %}selected{% endif %}>Não</option>
+                  <option value="sometimes" {% if sociable_strangers == 'sometimes' %}selected{% endif %}>Às Vezes</option>
+               </select>
+            </div>
+            <div class="mb-3">
+               <label for="sex" class="form-label fw-bold">Gênero:</label>
+               <select name="sex" id="sex" class="form-select">
+                  <option value="">Todos</option>
+                  <option value="macho" {% if sex == 'macho' %}selected{% endif %}>Masculino</option>
+                  <option value="fêmea" {% if sex == 'fêmea' %}selected{% endif %}>Feminino</option>
+               </select>
+            </div>
+            <div class="mb-3">
+               <label for="size_by_age" class="form-label fw-bold">Tamanho:</label>
+               <select name="size_by_age" id="size_by_age" class="form-select">
+                  <option value="">Todos</option>
+                  <option value="filhote" {% if size_by_age == 'filhote' %}selected{% endif %}>Filhote</option>
+                  <option value="adulto" {% if size_by_age == 'adulto' %}selected{% endif %}>Adulto</option>
+                  <option value="idoso" {% if size_by_age == 'idoso' %}selected{% endif %}>Idoso</option>
+               </select>
+            </div>
+            <div class="mb-3">
+               <label for="location" class="form-label fw-bold">Localização:</label>
+               <input type="text" name="location" id="location" class="form-control" placeholder="Cidade, Bairro, CEP" value="{{ location|default:'' }}">
+            </div>
+            <div class="mb-3">
+               <label for="distance" class="form-label fw-bold">Distância Máxima (km):</label>
+               <input type="number" name="distance" id="distance" class="form-control" placeholder="Ex: 10" value="{{ distance|default:'' }}">
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Filtrar</button>
+            <button type="button" class="btn btn-secondary w-100 mt-2" onclick="limparFiltros()">Limpar Filtros</button>
+         </form>
+      </aside>
+      <!-- Resultados -->
+      <section class="results col-md-9">
+         {% if adoption_pets %}
+         <h3>Resultados ({{ adoption_pets|length }})</h3>
+         <div class="row" id="pets-list">
+            {% for pet in adoption_pets %}
+            <div class="col-md-4 mb-4 pet-item" data-lat="{{ pet.latitude }}" data-lng="{{ pet.longitude }}" data-sex="{{ pet.sex }}">
+               <div class="card h-100">
+                  {% if pet.photo_1 %}
+                  <img src="{{ pet.photo_1.url }}" class="card-img-top" alt="{{ pet.pet_name }}" style="height: 200px; object-fit: cover;">
+                  {% else %}
+                  <div class="card-img-top bg-secondary" style="height: 200px; display: flex; align-items: center; justify-content: center;">
+                     <span class="text-white">Sem foto</span>
+                  </div>
+                  {% endif %}
+                  <div class="card-body">
+                     <h5 class="card-title">{{ pet.pet_name|title|default:"Pet sem nome" }}</h5>
+                     <ul class="list-unstyled">
+                        <li><strong>Idade:</strong> {{ pet.approximate_age }}</li>
+                        <li><strong>Castrado:</strong> {{ pet.get_is_neutered_display }}</li>
+                        <li><strong>Vacinado:</strong> {{ pet.get_is_vaccinated_display }}</li>
+                        <li><strong>Sociável com Animais:</strong> {{ pet.get_sociable_with_animals_display }}</li>
+                        <li><strong>Sociável com Crianças:</strong> {{ pet.get_sociable_with_children_display }}</li>
+                        <li><strong>Sociável com Estranhos:</strong> {{ pet.get_sociable_with_strangers_display }}</li>
+                        <li><strong>Local:</strong> <span id="location-{{ pet.id }}">{{ pet.location|default:"Não especificado" }}</span></li>
+                        <li><strong>Gênero:</strong> {{ pet.get_sex_display }}</li>
+                        <li><strong>Tamanho:</strong> {{ pet.get_size_by_age_display }}</li>
+                     </ul>
+                  </div>
+                  <div class="card-footer text-center">
+                     <button class="btn btn-primary" onclick="openModal('{{ pet.id }}')">Ver detalhes</button>
+                  </div>
+               </div>
+            </div>
+            {% endfor %}
+         </div>
+         {% else %}
+         <p class="no-results text-center mt-4">Nenhum pet para adoção encontrado com esses filtros.</p>
+         {% endif %}
+      </section>
+   </div>
 </div>
-
-
 <!-- Modal para detalhes do pet -->
 <div class="modal fade" id="petModal" tabindex="-1" aria-labelledby="petModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="petModalLabel">Detalhes do Pet</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+   <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+         <div class="modal-header">
+            <h5 class="modal-title" id="petModalLabel">Detalhes do Pet</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+         </div>
+         <div class="modal-body">
+            <div class="row">
+               <div class="col-md-6">
+                  <img id="modalPetImage" src="" class="img-fluid" alt="Foto do Pet" style="max-height: 300px; object-fit: cover;">
+               </div>
+               <div class="col-md-6">
+                  <h3 id="modalPetName"></h3>
+                  <ul class="list-unstyled">
+                     <li><strong>Idade:</strong> <span id="modalPetAge"></span></li>
+                     <li><strong>Castrado:</strong> <span id="modalPetNeutered"></span></li>
+                     <li><strong>Vacinado:</strong> <span id="modalPetVaccinated"></span></li>
+                     <li><strong>Sociável com Animais:</strong> <span id="modalPetSociableAnimals"></span></li>
+                     <li><strong>Sociável com Crianças:</strong> <span id="modalPetSociableChildren"></span></li>
+                     <li><strong>Sociável com Estranhos:</strong> <span id="modalPetSociableStrangers"></span></li>
+                     <li><strong>Gênero:</strong> <span id="modalPetSex"></span></li>
+                     <li><strong>Tamanho:</strong> <span id="modalPetSize"></span></li>
+                     <li><strong>Localização:</strong> <span id="modalPetLocation"></span></li>
+                  </ul>
+               </div>
             </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-md-6">
-                        <img id="modalPetImage" src="" class="img-fluid" alt="Foto do Pet" style="max-height: 300px; object-fit: cover;">
-                    </div>
-                    <div class="col-md-6">
-                        <h3 id="modalPetName"></h3>
-                        <ul class="list-unstyled">
-                            <li><strong>Idade:</strong> <span id="modalPetAge"></span></li>
-                            <li><strong>Castrado:</strong> <span id="modalPetNeutered"></span></li>
-                            <li><strong>Vacinado:</strong> <span id="modalPetVaccinated"></span></li>
-                            <li><strong>Sociável com Animais:</strong> <span id="modalPetSociableAnimals"></span></li>
-                            <li><strong>Sociável com Crianças:</strong> <span id="modalPetSociableChildren"></span></li>
-                            <li><strong>Sociável com Estranhos:</strong> <span id="modalPetSociableStrangers"></span></li>
-                            <li><strong>Gênero:</strong> <span id="modalPetSex"></span></li>
-                            <li><strong>Tamanho:</strong> <span id="modalPetSize"></span></li>
-                            <li><strong>Localização:</strong> <span id="modalPetLocation"></span></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-            </div>
-        </div>
-    </div>
+         </div>
+         <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+         </div>
+      </div>
+   </div>
 </div>
-
-
 <!-- Estilos -->
 <style>
-    .info-box {
-        font-family: Arial, sans-serif;
-        font-size: 14px;
-        padding: 10px;
-        border-radius: 5px;
-        background-color: #fff;
-        border: 1px solid #ddd;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-        width: 200px;
-        min-width: 150px;
-    }
-    .info-box h3 {
-        font-size: 16px;
-        margin-top: 0;
-        color: #333;
-    }
-    .info-box p {
-        margin: 5px 0;
-        color: #666;
-    }
-    .info-box strong {
-        color: #333;
-    }
-    .card {
-        transition: transform 0.2s;
-    }
-    .card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    }
-    .card-body ul li {
-        margin-bottom: 5px;
-    }
+   .info-box {
+   font-family: Arial, sans-serif;
+   font-size: 14px;
+   padding: 10px;
+   border-radius: 5px;
+   background-color: #fff;
+   border: 1px solid #ddd;
+   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+   width: 200px;
+   min-width: 150px;
+   }
+   .info-box h3 {
+   font-size: 16px;
+   margin-top: 0;
+   color: #333;
+   }
+   .info-box p {
+   margin: 5px 0;
+   color: #666;
+   }
+   .info-box strong {
+   color: #333;
+   }
+   .card {
+   transition: transform 0.2s;
+   }
+   .card:hover {
+   transform: translateY(-5px);
+   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+   }
+   .card-body ul li {
+   margin-bottom: 5px;
+   }
 </style>
-
 <!-- Dependências -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
 <script>
-    // Inicializa o mapa com uma localização padrão (São Paulo)
-    var map = L.map('map').setView([-23.5489, -46.6388], 13);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(map);
+   // Inicializa o mapa com uma localização padrão (São Paulo)
+   var map = L.map('map').setView([-23.5489, -46.6388], 13);
+   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(map);
 
-    // Ícones personalizados para macho e fêmea com tamanho correto (50x82)
-    const iconMacho = L.icon({
-        iconUrl: '{% static "images/macho.png" %}',
-        iconSize: [31, 43],  // Tamanho exato da imagem
-        iconAnchor: [25, 41],  // Metade da largura (50/2) e metade da altura (82/2)
-        popupAnchor: [0, -41]  // Popup ancorado acima do ícone
-    });
+   // Ícones personalizados para macho e fêmea com tamanho correto (50x82)
+   const iconMacho = L.icon({
+       iconUrl: '{% static "images/macho.png" %}',
+       iconSize: [31, 43],  // Tamanho exato da imagem
+       iconAnchor: [25, 41],  // Metade da largura (50/2) e metade da altura (82/2)
+       popupAnchor: [0, -41]  // Popup ancorado acima do ícone
+   });
 
-    const iconFemea = L.icon({
-        iconUrl: '{% static "images/femea.png" %}',
-        iconSize: [31, 43],  // Tamanho exato da imagem
-        iconAnchor: [25, 41],  // Metade da largura (50/2) e metade da altura (82/2)
-        popupAnchor: [0, -41]  // Popup ancorado acima do ícone
-    });
+   const iconFemea = L.icon({
+       iconUrl: '{% static "images/femea.png" %}',
+       iconSize: [31, 43],  // Tamanho exato da imagem
+       iconAnchor: [25, 41],  // Metade da largura (50/2) e metade da altura (82/2)
+       popupAnchor: [0, -41]  // Popup ancorado acima do ícone
+   });
 
-    // Função para obter a localização do usuário via API do Django
-    function obterLocalizacaoUsuario() {
-        console.log("Obtendo localização do usuário...");
-        fetch('/search/api/user-location/')
-            .then(response => {
-                if (!response.ok) throw new Error("Erro na API de localização: " + response.status);
-                return response.json();
-            })
-            .then(data => {
-                if (data.error) {
-                    console.error("Erro retornado pela API:", data.error);
-                    return;
-                }
-                const latitude = data.latitude;
-                const longitude = data.longitude;
-                console.log(`Localização obtida: [${latitude}, ${longitude}]`);
-                map.setView([latitude, longitude], 12);
-            })
-            .catch(error => {
-                console.error('Erro ao obter a localização do usuário:', error);
-                map.setView([-23.5489, -46.6388], 13);
-            });
-    }
+   // Função para obter a localização do usuário via API do Django
+   function obterLocalizacaoUsuario() {
+       console.log("Obtendo localização do usuário...");
+       fetch('/search/api/user-location/')
+           .then(response => {
+               if (!response.ok) throw new Error("Erro na API de localização: " + response.status);
+               return response.json();
+           })
+           .then(data => {
+               if (data.error) {
+                   console.error("Erro retornado pela API:", data.error);
+                   return;
+               }
+               const latitude = data.latitude;
+               const longitude = data.longitude;
+               console.log(`Localização obtida: [${latitude}, ${longitude}]`);
+               map.setView([latitude, longitude], 12);
+           })
+           .catch(error => {
+               console.error('Erro ao obter a localização do usuário:', error);
+               map.setView([-23.5489, -46.6388], 13);
+           });
+   }
 
-    // Formatar data
-    function formatarData(dataISO) {
-        const data = new Date(dataISO);
-        const dia = String(data.getDate()).padStart(2, '0');
-        const mes = String(data.getMonth() + 1).padStart(2, '0');
-        const ano = data.getFullYear();
-        return `${dia}/${mes}/${ano}`;
-    }
+   // Formatar data
+   function formatarData(dataISO) {
+       const data = new Date(dataISO);
+       const dia = String(data.getDate()).padStart(2, '0');
+       const mes = String(data.getMonth() + 1).padStart(2, '0');
+       const ano = data.getFullYear();
+       return `${dia}/${mes}/${ano}`;
+   }
 
-    // Função para formatar o endereço
-    function formatAddress(address) {
-        if (!address || address === "Não especificado") return "Não especificado";
-        const parts = address.split(", ").map(part => part.trim());
-        try {
-            const street = parts[1] || "";
-            const neighborhood = parts[2] || "";
-            const city = parts[parts.length - 3] || "";
-            const state = parts[parts.length - 2] || "";
-            return `${street}, ${neighborhood}, ${city}, ${state}`.replace(/, ,/g, ", ").trim();
-        } catch (e) {
-            return address;
-        }
-    }
+   // Função para formatar o endereço
+   function formatAddress(address) {
+       if (!address || address === "Não especificado") return "Não especificado";
+       const parts = address.split(", ").map(part => part.trim());
+       try {
+           const street = parts[1] || "";
+           const neighborhood = parts[2] || "";
+           const city = parts[parts.length - 3] || "";
+           const state = parts[parts.length - 2] || "";
+           return `${street}, ${neighborhood}, ${city}, ${state}`.replace(/, ,/g, ", ").trim();
+       } catch (e) {
+           return address;
+       }
+   }
 
-    // Adicionar marcadores de pets
-    function adicionarMarcadores(pets) {
-        console.log("Pets recebidos para o mapa:", pets);
-        map.eachLayer(layer => {
-            if (layer instanceof L.Marker) map.removeLayer(layer);
-        });
+   // Adicionar marcadores de pets
+   function adicionarMarcadores(pets) {
+       console.log("Pets recebidos para o mapa:", pets);
+       map.eachLayer(layer => {
+           if (layer instanceof L.Marker) map.removeLayer(layer);
+       });
 
-        pets.forEach(pet => {
-            if (pet.latitude && pet.longitude) {
-                // Logs detalhados para depurar o valor de pet.sexo
-                console.log(`Pet: ${pet.nome} | Sexo bruto: "${pet.sexo}" | Tipo: ${typeof pet.sexo}`);
+       pets.forEach(pet => {
+           if (pet.latitude && pet.longitude) {
+               // Logs detalhados para depurar o valor de pet.sexo
+               console.log(`Pet: ${pet.nome} | Sexo bruto: "${pet.sexo}" | Tipo: ${typeof pet.sexo}`);
 
-                // Normalizar o valor de sexo para minúsculas e remover acentos
-                const sexoNormalizado = pet.sexo ? pet.sexo.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '') : '';
-                console.log(`Sexo normalizado: "${sexoNormalizado}"`);
+               // Normalizar o valor de sexo para minúsculas e remover acentos
+               const sexoNormalizado = pet.sexo ? pet.sexo.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '') : '';
+               console.log(`Sexo normalizado: "${sexoNormalizado}"`);
 
-                // Atribuir ícone com base no sexo
-                let markerIcon;
-                console.log(`Comparando sexo normalizado: "${sexoNormalizado}"`);
-                if (sexoNormalizado === 'femea') {
-                    markerIcon = iconFemea;
-                    console.log(`Atribuído ícone fêmea para ${pet.nome}`);
-                } else if (sexoNormalizado === 'macho') {
-                    markerIcon = iconMacho;
-                    console.log(`Atribuído ícone macho para ${pet.nome}`);
-                } else {
-                    console.warn(`Sexo desconhecido ou ausente para ${pet.nome}: "${pet.sexo}" (normalizado: "${sexoNormalizado}"). Usando ícone padrão (macho).`);
-                    markerIcon = iconMacho; // Padrão para valores inválidos ou nulos
-                }
+               // Atribuir ícone com base no sexo
+               let markerIcon;
+               console.log(`Comparando sexo normalizado: "${sexoNormalizado}"`);
+               if (sexoNormalizado === 'femea') {
+                   markerIcon = iconFemea;
+                   console.log(`Atribuído ícone fêmea para ${pet.nome}`);
+               } else if (sexoNormalizado === 'macho') {
+                   markerIcon = iconMacho;
+                   console.log(`Atribuído ícone macho para ${pet.nome}`);
+               } else {
+                   console.warn(`Sexo desconhecido ou ausente para ${pet.nome}: "${pet.sexo}" (normalizado: "${sexoNormalizado}"). Usando ícone padrão (macho).`);
+                   markerIcon = iconMacho; // Padrão para valores inválidos ou nulos
+               }
 
-                let marker = L.marker([pet.latitude, pet.longitude], { icon: markerIcon }).addTo(map);
-                const dataFormatada = pet.data_hora ? formatarData(pet.data_hora) : 'Data não disponível';
-                let content = `
-                    <div class="info-box">
-                        ${pet.imagem1 ? `<img src="${pet.imagem1}" alt="Imagem do ${pet.nome}" style="width: 100%; height: 100px; object-fit: cover;">` : ''}
-                        <br><br>
-                        <h3>${pet.nome}</h3>
-                        <p><strong>Disponível desde ${dataFormatada}</strong><br>
-                        <strong>Espécie:</strong> ${pet.especie || 'Não especificada'}<br>
-                        <strong>Gênero:</strong> ${pet.sexo || 'Não especificado'}<br>
-                        <strong>Endereço:</strong> ${formatAddress(pet.address) || 'Não especificado'}</p>
-                        <button class="btn btn-primary" onclick="openModal('${pet.id}')">Ver detalhes</button>
-                    </div>
-                `;
-                marker.bindPopup(content);
-            } else {
-                console.log(`Pet ${pet.nome} não tem coordenadas válidas: latitude=${pet.latitude}, longitude=${pet.longitude}`);
-            }
-        });
-    }
+               let marker = L.marker([pet.latitude, pet.longitude], { icon: markerIcon }).addTo(map);
+               const dataFormatada = pet.data_hora ? formatarData(pet.data_hora) : 'Data não disponível';
+               let content = `
+                   <div class="info-box">
+                       ${pet.imagem1 ? `<img src="${pet.imagem1}" alt="Imagem do ${pet.nome}" style="width: 100%; height: 100px; object-fit: cover;">` : ''}
+                       <br><br>
+                       <h3>${pet.nome}</h3>
+                       <p><strong>Disponível desde ${dataFormatada}</strong><br>
+                       <strong>Espécie:</strong> ${pet.especie || 'Não especificada'}<br>
+                       <strong>Gênero:</strong> ${pet.sexo || 'Não especificado'}<br>
+                       <strong>Endereço:</strong> ${formatAddress(pet.address) || 'Não especificado'}</p>
+                       <button class="btn btn-primary" onclick="openModal('${pet.id}')">Ver detalhes</button>
+                   </div>
+               `;
+               marker.bindPopup(content);
+           } else {
+               console.log(`Pet ${pet.nome} não tem coordenadas válidas: latitude=${pet.latitude}, longitude=${pet.longitude}`);
+           }
+       });
+   }
 
-    // Carregar pets da API com os filtros do formulário
-    function carregarPets() {
-        console.log("Carregando pets da API...");
-        const form = document.getElementById('filter-form');
-        const formData = new FormData(form);
-        formData.append('source', 'adoption');
-        const params = new URLSearchParams(formData).toString();
+   // Carregar pets da API com os filtros do formulário
+   function carregarPets() {
+       console.log("Carregando pets da API...");
+       const form = document.getElementById('filter-form');
+       const formData = new FormData(form);
+       formData.append('source', 'adoption');
+       const params = new URLSearchParams(formData).toString();
 
-        fetch(`/search/api/pets/?${params}`)
-            .then(response => {
-                if (!response.ok) throw new Error("Erro na API de pets: " + response.status);
-                return response.json();
-            })
-            .then(pets => {
-                if (!pets || pets.length === 0) {
-                    console.log("Nenhum pet encontrado!");
-                } else {
-                    console.log("Pets recebidos da API:", pets);
-                    adicionarMarcadores(pets);
-                }
-            })
-            .catch(error => {
-                console.error('Erro ao carregar pets:', error);
-            });
-    }
+       fetch(`/search/api/pets/?${params}`)
+           .then(response => {
+               if (!response.ok) throw new Error("Erro na API de pets: " + response.status);
+               return response.json();
+           })
+           .then(pets => {
+               if (!pets || pets.length === 0) {
+                   console.log("Nenhum pet encontrado!");
+               } else {
+                   console.log("Pets recebidos da API:", pets);
+                   adicionarMarcadores(pets);
+               }
+           })
+           .catch(error => {
+               console.error('Erro ao carregar pets:', error);
+           });
+   }
 
-    // Função para limpar os filtros
-    function limparFiltros() {
-        const form = document.getElementById('filter-form');
-        form.reset();
-        carregarPets();
-        window.location.href = "{% url 'search:adoption_pets' %}";
-    }
+   // Função para limpar os filtros
+   function limparFiltros() {
+       const form = document.getElementById('filter-form');
+       form.reset();
+       carregarPets();
+       window.location.href = "{% url 'search:adoption_pets' %}";
+   }
 
-    // Função placeholder para o modal
-    function openModal(petId) {
-        console.log("Abrir modal para o pet com ID:", petId);
-        // Adicione a lógica do modal aqui, se necessário
-    }
+   // Função placeholder para o modal
+   function openModal(petId) {
+       console.log("Abrir modal para o pet com ID:", petId);
+       // Adicione a lógica do modal aqui, se necessário
+   }
 
-    // Carregar localização do usuário e pets ao iniciar
-    obterLocalizacaoUsuario();
-    carregarPets();
+   // Carregar localização do usuário e pets ao iniciar
+   obterLocalizacaoUsuario();
+   carregarPets();
 
-    // Atualizar o mapa e a lista de cards quando o formulário for enviado
-    document.getElementById('filter-form').addEventListener('submit', function(event) {
-        event.preventDefault();
-        carregarPets();
-        this.submit();
-    });
+   // Atualizar o mapa e a lista de cards quando o formulário for enviado
+   document.getElementById('filter-form').addEventListener('submit', function(event) {
+       event.preventDefault();
+       carregarPets();
+       this.submit();
+   });
 
-    // Atualizar o mapa ao digitar no campo de busca
-    document.getElementById('query').addEventListener('input', function() {
-        carregarPets();
-    });
+   // Atualizar o mapa ao digitar no campo de busca
+   document.getElementById('query').addEventListener('input', function() {
+       carregarPets();
+   });
 
 
-    
+
 
 
 
 </script>
-
 {% endblock %}

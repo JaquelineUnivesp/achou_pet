@@ -17,8 +17,8 @@
                 <div class="card mb-3 shadow-sm">
                     <div class="row g-0">
                         <div class="col-md-4">
-                            {% if pet.photo1 %}
-                                <img src="{{ pet.photo1.url }}" class="img-fluid rounded-start" alt="Foto de {{ pet.name }}">
+                            {% if pet.photo_1 %}
+                                <img src="{{ pet.photo_1.url }}" class="img-fluid rounded-start" alt="Foto de {{ pet.name }}">
                             {% else %}
                                 <div class="bg-light h-100 d-flex align-items-center justify-content-center">Sem Foto</div>
                             {% endif %}

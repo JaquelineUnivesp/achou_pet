@@ -1,5 +1,5 @@
 {% extends 'core/base.html' %}
-{% load static %} <!-- Carregar as tags estáticas -->
+{% load static %}
 {% block title %}Cadastrar Pet Perdido - Achou Pet{% endblock %}
 {% block content %}
 
@@ -31,97 +31,91 @@
 
          <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
-            <div class="container">
-               <div class="row mb-4">
-                  <div class="col-md-3">
-                     <label for="id_status" class="form-label fw-bold">Status</label><br>
-                     {{ form.status }}
-                  </div>
-                  <div class="col-md-3">
-                     <label for="id_species" class="form-label fw-bold">Espécie</label><br>
-                     {{ form.species }}
-                  </div>
-                  <div class="col-md-3">
-                     <label for="id_size" class="form-label fw-bold">Tamanho</label><br>
-                     {{ form.size }}
-                  </div>
-                  <div class="col-md-3">
-                     <label for="id_sex" class="form-label fw-bold">Sexo</label><br>
-                     {{ form.sex }}
-                  </div>
-               </div>
 
-               <div class="row mb-4">
-                  <div class="col-md-6">
-                     <label for="id_name" class="form-label fw-bold">Nome</label><br>
-                     {{ form.name }}
-                  </div>
-                  <div class="col-md-6">
-                     <label for="id_lost_date" class="form-label fw-bold">Data que aconteceu</label><br>
-                     {{ form.lost_date }}
-                  </div>
-               </div>
 
-               <div class="row mb-4">
-                  <div class="col-md-6">
-                     <label for="id_breed" class="form-label fw-bold">Raça</label><br>
-                     {{ form.breed }}
-                  </div>
-                  <div class="col-md-6">
-                     <label for="id_notification_phone" class="form-label fw-bold">Telefone para Notificação</label><br>
-                     {{ form.notification_phone }}
-                  </div>
-               </div>
 
-               <div class="row mb-4">
-                  <div class="col-md-6">
-                     <label for="id_color" class="form-label fw-bold">Cor</label><br>
-                     {{ form.color }}
-                  </div>
-               </div>
-
-               <div class="row mb-4">
-                  <div class="col-md-4">
-                     <label for="id_photo1" class="form-label fw-bold">Foto</label><br>
-                     {{ form.photo1 }}
-                  </div>
-                  <div class="col-md-4">
-                     <label for="id_photo2" class="form-label fw-bold">Foto 2</label><br>
-                     {{ form.photo2 }}
-                  </div>
-                  <div class="col-md-4">
-                     <label for="id_photo3" class="form-label fw-bold">Foto 3</label><br>
-                     {{ form.photo3 }}
-                  </div>
-               </div>
-
-               <div class="mb-4">
-                  <label for="id_details" class="form-label fw-bold">Detalhes sobre o Pet</label><br>
-                  {{ form.details }}
-               </div>
-
-               <div class="mb-4">
-                  <label for="id_lost_location" class="form-label fw-bold">Endereço</label>
-                  <input type="text" id="id_lost_location" name="lost_location" class="form-control" required>
-                  <input type="hidden" id="id_latitude" name="latitude">
-                  <input type="hidden" id="id_longitude" name="longitude">
-                  <div id="map" style="height: 300px; width: 100%; margin-top: 10px; background-color: #e0e0e0;"></div>
-                  <small class="text-muted">Arraste o ícone ou use a busca para definir a localização</small>
-               </div>
-
-               <div class="mb-4">
-                  <div class="form-check">
-                     {{ form.terms_accepted }}
-                     <label for="id_terms_accepted" class="form-check-label">Concordo com os Termos de Uso</label>
-                  </div>
-                  <div class="form-check">
-                     {{ form.privacy_accepted }}
-                     <label for="id_privacy_accepted" class="form-check-label">Concordo com a Política de Privacidade</label>
-                  </div>
-               </div>
-
-               <button type="submit" class="btn rounded-pill background_project">Cadastrar</button>
+            <div class="mb-3">
+            <label for="id_name" class="form-label">Nome do Pet</label>
+           {{ form.name }}
             </div>
+
+
+            <div class="mb-3">
+               <label for="id_species">Espécie</label>
+               {{ form.species }}
+            </div>
+            <div class="mb-3">
+               <label for="id_size">Tamanho</label>
+               {{ form.size }}
+            </div>
+            <div class="mb-3">
+               <label for="id_breed">Raça</label>
+               {{ form.breed }}
+            </div>
+            <div class="mb-3">
+               <label for="id_color">Cor</label>
+               {{ form.color }}
+            </div>
+            <div class="mb-3">
+               <label for="id_coat_type">Tipo de Pelagem</label>
+               {{ form.coat_type }}
+            </div>
+            <div class="mb-3">
+               <label for="id_eye_color">Cor dos Olhos</label>
+               {{ form.eye_color }}
+            </div>
+            <div class="mb-3">
+               <label for="id_sex">Sexo</label>
+               {{ form.sex }}
+            </div>
+            <div class="mb-3">
+               <label for="id_lost_date">Data</label>
+               {{ form.lost_date }}
+            </div>
+            <div class="mb-3">
+               <label for="id_location">Localização</label>
+               {{ form.location }}
+            </div>
+            <div class="mb-3">
+               <label for="id_photo_1">Foto do Pet</label>
+               {{ form.photo_1 }}
+            </div>
+            <div class="mb-3">
+               <label for="id_photo_2">Foto Secundária</label>
+               {{ form.photo_2 }}
+            </div>
+            <div class="mb-3">
+               <label for="id_photo_3">Foto Adicional</label>
+               {{ form.photo_3 }}
+            </div>
+            <div class="mb-3">
+               <label for="id_status">Status</label>
+               {{ form.status }}
+            </div>
+            <div class="mb-3">
+               <label for="id_notification_phone">Telefone de Notificação</label>
+               {{ form.notification_phone }}
+            </div>
+            <div class="mb-3">
+               <label for="id_lost_location">Local de Perda</label>
+               {{ form.lost_location }}
+            </div>
+            <div id="map" style="height: 400px; margin-bottom: 20px;"></div>
+            <div class="form-check mb-3">
+               {{ form.terms_accepted }}
+               <label class="form-check-label" for="id_terms_accepted">
+                  Eu aceito os Termos de Uso
+               </label>
+            </div>
+            <div class="form-check mb-3">
+               {{ form.privacy_accepted }}
+               <label class="form-check-label" for="id_privacy_accepted">
+                  Eu aceito a Política de Privacidade
+               </label>
+            </div>
+            {{ form.latitude }}
+            {{ form.longitude }}
+            <button type="submit" class="btn rounded-pill background_project">Cadastrar</button>
          </form>
       </div>
    </div>

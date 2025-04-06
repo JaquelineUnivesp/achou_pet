@@ -10,4 +10,5 @@ urlpatterns = [
     path('breeding/', views.search_breeding_pets, name='breeding_pets'),
     path('api/pets/', views.api_pets, name='api_pets'),
     path('api/user-location/', views.get_user_location, name='get_user_location'),
+
 ]

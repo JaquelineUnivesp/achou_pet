@@ -9,8 +9,8 @@ class LostPetForm(forms.ModelForm):
     class Meta:
         model = LostPet
         fields = ['species', 'status', 'name', 'notification_phone', 'size', 'breed', 'color', 'sex',
-                  'lost_date', 'lost_location', 'latitude', 'longitude', 'details',
-                  'photo1', 'photo2', 'photo3', 'terms_accepted', 'privacy_accepted']
+            'lost_date', 'lost_location', 'latitude', 'longitude', 'details',
+            'photo_1', 'photo_2', 'photo_3', 'terms_accepted', 'privacy_accepted']
         widgets = {
             'lost_date': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
             'details': forms.Textarea(attrs={'rows': 4, 'class': 'form-control'}),

@@ -10,6 +10,15 @@
         <div class="col-9">
             <h1 class="display-1 text-center">Meus Pets <span class="color_project">Cadastrados</span></h1>
 
+
+            <h2>DEBUG CONTEXTO</h2>
+<p><strong>Usuário logado:</strong> {{ request.user }}</p>
+<p><strong>Lost Pets:</strong> {{ lost_pets|length }}</p>
+<p><strong>Adoption Pets:</strong> {{ adoption_pets|length }}</p>
+<p><strong>Breeding Pets:</strong> {{ breeding_pets|length }}</p>
+<hr>
+
+
             <!-- Seção de Pets Perdidos -->
             <h2 class="mt-4">Pets Perdidos</h2>
             {% if lost_pets %}
@@ -78,6 +87,7 @@
 
             <!-- Seção de Pets para Reprodução -->
             <h2 class="mt-4">Pets para Reprodução</h2>
+
             {% if breeding_pets %}
                 {% for pet in breeding_pets %}
                 <div class="card mb-3 shadow-sm">

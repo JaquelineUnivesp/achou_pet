@@ -106,15 +106,16 @@ def reverse_geocode(request):
 # View para listar os pets do usuário
 @login_required
 def user_pets_list(request):
-    lost_pets = LostPet.objects.filter(user=request.user).order_by('-created_at')
-    adoption_pets = PetAdoption.objects.filter(owner=request.user).order_by('-created_at')
-    breeding_pets = BreedingPet.objects.filter(owner=request.user).order_by('-created_at')
+    lost_pets = LostPet.objects.filter(user=request.user)
+    adoption_pets = PetAdoption.objects.filter(owner=request.user)
+    breeding_pets = BreedingPet.objects.filter(owner=request.user)  # ESSENCIAL
 
     context = {
         'lost_pets': lost_pets,
         'adoption_pets': adoption_pets,
         'breeding_pets': breeding_pets,
     }
+
     return render(request, 'pet_registration/user_pets_list.html', context)
 
 # Views para LostPet

@@ -52,7 +52,7 @@
                   </div>
                   <div class="col-md-4">
                      <label for="id_size_by_age" class="form-label fw-bold">Tamanho (Idade)</label><br>
-                     {{ form.size_by_age }}  <!-- Corrigido de size_age para size_by_age -->
+                     {{ form.size_by_age }}
                   </div>
                </div>
                <div class="row mb-4">
@@ -67,12 +67,25 @@
                </div>
                <div class="row mb-4">
                   <div class="col-md-6">
-                     <label for="id_approximate_age" class="form-label fw-bold">Idade Aproximada</label><br>
-                     {{ form.approximate_age }}
+                     <label for="id_coat_type" class="form-label fw-bold">Tipo de Pelagem</label><br>
+                     {{ form.coat_type }}
                   </div>
                   <div class="col-md-6">
-                     <label for="id_approximate_weight" class="form-label fw-bold">Peso Aproximado</label><br>
-                     {{ form.approximate_weight }}
+                     <label for="id_eye_color" class="form-label fw-bold">Cor dos Olhos</label><br>
+                     {{ form.eye_color }}
+                  </div>
+               </div>
+               <div class="row mb-4">
+                  <div class="col-md-6">
+                     <label for="id_age_value" class="form-label fw-bold">Idade</label><br>
+                     <div class="input-group">
+                        {{ form.age_value }}
+                        {{ form.age_unit }}
+                     </div>
+                  </div>
+                  <div class="col-md-6">
+                     <label for="id_weight" class="form-label fw-bold">Peso</label><br>
+                     {{ form.weight }}
                   </div>
                </div>
                <div class="row mb-4">
@@ -86,7 +99,7 @@
                   </div>
                   <div class="col-md-4">
                      <label for="id_phone_for_notifications" class="form-label fw-bold">Telefone de Notificação</label><br>
-                     {{ form.phone_for_notifications }}  <!-- Corrigido de notification_phone -->
+                     {{ form.phone_for_notifications }}
                   </div>
                </div>
                <div class="row mb-4">
@@ -129,26 +142,23 @@
                      {{ form.photo_3 }}
                   </div>
                </div>
-               <!-- Localização com Mapa -->
                <div class="mb-4">
                   <label for="id_location" class="form-label fw-bold">Endereço</label><br>
                   {{ form.location }}
                   {{ form.latitude }}
                   {{ form.longitude }}
                   <div id="map" style="height: 300px; width: 100%; margin-top: 10px; background-color: #e0e0e0;"></div>
-                  <small class="text-muted">Arraste o ícone ou clique no mapa para definir a localização (obrigatório)</small>
+                  <small class="text-muted">Clique ou arraste no mapa para ajustar a localização</small>
                </div>
-               <!-- Termos -->
                <div class="mb-4">
                   <div class="form-check">
                      {{ form.terms_accepted }}
-                     <label class="form-check-label" for="id_terms_accepted">Concordo com os <a href="#">Termos de Uso</a> <span class="text-danger">*</span></label>
+                     <label class="form-check-label" for="id_terms_accepted">Concordo com os <a href="#">Termos de Uso</a></label>
                   </div>
                   <div class="form-check">
                      {{ form.privacy_policy_accepted }}
-                     <label class="form-check-label" for="id_privacy_policy_accepted">Concordo com a <a href="#">Política de Privacidade</a> <span class="text-danger">*</span></label>
+                     <label class="form-check-label" for="id_privacy_policy_accepted">Concordo com a <a href="#">Política de Privacidade</a></label>
                   </div>
-                  <small class="text-muted">* Campos obrigatórios</small>
                </div>
                <button type="submit" class="btn rounded-pill background_project">Cadastrar</button>
             </div>
@@ -157,86 +167,43 @@
    </div>
 </div>
 
-<!-- Bootstrap CSS and JS -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<!-- Bootstrap e Leaflet -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<!-- Leaflet and LocationIQ Geocoder -->
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script src="https://tiles.locationiq.com/v3/libs/leaflet-geocoder/1.9.6/leaflet-geocoder-locationiq.min.js"></script>
-<link rel="stylesheet" href="https://tiles.locationiq.com/v3/libs/leaflet-geocoder/1.9.6/leaflet-geocoder-locationiq.min.css">
+<link rel="stylesheet" href="https://tiles.locationiq.com/v3/libs/leaflet-geocoder/1.9.6/leaflet-geocoder-locationiq.min.css" />
+
 <script>
-    var map = L.map('map').setView([-23.5489, -46.6388], 13); // São Paulo como padrão
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(map);
-    var marker = null;
+   const map = L.map('map').setView([-23.5489, -46.6388], 13);
+   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(map);
+   let marker = null;
 
-    // Função para arredondar coordenadas
-    function roundToSixDecimals(num) {
-        return Number(num.toFixed(6));
-    }
+   function round(num) {
+      return Number(num.toFixed(6));
+   }
 
-    // Geolocalização inicial
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function(position) {
-            var lat = roundToSixDecimals(position.coords.latitude);
-            var lon = roundToSixDecimals(position.coords.longitude);
-            map.setView([lat, lon], 13);
-            reverseGeocode(lat, lon);
-            marker = L.marker([lat, lon]).addTo(map);
-            document.getElementById('id_latitude').value = lat;
-            document.getElementById('id_longitude').value = lon;
-        });
-    }
+   navigator.geolocation?.getCurrentPosition(function(pos) {
+      const lat = round(pos.coords.latitude);
+      const lng = round(pos.coords.longitude);
+      setLocation(lat, lng);
+   });
 
-    // Adicionar o controle de busca LocationIQ
-    var geocoder = L.control.geocoder('pk.227bb16be8af10a97550047d4932e148', {
-        url: "https://api.locationiq.com/v1",
-        expanded: true,
-        panToPoint: true,
-        focus: false,
-        position: "topleft"
-    }).addTo(map);
+   map.on('click', function(e) {
+      setLocation(round(e.latlng.lat), round(e.latlng.lng));
+   });
 
-    // Evento quando um local é selecionado no autocomplete
-    geocoder.on('select', function(e) {
-        var lat = roundToSixDecimals(e.latlng.lat);
-        var lon = roundToSixDecimals(e.latlng.lng);
-        var address = e.feature.display_name;
-        console.log('Local selecionado:', lat, lon, address);
-        document.getElementById('id_location').value = address;
-        document.getElementById('id_latitude').value = lat;
-        document.getElementById('id_longitude').value = lon;
-        if (marker) marker.remove();
-        marker = L.marker([lat, lon]).addTo(map);
-    });
+   function setLocation(lat, lng) {
+      if (marker) marker.remove();
+      marker = L.marker([lat, lng]).addTo(map);
+      document.getElementById('id_latitude').value = lat;
+      document.getElementById('id_longitude').value = lng;
 
-    // Clique no mapa para ajustar
-    map.on('click', function(e) {
-        var lat = roundToSixDecimals(e.latlng.lat);
-        var lon = roundToSixDecimals(e.latlng.lng);
-        fetch(`https://api.locationiq.com/v1/reverse?key=pk.227bb16be8af10a97550047d4932e148&lat=${lat}&lon=${lon}&format=json`)
-            .then(response => response.json())
-            .then(data => {
-                console.log('Reverse geocode data:', data);
-                document.getElementById('id_location').value = data.display_name;
-                document.getElementById('id_latitude').value = lat;
-                document.getElementById('id_longitude').value = lon;
-                if (marker) marker.remove();
-                marker = L.marker([lat, lon]).addTo(map);
-            })
-            .catch(error => console.error('Erro no reverse geocode:', error));
-    });
-
-    // Função para reverse geocode (chamada na geolocalização)
-    function reverseGeocode(lat, lon) {
-        fetch(`https://api.locationiq.com/v1/reverse?key=pk.227bb16be8af10a97550047d4932e148&lat=${lat}&lon=${lon}&format=json`)
-            .then(response => response.json())
-            .then(data => {
-                document.getElementById('id_location').value = data.display_name;
-                document.getElementById('id_latitude').value = lat;
-                document.getElementById('id_longitude').value = lon;
-            })
-            .catch(error => console.error('Erro no reverse geocode:', error));
-    }
+      fetch(`https://api.locationiq.com/v1/reverse?key=pk.227bb16be8af10a97550047d4932e148&lat=${lat}&lon=${lng}&format=json`)
+         .then(res => res.json())
+         .then(data => {
+            document.getElementById('id_location').value = data.display_name;
+         });
+   }
 </script>
 {% endblock %}

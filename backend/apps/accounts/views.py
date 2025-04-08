@@ -13,7 +13,7 @@ from allauth.account.utils import send_email_confirmation
 from allauth.account.models import EmailConfirmationHMAC
 from django.views.generic import TemplateView
 from django.contrib.auth.views import PasswordResetView
-
+from django.contrib.auth import get_user_model
 import logging
 
 
@@ -21,6 +21,7 @@ import logging
 
 
 logger = logging.getLogger(__name__)
+User = get_user_model()
 
 # Views de API
 class RegisterUserView(generics.CreateAPIView):
@@ -112,25 +113,55 @@ class CustomPasswordResetView(PasswordResetView):
 def password_reset_view(request):
     return CustomPasswordResetView.as_view()(request)
 
+
+
 @login_required
 def change_email_view(request):
     if request.method == 'POST':
         new_email = request.POST.get('email')
-        if new_email:
-            old_email = request.user.email
-            request.user.email = new_email
-            request.user.is_verified = False
+
+        if not new_email:
+            return render(request, 'account/change_email.html', {
+                'error': 'Digite um e-mail válido.'
+            })
+
+        # Verificação para evitar duplicidade
+        if User.objects.filter(email=new_email).exclude(id=request.user.id).exists():
+            return render(request, 'account/change_email.html', {
+                'error': 'Este e-mail já está em uso por outro usuário.'
+            })
+
+        old_email = request.user.email
+        request.user.email = new_email
+        request.user.is_verified = False
+
+        try:
             request.user.save()
-            try:
-                send_email_confirmation(request, request.user)
-                logger.info(f"E-mail de confirmação enviado para {new_email} (anterior: {old_email})")
-            except Exception as e:
-                logger.error(f"Erro ao enviar e-mail para {new_email}: {str(e)}")
-                return render(request, 'account/change_email.html', {'error': f"Erro ao enviar e-mail: {str(e)}"})
+
+            # Remove e-mails antigos do usuário
+            EmailAddress.objects.filter(user=request.user).exclude(email=new_email).delete()
+
+            # Cria ou atualiza o novo email
+            email_address, created = EmailAddress.objects.get_or_create(
+                user=request.user,
+                email=request.user.email
+            )
+
+            # Força verificação
+            email_address.send_confirmation(request)
+
+            logger.info(f"E-mail de confirmação enviado para {new_email} (anterior: {old_email})")
+            messages.success(request, 'E-mail atualizado! Verifique sua caixa de entrada.')
             return redirect('home')
-        else:
-            return render(request, 'account/change_email.html', {'error': 'Digite um e-mail'})
+
+        except Exception as e:
+            logger.error(f"Erro ao salvar novo e-mail {new_email}: {str(e)}")
+            return render(request, 'account/change_email.html', {
+                'error': f"Erro ao salvar ou enviar confirmação: {str(e)}"
+            })
+
     return render(request, 'account/change_email.html')
+
 
 def home_view(request):
     return render(request, 'account/home.html')

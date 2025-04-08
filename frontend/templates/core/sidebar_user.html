@@ -20,6 +20,20 @@
             <ul>
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                  <li class="nav-item">
                     <a href="http://127.0.0.1:8000/search/" class="nav-link">
                         <i class="fas fa-user me-2"></i> Busca
@@ -158,9 +172,25 @@
     </ul>
 </div>
 
+
+<div class="modal fade" id="dynamicModal" tabindex="-1" aria-labelledby="dynamicModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="dynamicModalLabel">Carregando...</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+      </div>
+      <div class="modal-body">
+        <div id="modalContent">Carregando conteúdo...</div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
     function toggleSidebar() {
         const sidebar = document.getElementById('sidebar');
         sidebar.classList.toggle('active');
     }
 </script>
+

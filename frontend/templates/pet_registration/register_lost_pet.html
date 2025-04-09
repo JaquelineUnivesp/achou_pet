@@ -112,7 +112,18 @@
                <label for="id_lost_location">Local de Perda</label>
                {{ form.lost_location }}
             </div>
-            <div id="map" style="height: 400px; margin-bottom: 20px;"></div>
+
+                           <div class="mb-4">
+                  <label for="id_location" class="form-label fw-bold">Endereço</label><br>
+                  {{ form.location }}
+                  {{ form.latitude }}
+                  {{ form.longitude }}
+                  <div id="map" style="height: 300px; width: 100%; margin-top: 10px; background-color: #e0e0e0;"></div>
+                  <small class="text-muted">Clique ou arraste no mapa para ajustar a localização</small>
+               </div>
+
+
+
 
             <div class="form-check mb-3">
                {{ form.terms_accepted }}
@@ -123,8 +134,7 @@
                <label class="form-check-label" for="id_privacy_accepted">Eu aceito a Política de Privacidade</label>
             </div>
 
-            {{ form.latitude }}
-            {{ form.longitude }}
+
 
             <button type="submit" class="btn rounded-pill background_project">Cadastrar</button>
          </form>
@@ -132,74 +142,94 @@
    </div>
 </div>
 
-<!-- Dependências e Estilos (mantidos) -->
+
+
+
+<!-- Bootstrap CSS and JS -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<!-- Leaflet and LocationIQ Geocoder -->
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
-<script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
-
-<!-- Script do mapa (mantido igual ao anterior) -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://tiles.locationiq.com/v3/libs/leaflet-geocoder/1.9.6/leaflet-geocoder-locationiq.min.js"></script>
+<link rel="stylesheet" href="https://tiles.locationiq.com/v3/libs/leaflet-geocoder/1.9.6/leaflet-geocoder-locationiq.min.css">
 <script>
-   var map = L.map('map').setView([-23.5489, -46.6388], 13);
-   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(map);
-   var marker;
+    var map = L.map('map').setView([-23.5489, -46.6388], 13); // São Paulo como padrão
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(map);
+    var marker = null;
 
-   if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(function(position) {
-         const { latitude, longitude } = position.coords;
-         map.setView([latitude, longitude], 13);
-         addMarker(latitude, longitude);
-      }, function() {
-         obterLocalizacaoUsuario();
-      });
-   } else {
-      obterLocalizacaoUsuario();
-   }
+    // Função para arredondar coordenadas
+    function roundToSixDecimals(num) {
+        return Number(num.toFixed(6));
+    }
 
-   function addMarker(lat, lon) {
-      if (marker) marker.remove();
-      marker = L.marker([lat, lon], { draggable: true }).addTo(map);
-      marker.on('dragend', function(e) {
-         const { lat, lng } = e.target.getLatLng();
-         reverseGeocode(lat, lng);
-      });
-      reverseGeocode(lat, lon);
-   }
+    // Geolocalização inicial
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+            var lat = roundToSixDecimals(position.coords.latitude);
+            var lon = roundToSixDecimals(position.coords.longitude);
+            map.setView([lat, lon], 13);
+            reverseGeocode(lat, lon);
+            marker = L.marker([lat, lon]).addTo(map);
+            document.getElementById('id_latitude').value = lat;
+            document.getElementById('id_longitude').value = lon;
+        });
+    }
 
-   function reverseGeocode(lat, lon) {
-      fetch(`https://api.locationiq.com/v1/reverse?key=pk.227bb16be8af10a97550047d4932e148&lat=${lat}&lon=${lon}&format=json`)
-         .then(response => response.json())
-         .then(data => {
-            document.getElementById('id_lost_location').value = data.display_name;
-            document.getElementById('id_latitude').value = lat.toFixed(6);
-            document.getElementById('id_longitude').value = lon.toFixed(6);
-         });
-   }
+    // Adicionar o controle de busca LocationIQ
+    var geocoder = L.control.geocoder('pk.227bb16be8af10a97550047d4932e148', {
+        url: "https://api.locationiq.com/v1",
+        expanded: true,
+        panToPoint: true,
+        focus: false,
+        position: "topleft"
+    }).addTo(map);
 
-   map.on('click', function(e) {
-      const { lat, lng } = e.latlng;
-      addMarker(lat, lng);
-   });
+    // Evento quando um local é selecionado no autocomplete
+    geocoder.on('select', function(e) {
+        var lat = roundToSixDecimals(e.latlng.lat);
+        var lon = roundToSixDecimals(e.latlng.lng);
+        var address = e.feature.display_name;
+        console.log('Local selecionado:', lat, lon, address);
+        document.getElementById('id_location').value = address;
+        document.getElementById('id_latitude').value = lat;
+        document.getElementById('id_longitude').value = lon;
+        if (marker) marker.remove();
+        marker = L.marker([lat, lon]).addTo(map);
+    });
 
-   L.Control.geocoder({ defaultMarkGeocode: false })
-      .on('markgeocode', function(e) {
-         const latlng = e.geocode.center;
-         addMarker(latlng.lat, latlng.lng);
-         map.setView(latlng, 16);
-      })
-      .addTo(map);
+    // Clique no mapa para ajustar
+    map.on('click', function(e) {
+        var lat = roundToSixDecimals(e.latlng.lat);
+        var lon = roundToSixDecimals(e.latlng.lng);
+        fetch(`https://api.locationiq.com/v1/reverse?key=pk.227bb16be8af10a97550047d4932e148&lat=${lat}&lon=${lon}&format=json`)
+            .then(response => response.json())
+            .then(data => {
+                console.log('Reverse geocode data:', data);
+                document.getElementById('id_location').value = data.display_name;
+                document.getElementById('id_latitude').value = lat;
+                document.getElementById('id_longitude').value = lon;
+                if (marker) marker.remove();
+                marker = L.marker([lat, lon]).addTo(map);
+            })
+            .catch(error => console.error('Erro no reverse geocode:', error));
+    });
 
-   function obterLocalizacaoUsuario() {
-      fetch('https://ipinfo.io/json?token=91e3040b4f78f5')
-         .then(response => response.json())
-         .then(data => {
-            const [latitude, longitude] = data.loc.split(',');
-            map.setView([latitude, longitude], 12);
-            addMarker(latitude, longitude);
-         });
-   }
+    // Função para reverse geocode (chamada na geolocalização)
+    function reverseGeocode(lat, lon) {
+        fetch(`https://api.locationiq.com/v1/reverse?key=pk.227bb16be8af10a97550047d4932e148&lat=${lat}&lon=${lon}&format=json`)
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('id_location').value = data.display_name;
+                document.getElementById('id_latitude').value = lat;
+                document.getElementById('id_longitude').value = lon;
+            })
+            .catch(error => console.error('Erro no reverse geocode:', error));
+    }
 </script>
+
+
+
+
 
 {% endblock %}

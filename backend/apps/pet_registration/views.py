@@ -433,6 +433,8 @@ def search_breeding_pets(request):
     breeding_pets = BreedingPet.objects.all()
     logger.info(f"Pets iniciais para cruzamento: {breeding_pets.count()}")
 
+
+
     if search_query:
         breeding_pets = breeding_pets.filter(
             Q(pet_name__icontains=search_query) |
@@ -532,7 +534,9 @@ def search_breeding_pets(request):
         'location': location,
         'distance': distance,
     }
-    return render(request, 'search/search_breeding.html', context)
+    print("DEBUG USUÁRIO ADOTANTE:", request.user, request.user.id)
+
+    return render(request, 'search/search_breeding_2.html', context)
 
 @require_GET
 def api_pets(request):

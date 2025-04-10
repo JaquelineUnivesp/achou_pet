@@ -2,10 +2,27 @@
 {% load static %}
 {% block title %}Busca de Pets para Adoção - Achou Pet{% endblock %}
 {% block content %}
-<div class="container mt-5">
-   <h1 class="display-1 text-center">Busca de Pets para <span class="color_project">Adoção</span></h1>
-   <p class="text-center">Encontre o pet perfeito para você!</p>
-   <!-- Mapa -->
+
+
+
+           <div class="row">
+        <div class="col-md-9">
+   <h1 class="display-1 ">Busca de Pets para <span class="color_project">Adoção</span></h1>
+   <p class="">Encontre o pet perfeito para você!</p>
+        </div>
+        <div class="col-md-3 ">
+            <button class="pill-button ">
+                <a href="{% url 'pet_registration:register_adoption_pet' %}">
+                     Cadastrar Pet Adoção
+                    </a>
+            </button>
+
+        </div>
+    </div>
+
+
+   <div class="container mt-5">
+
    <div id="map" style="height: 400px; width: 100%; margin-bottom: 20px; background-color: #e0e0e0;"></div>
    <div class="search-container row">
       <!-- Sidebar com filtros -->

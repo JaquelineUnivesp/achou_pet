@@ -10,7 +10,6 @@
       <div class="col-9">
          <h1 class="display-1 text-center">Cadastro de pet para <span class="color_project">adoção</span></h1>
          <p class="text-center">Ajude um pet a encontrar um novo lar!</p>
-
          {% if form.errors %}
          <div class="alert alert-danger alert-dismissible fade show" role="alert">
             <strong>Erro ao cadastrar:</strong>
@@ -27,108 +26,93 @@
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
          </div>
          {% endif %}
-
          <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="container">
-               <div class="row mb-4">
-                  <div class="col-md-6">
+               <div class="row">
+                  <div class="col-md-3">
                      <label for="id_relationship_with_pet" class="form-label fw-bold">Relação com o Pet</label><br>
                      {{ form.relationship_with_pet }}
                   </div>
-                  <div class="col-md-6">
+                  <div class="col-md-9">
                      <label for="id_pet_name" class="form-label fw-bold">Nome do Pet</label><br>
                      {{ form.pet_name }}
                   </div>
-               </div>
-               <div class="row mb-4">
-                  <div class="col-md-4">
+                  <div class="col-md-3">
                      <label for="id_species" class="form-label fw-bold">Espécie</label><br>
                      {{ form.species }}
                   </div>
-                  <div class="col-md-4">
+                  <div class="col-md-3">
                      <label for="id_sex" class="form-label fw-bold">Sexo</label><br>
                      {{ form.sex }}
                   </div>
-                  <div class="col-md-4">
+                  <div class="col-md-3">
                      <label for="id_size_by_age" class="form-label fw-bold">Tamanho (Idade)</label><br>
                      {{ form.size_by_age }}
                   </div>
-               </div>
-               <div class="row mb-4">
-                  <div class="col-md-6">
-                     <label for="id_breed" class="form-label fw-bold">Raça</label><br>
-                     {{ form.breed }}
-                  </div>
-                  <div class="col-md-6">
-                     <label for="id_color" class="form-label fw-bold">Cor</label><br>
-                     {{ form.color }}
-                  </div>
-               </div>
-               <div class="row mb-4">
-                  <div class="col-md-6">
-                     <label for="id_coat_type" class="form-label fw-bold">Tipo de Pelagem</label><br>
-                     {{ form.coat_type }}
-                  </div>
-                  <div class="col-md-6">
-                     <label for="id_eye_color" class="form-label fw-bold">Cor dos Olhos</label><br>
-                     {{ form.eye_color }}
-                  </div>
-               </div>
-               <div class="row mb-4">
-                  <div class="col-md-6">
+                  <div class="col-md-3">
                      <label for="id_age_value" class="form-label fw-bold">Idade</label><br>
                      <div class="input-group">
                         {{ form.age_value }}
                         {{ form.age_unit }}
                      </div>
                   </div>
-                  <div class="col-md-6">
+                  <div class="col-md-3">
                      <label for="id_weight" class="form-label fw-bold">Peso</label><br>
                      {{ form.weight }}
                   </div>
-               </div>
-               <div class="row mb-4">
-                  <div class="col-md-4">
+                  <div class="col-md-3">
+                     <label for="id_breed" class="form-label fw-bold">Raça</label><br>
+                     {{ form.breed }}
+                  </div>
+                  <div class="col-md-3">
+                     <label for="id_color" class="form-label fw-bold">Cor</label><br>
+                     {{ form.color }}
+                  </div>
+                  <div class="col-md-3">
+                     <label for="id_coat_type" class="form-label fw-bold">Tipo de Pelagem</label><br>
+                     {{ form.coat_type }}
+                  </div>
+                  <div class="col-md-3">
+                     <label for="id_eye_color" class="form-label fw-bold">Cor dos Olhos</label><br>
+                     {{ form.eye_color }}
+                  </div>
+                  <div class="col-md-3">
                      <label for="id_is_neutered" class="form-label fw-bold">Castrado?</label><br>
                      {{ form.is_neutered }}
                   </div>
-                  <div class="col-md-4">
+                  <div class="col-md-3">
                      <label for="id_is_vaccinated" class="form-label fw-bold">Vacinado?</label><br>
                      {{ form.is_vaccinated }}
                   </div>
-                  <div class="col-md-4">
+                  <div class="col-md-3">
                      <label for="id_phone_for_notifications" class="form-label fw-bold">Telefone de Notificação</label><br>
                      {{ form.phone_for_notifications }}
                   </div>
-               </div>
-               <div class="row mb-4">
-                  <div class="col-md-4">
+                  <div class="col-md-3">
                      <label for="id_sociable_with_animals" class="form-label fw-bold">Sociável com Animais</label><br>
                      {{ form.sociable_with_animals }}
                   </div>
-                  <div class="col-md-4">
+                  <div class="col-md-3">
                      <label for="id_sociable_with_children" class="form-label fw-bold">Sociável com Crianças</label><br>
                      {{ form.sociable_with_children }}
                   </div>
-                  <div class="col-md-4">
+                  <div class="col-md-3">
                      <label for="id_sociable_with_strangers" class="form-label fw-bold">Sociável com Estranhos</label><br>
                      {{ form.sociable_with_strangers }}
                   </div>
-               </div>
-               <div class="mb-4">
-                  <label for="id_behavior" class="form-label fw-bold">Comportamento</label><br>
-                  {{ form.behavior }}
-               </div>
-               <div class="mb-4">
-                  <label for="id_health_issues" class="form-label fw-bold">Problemas de Saúde</label><br>
-                  {{ form.health_issues }}
-               </div>
-               <div class="mb-4">
-                  <label for="id_observations" class="form-label fw-bold">Observações</label><br>
-                  {{ form.observations }}
-               </div>
-               <div class="row mb-4">
+                  <div class="col-md-12">
+                     <label for="id_behavior" class="form-label fw-bold">Comportamento</label><br>
+                     {{ form.behavior }}
+                  </div>
+                  <div class="col-md-6">
+                     <label for="id_health_issues" class="form-label fw-bold">Problemas de Saúde</label><br>
+                     {{ form.health_issues }}
+                  </div>
+                  <div class="col-md-6">
+                     <label for="id_observations" class="form-label fw-bold">Observações</label><br>
+                     {{ form.observations }}
+                  </div>
                   <div class="col-md-4">
                      <label for="id_photo_1" class="form-label fw-bold">Foto 1</label><br>
                      {{ form.photo_1 }}
@@ -141,32 +125,31 @@
                      <label for="id_photo_3" class="form-label fw-bold">Foto 3</label><br>
                      {{ form.photo_3 }}
                   </div>
-               </div>
-               <div class="mb-4">
-                  <label for="id_location" class="form-label fw-bold">Endereço</label><br>
-                  {{ form.location }}
-                  {{ form.latitude }}
-                  {{ form.longitude }}
-                  <div id="map" style="height: 300px; width: 100%; margin-top: 10px; background-color: #e0e0e0;"></div>
-                  <small class="text-muted">Clique ou arraste no mapa para ajustar a localização</small>
-               </div>
-               <div class="mb-4">
-                  <div class="form-check">
-                     {{ form.terms_accepted }}
-                     <label class="form-check-label" for="id_terms_accepted">Concordo com os <a href="#">Termos de Uso</a></label>
+                  <div class="col-md-12">
+                     <label for="id_location" class="form-label fw-bold">Endereço</label><br>
+                     {{ form.location }}
+                     {{ form.latitude }}
+                     {{ form.longitude }}
+                     <div id="map" style="height: 300px; width: 100%; margin-top: 10px; background-color: #e0e0e0;"></div>
+                     <small class="text-muted">Clique ou arraste no mapa para ajustar a localização</small>
                   </div>
-                  <div class="form-check">
-                     {{ form.privacy_policy_accepted }}
-                     <label class="form-check-label" for="id_privacy_policy_accepted">Concordo com a <a href="#">Política de Privacidade</a></label>
+                  <div class="col-md-12">
+                     <div class="form-check">
+                        {{ form.terms_accepted }}
+                        <label class="form-check-label" for="id_terms_accepted">Concordo com os <a href="#">Termos de Uso</a></label>
+                     </div>
+                     <div class="form-check">
+                        {{ form.privacy_policy_accepted }}
+                        <label class="form-check-label" for="id_privacy_policy_accepted">Concordo com a <a href="#">Política de Privacidade</a></label>
+                     </div>
                   </div>
+                  <button type="submit" class="btn rounded-pill background_project">Cadastrar</button>
                </div>
-               <button type="submit" class="btn rounded-pill background_project">Cadastrar</button>
-            </div>
          </form>
+         </div>
       </div>
    </div>
 </div>
-
 <!-- Bootstrap CSS and JS -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

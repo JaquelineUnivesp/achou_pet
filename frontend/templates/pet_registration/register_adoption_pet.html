@@ -233,4 +233,66 @@
     }
 </script>
 
+
+
+<script>
+const breedsCats = [
+  "Sem Raça", "Abissínio", "American Bobtail", "American Curl", "American Shorthair",
+  "Balinese", "Bengal", "Birmanês", "Bombaim", "British Shorthair",
+  "Burmês", "Chartreux", "Cornish Rex", "Devon Rex", "Egyptian Mau",
+  "Exótico", "Himalaio", "Japanese Bobtail", "Korat", "LaPerm",
+  "Maine Coon", "Manx", "Florestal Norueguês", "Ocicat", "Oriental",
+  "Persa", "Ragdoll", "Azul Russo", "Scottish Fold", "Selkirk Rex",
+  "Siamês", "Siberiano", "Singapura", "Snowshoe", "Somali", "Sphynx",
+  "Tonquinês", "Angorá Turco", "Van Turco", "Outra Raça"
+];
+
+const breedsDogs = [
+  "Sem Raça", "Pastor Alemão", "Pastor Belga", "Pastor de Shetland",
+  "Affenpinscher", "Afghan Hound", "Airedale Terrier", "Akita",
+  "Alaskan Malamute", "American Bulldog", "American Pit Bull Terrier",
+  "Australian Cattle Dog", "Australian Shepherd", "Basset Hound",
+  "Beagle", "Belgian Malinois", "Bernese Mountain Dog", "Bichon Frisé",
+  "Bloodhound", "Border Collie", "Boston Terrier", "Boxer",
+  "Bull Terrier", "Bulldog Francês", "Bulldog Inglês", "Cairn Terrier",
+  "Cane Corso", "Cavalier King Charles Spaniel", "Chihuahua",
+  "Chow Chow", "Cocker Spaniel", "Collie", "Dachshund", "Dálmata",
+  "Doberman", "Dogo Argentino", "Golden Retriever", "Dog Alemão",
+  "Greyhound", "Havanês", "Jack Russell Terrier", "Labrador Retriever",
+  "Lhasa Apso", "Maltês", "Mastiff", "Pinscher Miniatura",
+  "Terra Nova", "Papillon", "Pequinês", "Corgi", "Poodle",
+  "Spitz Alemão", "Pug", "Rottweiler", "São Bernardo",
+  "Samoyeda", "Schnauzer", "Scottish Terrier", "Shar Pei", "Shiba Inu",
+  "Shih Tzu", "Husky Siberiano", "Staffordshire Bull Terrier",
+  "Weimaraner", "West Highland Terrier", "Whippet", "Yorkshire Terrier",
+  "Outra Raça"
+];
+
+const speciesSelect = document.getElementById('id_species');
+const breedSelect = document.getElementById('id_breed');
+
+function updateBreeds() {
+  const species = speciesSelect.value;
+  const breeds = species === 'cat' ? breedsCats : breedsDogs;
+
+  breedSelect.innerHTML = '';  // limpa opções
+  breeds.forEach(breed => {
+    const option = document.createElement('option');
+    option.value = breed;
+    option.textContent = breed;
+    breedSelect.appendChild(option);
+  });
+}
+
+// ao carregar a página
+updateBreeds();
+
+// quando mudar a espécie
+speciesSelect.addEventListener('change', updateBreeds);
+</script>
+
+
+
+
+
 {% endblock %}

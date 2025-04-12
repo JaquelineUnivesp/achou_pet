@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth import get_user_model
 from django.utils import timezone
+from apps.core.choices.breeds import BREEDS_DOGS, BREEDS_CATS
 
 # Choices reutilizáveis
 COLOR_CHOICES = [
@@ -8,12 +9,7 @@ COLOR_CHOICES = [
     ('preto', 'Preto'), ('branco', 'Branco'), ('caramelo', 'Caramelo'),
     ('cinza', 'Cinza'), ('marrom', 'Marrom'), ('rajado', 'Rajado'), ('outro', 'Outro')
 ]
-BREED_CHOICES = [
-    ('', 'Selecione uma raça'),
-    ('sem_raca_definida', 'Sem Raça Definida'), ('labrador', 'Labrador'),
-    ('poodle', 'Poodle'), ('siames', 'Siamês'), ('persa', 'Persa'),
-    ('vira_lata', 'Vira-lata'), ('outro', 'Outro')
-]
+
 COAT_TYPE_CHOICES = [('short', 'Curto'), ('medium', 'Médio'), ('long', 'Longo'), ('hairless', 'Sem Pelo')]
 EYE_COLOR_CHOICES = [
     ('brown', 'Castanho'), ('blue', 'Azul'), ('green', 'Verde'),
@@ -37,7 +33,7 @@ class LostPet(models.Model):
     name = models.CharField(max_length=100, blank=True, null=True, verbose_name='Nome')
     notification_phone = models.CharField(max_length=15, help_text="Telefone para contato", verbose_name='Telefone de Notificação')
     size = models.CharField(max_length=10, choices=SIZE_CHOICES, verbose_name='Tamanho')
-    breed = models.CharField(max_length=100, choices=BREED_CHOICES, blank=True, null=True, verbose_name='Raça')
+    breed = models.CharField(max_length=100, blank=True, null=True, verbose_name='Raça')
     color = models.CharField(max_length=100, choices=COLOR_CHOICES, verbose_name='Cor')
     sex = models.CharField(max_length=10, choices=SEX_CHOICES, verbose_name='Sexo')
     lost_date = models.DateField(default=timezone.now, verbose_name='Data de Perda')
@@ -79,7 +75,7 @@ class PetAdoption(models.Model):
     pet_name = models.CharField(max_length=100, blank=True, null=True, verbose_name='Nome do Pet')
     species = models.CharField(max_length=10, choices=SPECIES_CHOICES, blank=True, null=True, verbose_name='Espécie')
     sex = models.CharField(max_length=6, choices=SEX_CHOICES, blank=True, null=True, verbose_name='Sexo')
-    breed = models.CharField(max_length=100, choices=BREED_CHOICES, blank=True, null=True, verbose_name='Raça')
+    breed = models.CharField(max_length=100, blank=True, null=True, verbose_name='Raça')
     color = models.CharField(max_length=50, choices=COLOR_CHOICES, blank=True, null=True, verbose_name='Cor')
     coat_type = models.CharField(max_length=20, choices=COAT_TYPE_CHOICES, blank=True, null=True, verbose_name='Tipo de Pelagem')
     eye_color = models.CharField(max_length=20, choices=EYE_COLOR_CHOICES, blank=True, null=True, verbose_name='Cor dos Olhos')
@@ -97,6 +93,7 @@ class PetAdoption(models.Model):
     sociable_with_strangers = models.CharField(max_length=20, choices=SOCIABILITY_CHOICES, verbose_name='Sociável com Estranhos')
     behavior = models.CharField(max_length=100, help_text="Ex: Medroso, Agitado, Calmo, etc.", verbose_name='Comportamento')
     observations = models.TextField(blank=True, null=True, help_text="Observações ou cuidados especiais", verbose_name='Observações')
+    phone_for_notifications = models.CharField(max_length=15, verbose_name="Telefone para Notificações", blank=True,  null=True)
     location = models.CharField(max_length=255, help_text="Endereço onde o pet está localizado", verbose_name='Localização')
     latitude = models.DecimalField(max_digits=9, decimal_places=6, blank=True, null=True, verbose_name='Latitude')
     longitude = models.DecimalField(max_digits=9, decimal_places=6, blank=True, null=True, verbose_name='Longitude')
@@ -128,7 +125,7 @@ class BreedingPet(models.Model):
     species = models.CharField(max_length=10, choices=SPECIES_CHOICES, verbose_name="Espécie", blank=True, null=True)
     sex = models.CharField(max_length=10, choices=SEX_CHOICES, verbose_name="Sexo", blank=True, null=True)
     size_by_age = models.CharField(max_length=20, choices=SIZE_BY_AGE_CHOICES, verbose_name="Tamanho por Idade", blank=True, null=True)
-    breed = models.CharField(max_length=100, choices=BREED_CHOICES, verbose_name="Raça", blank=True, null=True)
+    breed = models.CharField(max_length=100, blank=True, null=True, verbose_name='Raça')
     color = models.CharField(max_length=100, choices=COLOR_CHOICES, verbose_name="Cor", blank=True, null=True)
     coat_type = models.CharField(max_length=20, choices=COAT_TYPE_CHOICES, blank=True, null=True, verbose_name='Tipo de Pelagem')
     eye_color = models.CharField(max_length=20, choices=EYE_COLOR_CHOICES, blank=True, null=True, verbose_name='Cor dos Olhos')

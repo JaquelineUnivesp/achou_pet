@@ -1,14 +1,43 @@
 {% extends 'core/base.html' %}
 {% block title %}Detalhes do Pet - Achou Pet{% endblock %}
+
 {% block content %}
-<div class="container mt-5">
-    <h1>{{ pet.name|default:"Pet sem Nome" }}</h1>
-    <p>Status: {{ pet.get_status_display }}</p>
-    <p>Espécie: {{ pet.get_species_display }}</p>
-    <p>Local: {{ pet.lost_location }}</p>
-    {% if pet.photo1 %}
-        <img src="{{ pet.photo1.url }}" alt="Foto do pet" class="img-fluid">
-    {% endif %}
-    <a href="{% url 'pet_registration:user_pets_list' %}" class="btn btn-primary">Voltar</a>
+<div class="container mt-5 mb-5">
+
+  <div class="card shadow p-4 rounded-4">
+
+    <div class="row g-4">
+      <div class="col-md-5 text-center">
+        {% if pet.photo_1 %}
+            <img src="{{ pet.photo_1.url }}" alt="Foto do pet" class="img-fluid rounded-4 border">
+        {% else %}
+            <img src="{% static 'img/no-image.png' %}" alt="Sem foto" class="img-fluid rounded-4 border">
+        {% endif %}
+      </div>
+
+      <div class="col-md-7">
+        <h2 class="mb-3 fw-bold">{{ pet.name|default:"Pet sem Nome" }}</h2>
+
+        <span class="badge bg-danger mb-2">{{ pet.get_status_display }}</span>
+
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item"><strong>Espécie:</strong> {{ pet.get_species_display }}</li>
+          <li class="list-group-item"><strong>Raça:</strong> {{ pet.breed }}</li>
+          <li class="list-group-item"><strong>Cor:</strong> {{ pet.color }}</li>
+          <li class="list-group-item"><strong>Porte:</strong> {{ pet.size }}</li>
+          <li class="list-group-item"><strong>Sexo:</strong> {{ pet.get_sex_display }}</li>
+          <li class="list-group-item"><strong>Última Localização:</strong><br>{{ pet.lost_location }}</li>
+        </ul>
+
+        <div class="mt-4">
+          <a href="{% url 'pet_registration:edit_pet' pet.id %}" class="btn btn-warning me-2">Editar</a>
+          <a href="{% url 'pet_registration:delete_pet' pet.id %}" class="btn btn-danger me-2">Deletar</a>
+          <a href="{% url 'pet_registration:user_pets_list' %}" class="btn btn-secondary">Voltar</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
 </div>
 {% endblock %}

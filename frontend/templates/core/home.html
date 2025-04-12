@@ -32,11 +32,15 @@
          <div class="row">
             <div class="col-md-4 mb-5">
                <a class="text-decoration-none" href="{% url 'pet_registration:register_lost_pet' %}">
+
+
+
                   <div class="h-100 border-0" role="button" tabindex="0">
                      <div class="service-card">
                         <div class="icon-circle text-center">
-                           <i class="bi bi-search"></i> <!-- Ícone de busca -->
+                            <img src="{% static 'images/pet-perdido.jpg' %}" alt="{{ pet.pet_name }}"class="img-fluid">
                         </div>
+                        <br>
                         <h3 class="h1 mb-3 font3">Pet Perdido</h3>
                         <h5 class="card-subtitle h3 mb-3 text-muted">Encontre seu melhor amigo de volta!</h5>
                         <p class="card-text flex-grow-1">Seu pet desapareceu? Não se desespere! Aqui, unimos forças para reencontrar animais perdidos. Com a ajuda da comunidade e ferramentas inteligentes, cada patinha perdida tem uma história feliz para contar.</p>
@@ -51,7 +55,10 @@
                   <div class="h-100 border-0" role="button" tabindex="0">
                      <div class="service-card">
                         <div class="icon-circle text-center">
-                           <i class="bi bi-heart"></i> <!-- Ícone de coração -->
+                           <div class="icon-circle text-center">
+                            <img src="{% static 'images/pet-adocao.jpg' %}" alt="{{ pet.pet_name }}"class="img-fluid">
+                        </div>
+                        <br>
                         </div>
                         <h3 class="h1 mb-3 font2">Pets para Adoção</h3>
                         <h5 class="card-subtitle h3 mb-3 text-muted">Dê um lar, ganhe um amor!</h5>
@@ -67,7 +74,10 @@
                   <div class="h-100 border-0" role="button" tabindex="0">
                      <div class="service-card">
                         <div class="icon-circle text-center">
-                           <i class="bi bi-paw"></i> <!-- Ícone de pata -->
+                           <div class="icon-circle text-center">
+                            <img src="{% static 'images/pet-reproducao.jpg' %}" alt="{{ pet.pet_name }}"class="img-fluid">
+                        </div>
+                        <br>
                         </div>
                         <h3 class="h1 mb-3 font4">Pets para Reproduçao</h3>
                         <h5 class="card-subtitle h3 mb-3 text-muted">Ajude a criar novas vidas cheias de amor!</h5>

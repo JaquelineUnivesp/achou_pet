@@ -3,254 +3,162 @@
 
 {% block content %}
 
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+
 <div class="container mt-5 mb-5">
 
 <style>
 .img-pet-galeria {
-    width: 100%;
-    aspect-ratio: 1 / 1; /* Mantém quadrado */
-    object-fit: cover;
-    border-radius: 8px;
-}
-
-.card-pet-info {
-    border-radius: 8px;
-    padding: 20px;
-    background-color: #fff;
-    box-shadow: 0 0 8px rgba(0,0,0,0.05);
-}
-
-.description-pet {
-    max-width: 800px;
-    margin: auto;
-    text-align: justify;
-}
-
-h2 { font-size: 2rem; font-weight: 700; }
-h5 { font-size: 1.4rem; font-weight: 600; }
-.card-pet-info { font-size: 1.1rem; }
-.card-pet-info strong { font-size: 1.2rem; font-weight: 700; }
-.description-pet { font-size: 1.1rem; line-height: 1.8; }
-.btn { font-size: 1.1rem; font-weight: 600; padding: 10px 20px; }
-
-.carousel-item img {
   width: 100%;
+  aspect-ratio: 1/1;
   object-fit: cover;
   border-radius: 8px;
 }
-
-
+.carousel-item img {
+  object-fit: cover;
+  height: 400px;
+}
 </style>
 
-
-
-
-
-
-
-<div class="row mb-4">
-   <div class="col-md-8">
-      <h2 class="display-1 text-left">{{ pet.name }}</h2>
-   </div>
-   <div class="col-md-4 text-md-end text-start">
-      <h4 class="bg-danger p-2 mb-2 text-light rounded d-inline-block">Pet {{ pet.get_status_display }}</h4>
-   </div>
-</div>
-
-
-<div class="d-none d-md-block">
-  <div class="row text-center mb-4">
-    {% if pet.photo_1 %}
-    <div class="col-md-4 mb-2">
-      <img src="{{ pet.photo_1.url }}" class="img-fluid img-pet-galeria" alt="{{ pet.name }}" data-bs-toggle="modal" data-bs-target="#galleryModal">
-    </div>
-    {% endif %}
-    {% if pet.photo_2 %}
-    <div class="col-md-4 mb-2">
-      <img src="{{ pet.photo_2.url }}" class="img-fluid img-pet-galeria" alt="{{ pet.name }}" data-bs-toggle="modal" data-bs-target="#galleryModal">
-    </div>
-    {% endif %}
-    {% if pet.photo_3 %}
-    <div class="col-md-4 mb-2">
-      <img src="{{ pet.photo_3.url }}" class="img-fluid img-pet-galeria" alt="{{ pet.name }}" data-bs-toggle="modal" data-bs-target="#galleryModal">
-    </div>
-    {% endif %}
+<!-- Nome + Status -->
+<div class="row mb-4 align-items-center">
+  <div class="col-md-8">
+    <h2 class="display-1">{{ pet.name }}</h2>
   </div>
-</div>
-
-<!-- Versão Mobile - Carrossel -->
-<div class="d-md-none mb-4">
-  <div id="galleryCarouselMobile" class="carousel slide" data-bs-ride="carousel">
-    <div class="carousel-inner">
-      <div class="carousel-item active">
-        <img src="{{ pet.photo_1.url }}" class="d-block w-100 img-pet-galeria">
-      </div>
-      {% if pet.photo_2 %}
-      <div class="carousel-item">
-        <img src="{{ pet.photo_2.url }}" class="d-block w-100 img-pet-galeria">
-      </div>
+  <div class="col-md-4 text-md-end text-start">
+    <span class="display-5
+      {% if pet.status == 'lost' %} bg-warning text-dark
+      {% elif pet.status == 'found' %} bg-success
+      {% else %} bg-secondary
       {% endif %}
-      {% if pet.photo_3 %}
-      <div class="carousel-item">
-        <img src="{{ pet.photo_3.url }}" class="d-block w-100 img-pet-galeria">
-      </div>
+      p-2 rounded">
+      {% if pet.status == 'lost' %} Perdido
+      {% elif pet.status == 'found' %} Encontrado
+      {% else %} -
       {% endif %}
-    </div>
-    <button class="carousel-control-prev" type="button" data-bs-target="#galleryCarouselMobile" data-bs-slide="prev">
-      <span class="carousel-control-prev-icon"></span>
-    </button>
-    <button class="carousel-control-next" type="button" data-bs-target="#galleryCarouselMobile" data-bs-slide="next">
-      <span class="carousel-control-next-icon"></span>
-    </button>
+    </span>
   </div>
 </div>
 
-
-
-
-
-
-<div class="modal fade" id="galleryModal" tabindex="-1" aria-labelledby="galleryModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-lg">
-    <div class="modal-content">
-      <div class="modal-body p-0">
-        <div id="carouselGallery" class="carousel slide" data-bs-ride="carousel">
-          <div class="carousel-inner">
-            <div class="carousel-item active">
-              <img src="{{ pet.photo_1.url }}" class="d-block w-100 img-fluid">
-            </div>
-            {% if pet.photo_2 %}
-            <div class="carousel-item">
-              <img src="{{ pet.photo_2.url }}" class="d-block w-100 img-fluid">
-            </div>
-            {% endif %}
-            {% if pet.photo_3 %}
-            <div class="carousel-item">
-              <img src="{{ pet.photo_3.url }}" class="d-block w-100 img-fluid">
-            </div>
-            {% endif %}
-          </div>
-          <button class="carousel-control-prev" type="button" data-bs-target="#carouselGallery" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon"></span>
-          </button>
-          <button class="carousel-control-next" type="button" data-bs-target="#carouselGallery" data-bs-slide="next">
-            <span class="carousel-control-next-icon"></span>
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
+<!-- Galeria Desktop -->
+<div class="row mb-4 d-none d-md-flex text-center">
+  {% if pet.photo_1 %}<div class="col-md-4 mb-2"><img src="{{ pet.photo_1.url }}" class="img-fluid img-pet-galeria"></div>{% endif %}
+  {% if pet.photo_2 %}<div class="col-md-4 mb-2"><img src="{{ pet.photo_2.url }}" class="img-fluid img-pet-galeria"></div>{% endif %}
+  {% if pet.photo_3 %}<div class="col-md-4 mb-2"><img src="{{ pet.photo_3.url }}" class="img-fluid img-pet-galeria"></div>{% endif %}
 </div>
 
+<!-- Carrossel Mobile -->
+<div id="petCarousel" class="carousel slide d-md-none mb-4" data-bs-ride="carousel">
+  <div class="carousel-inner">
+    {% if pet.photo_1 %}<div class="carousel-item active"><img src="{{ pet.photo_1.url }}" class="d-block w-100 img-pet-galeria"></div>{% endif %}
+    {% if pet.photo_2 %}<div class="carousel-item"><img src="{{ pet.photo_2.url }}" class="d-block w-100 img-pet-galeria"></div>{% endif %}
+    {% if pet.photo_3 %}<div class="carousel-item"><img src="{{ pet.photo_3.url }}" class="d-block w-100 img-pet-galeria"></div>{% endif %}
+  </div>
+  <button class="carousel-control-prev" type="button" data-bs-target="#petCarousel" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon"></span>
+  </button>
+  <button class="carousel-control-next" type="button" data-bs-target="#petCarousel" data-bs-slide="next">
+    <span class="carousel-control-next-icon"></span>
+  </button>
+</div>
 
+<h5 class="fw-bold mb-2">Última Localização</h5>
+<p>{{ pet.lost_date|date:"d/m/Y" }} | {{ pet.lost_location }}</p>
 
-
-<!-- Mapa + Informações -->
 <div class="row mb-5 g-4">
-
-  <!-- Mapa -->
-  <div class="col-md-6">
-    <h5 class="fw-bold mb-3">Última Localização</h5>
-    <p>{{ pet.lost_date|date:"d/m/Y" }} | {{ pet.lost_location }}</p>
-    <div id="map" style="height: 400px; width: 100%; background-color: #e0e0e0; border-radius: 8px;"></div>
+  <div class="col-lg-7">
+    <div id="map" style="height:400px; width:100%; border-radius:8px;"></div>
   </div>
 
-  <!-- Informações -->
-  <div class="col-md-6">
-    <div class="card p-4 shadow-sm h-100">
-      <h5 class="fw-bold mb-4 text-center">Informações do Pet</h5>
+  <div class="col-lg-5">
+    <div class="p-4">
+      <h5 class="fw-bold mb-4">Informações do Pet</h5>
       <div class="row">
         <div class="col-6 text-start">
-          <div class="mb-3"><strong>Espécie:</strong><br>{{ pet.get_species_display }}</div>
-          <div class="mb-3"><strong>Raça:</strong><br>{{ pet.breed|default:"Sem Raça" }}</div>
-          <div class="mb-3"><strong>Sexo:</strong><br>{{ pet.get_sex_display }}</div>
-          <div class="mb-3"><strong>Tamanho:</strong><br>{{ pet.get_size_display }}</div>
-          <div class="mb-3"><strong>Idade:</strong><br>{{ pet.age_value|default:"-" }} {{ pet.age_unit|default:"-" }}</div>
-
+          <p><i class="bi bi-paw me-1 text-secondary"></i><strong>Espécie:</strong> {{ pet.get_species_display }}</p>
+          <p><i class="bi bi-tag-fill me-1 text-secondary"></i><strong>Raça:</strong> {{ pet.breed|default:"Sem Raça" }}</p>
+          <p><i class="bi bi-gender-ambiguous me-1 text-secondary"></i><strong>Sexo:</strong> {{ pet.get_sex_display }}</p>
+          <p><i class="bi bi-arrows-fullscreen me-1 text-secondary"></i><strong>Tamanho:</strong> {{ pet.get_size_display }}</p>
+          <p><i class="bi bi-hourglass-split me-1 text-secondary"></i><strong>Idade:</strong> {{ pet.age|default:"-" }}</p>
         </div>
+
         <div class="col-6 text-start">
-          <div class="mb-3"><strong>Tipo de Pelagem:</strong><br>{{ pet.coat_type|default:"-" }}</div>
-          <div class="mb-3"><strong>Cor:</strong><br>{{ pet.color|default:"Selecione uma cor" }}</div>
-          <div class="mb-3"><strong>Cor dos Olhos:</strong><br>{{ pet.eye_color|default:"-" }}</div>
-          <div class="mb-3"><strong>Peso:</strong><br>{{ pet.weight|default:"-" }}</div>
-          <div class="mb-3"><strong>Data da Perda:</strong><br>{{ pet.lost_date|date:"d/m/Y"|default:"-" }}</div>
-          </div>
+          <p><i class="bi bi-brush-fill me-1 text-secondary"></i><strong>Pelagem:</strong> {{ pet.fur_type|default:"-" }}</p>
+          <p><i class="bi bi-palette-fill me-1 text-secondary"></i><strong>Cor:</strong> {{ pet.color|default:"-" }}</p>
+          <p><i class="bi bi-eye-fill me-1 text-secondary"></i><strong>Olhos:</strong> {{ pet.eye_color|default:"-" }}</p>
+          <p><i class="bi bi-speedometer2 me-1 text-secondary"></i><strong>Peso:</strong> {{ pet.weight|default:"-" }}</p>
+          <p><i class="bi bi-calendar-event me-1 text-secondary"></i><strong>Perda:</strong> {{ pet.lost_date|date:"d/m/Y"|default:"-" }}</p>
         </div>
       </div>
 
-      <div class="text-center mt-4">
-        <a href="https://wa.me/55{{ pet.notification_phone }}" target="_blank" class="btn btn-success w-100">
-          <i class="bi bi-whatsapp me-2"></i> Enviar mensagem
-        </a>
-      </div>
+      <a href="https://wa.me/55{{ pet.notification_phone }}" target="_blank" class="btn btn-success w-100 mt-4">
+        <i class="bi bi-whatsapp me-2"></i> Enviar mensagem
+      </a>
     </div>
   </div>
 </div>
-<br><br>
-<div class="container">
-<!-- Descrição -->
-{% if pet.details %}
-<div class="row">
-  <h5 class="fw-bold">Descrição</h5>
-  <p>{{ pet.details }}</p>
-</div>
 
+{% if pet.details %}
+<div class="mb-5">
+  <h5 class="fw-bold mb-2">Descrição</h5>
+  <p>{{ pet.details }}</p>
 </div>
 {% endif %}
 
-<!-- Botões -->
-<div class="text-left mb-5">
-  <a href="{% url 'pet_registration:edit_pet' pet.id %}" class="btn btn-warning me-2">Editar</a>
-  <a href="{% url 'pet_registration:delete_pet' pet.id %}" class="btn btn-danger me-2">Deletar</a>
-  <a href="{% url 'pet_registration:user_pets_list' %}" class="btn btn-secondary">Voltar</a>
+<div class="mb-5">
+  <a href="{% url 'pet_registration:edit_pet' pet.id %}" class="btn btn-primary me-2">
+    <i class="bi bi-pencil me-1"></i> Editar
+  </a>
+  <a href="{% url 'pet_registration:delete_pet' pet.id %}" class="btn btn-danger me-2">
+    <i class="bi bi-trash me-1"></i> Deletar
+  </a>
+  <a href="{% url 'pet_registration:user_pets_list' %}" class="btn btn-secondary">
+    <i class="bi bi-arrow-left me-1"></i> Voltar
+  </a>
 </div>
 
 </div>
 
-
-
-
-<script>
-  function changeModalImage(url) {
-    document.getElementById('modalImage').src = url;
-  }
-</script>
-
-
-<!-- Leaflet Lib -->
-<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-
-<!-- JS do Mapa somente visualização -->
-<!-- Leaflet -->
-<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
 <script>
-
-
-
-
 document.addEventListener('DOMContentLoaded', function () {
+    var lat = parseFloat('{{ pet.latitude|default:"-23.550520" }}');
+    var lon = parseFloat('{{ pet.longitude|default:"-46.633308" }}');
 
-  // Pega lat/lng ou usa default
-  var lat = Number('{{ pet.latitude|default:"-23.550520" }}');
-  var lon = Number('{{ pet.longitude|default:"-46.633308" }}');
+    if (isNaN(lat) || isNaN(lon)) {
+        lat = -23.550520;
+        lon = -46.633308;
+    }
 
-  if (!lat || !lon) {
-    lat = -23.550520;  // São Paulo
-    lon = -46.633308;
-  }
+    var map = L.map('map').setView([lat, lon], 15);
 
-  var map = L.map('map').setView([lat, lon], 14);
+    L.tileLayer('https://tiles.locationiq.com/v3/streets/r/{z}/{x}/{y}.png?key=pk.227bb16be8af10a97550047d4932e148', {
+        maxZoom: 19,
+        attribution: '&copy; LocationIQ & OpenStreetMap contributors'
+    }).addTo(map);
 
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; OpenStreetMap contributors'
-  }).addTo(map);
+    var marker = L.marker([lat, lon]).addTo(map);
 
-  L.marker([lat, lon]).addTo(map);
+    fetch(`https://api.locationiq.com/v1/reverse?key=pk.227bb16be8af10a97550047d4932e148&lat=${lat}&lon=${lon}&format=json`)
+        .then(response => response.json())
+        .then(data => {
+            var popupContent = `<strong>${data.display_name}</strong><br>Lat: ${lat}<br>Lon: ${lon}`;
+            marker.bindPopup(popupContent).openPopup();
+        })
+        .catch(error => {
+            marker.bindPopup(`<strong>Endereço não encontrado</strong><br>Lat: ${lat}<br>Lon: ${lon}`).openPopup();
+            console.error('Erro ao buscar endereço:', error);
+        });
 });
 </script>
+
+
+
+
+
+
 
 
 {% endblock %}

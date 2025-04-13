@@ -139,6 +139,7 @@
               <strong>Tamanho:</strong> ${tamanho}<br>
               <strong>Endereço:</strong> ${formatarEndereco(endereco)}</p>
               <a href="/pet/${id}/" class="btn btn-outline-primary btn-sm">Ver detalhes</a>
+
             </div>
           `;
           L.marker([lat, lng], { icon }).addTo(map).bindPopup(content);

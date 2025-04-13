@@ -10,10 +10,10 @@ COLOR_CHOICES = [
     ('cinza', 'Cinza'), ('marrom', 'Marrom'), ('rajado', 'Rajado'), ('outro', 'Outro')
 ]
 
-COAT_TYPE_CHOICES = [('short', 'Curto'), ('medium', 'Médio'), ('long', 'Longo'), ('hairless', 'Sem Pelo')]
+COAT_TYPE_CHOICES = [('curto', 'Curto'), ('medio', 'Médio'), ('longo', 'Longo'), ('hairless', 'Sem Pelo')]
 EYE_COLOR_CHOICES = [
-    ('brown', 'Castanho'), ('blue', 'Azul'), ('green', 'Verde'),
-    ('amber', 'Âmbar'), ('gray', 'Cinza'), ('other', 'Outro')
+    ('castanho', 'Castanho'), ('azul', 'Azul'), ('verde', 'Verde'),
+    ('amber', 'Âmbar'), ('cinza', 'Cinza'), ('outro', 'Outro')
 ]
 AGE_UNIT_CHOICES = [
     ('dias', 'Dias'), ('meses', 'Meses'), ('anos', 'Anos')
@@ -22,10 +22,10 @@ WEIGHT_CHOICES = [(str(i), f"{i} kg") for i in range(0, 121)]
 
 # Modelo de Pet Perdido
 class LostPet(models.Model):
-    STATUS_CHOICES = [('lost', 'Perdido'), ('found', 'Encontrado')]
-    SPECIES_CHOICES = [('cat', 'Gato'), ('dog', 'Cachorro')]
-    SIZE_CHOICES = [('small', 'Pequeno'), ('medium', 'Médio'), ('large', 'Grande')]
-    SEX_CHOICES = [('male', 'Macho'), ('female', 'Fêmea')]
+    STATUS_CHOICES = [('perdido', 'Perdido'), ('encontrado', 'Encontrado')]
+    SPECIES_CHOICES = [('gato', 'Gato'), ('dog', 'Cachorro')]
+    SIZE_CHOICES = [('pequeno', 'Pequeno'), ('medio', 'Médio'), ('grande', 'Grande')]
+    SEX_CHOICES = [('macho', 'Macho'), ('femea', 'Fêmea')]
 
     user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name='lost_pets', verbose_name='Usuário')
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='lost', verbose_name='Status')

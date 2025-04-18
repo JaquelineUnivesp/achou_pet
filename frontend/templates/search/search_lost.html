@@ -1,154 +1,307 @@
 {% extends 'core/base.html' %}
 {% load static %}
 {% block title %}Buscar Pets Perdidos - Achou Pet{% endblock %}
+
 {% block content %}
 <div class="container mt-5">
-    <div class="row">
-        <div class="col-md-9">
-            <h1 class="display-1 text-left">Buscar Pets <span class="color_project">Perdidos</span></h1>
-            <p class="text-left">Encontre pets perdidos ou encontrados na sua região.</p>
-        </div>
-        <div class="col-md-3 ">
-            <button class="pill-button ">
-                <a href="{% url 'pet_registration:register_lost_pet' %}">
-                     Cadastrar Pet Perdido
-                    </a>
-            </button>
-
-        </div>
+  <!-- Cabeçalho e Botão -->
+  <div class="row">
+    <div class="col-md-9">
+      <h1 class="display-1 text-left">
+        Buscar Pets <span class="color_project">Perdidos</span>
+      </h1>
+      <p class="text-left">Encontre pets perdidos ou encontrados na sua região.</p>
     </div>
+    <div class="col-md-3">
+      <a href="{% url 'pet_registration:register_lost_pet' %}" class="btn btn-primary w-100 mt-3">Cadastrar Pet Perdido</a>
+    </div>
+  </div>
 
-    <div id="map" style="height: 400px; width: 100%; margin-bottom: 20px; background-color: #e0e0e0;"></div>
-    <div class="search-container row">
-        <aside class="sidebar col-md-3">
-            <form method="get" action="" id="filter-form" class="p-3 border rounded">
-                <label for="status">Status</label>
-                <select name="status" id="status" class="form-control mb-2">
-                    <option value="">Todos</option>
-                    <option value="lost" {% if request.GET.status == "lost" %}selected{% endif %}>Perdido</option>
-                    <option value="found" {% if request.GET.status == "found" %}selected{% endif %}>Encontrado</option>
-                </select>
-                <label for="species">Espécie</label>
-                <select name="species" id="species" class="form-control mb-2">
-                    <option value="">Todas</option>
-                    <option value="cat" {% if request.GET.species == "cat" %}selected{% endif %}>Gato</option>
-                    <option value="dog" {% if request.GET.species == "dog" %}selected{% endif %}>Cachorro</option>
-                </select>
-                <label for="size">Tamanho</label>
-                <select name="size" id="size" class="form-control mb-2">
-                    <option value="">Todos</option>
-                    <option value="small" {% if request.GET.size == "small" %}selected{% endif %}>Pequeno</option>
-                    <option value="medium" {% if request.GET.size == "medium" %}selected{% endif %}>Médio</option>
-                    <option value="large" {% if request.GET.size == "large" %}selected{% endif %}>Grande</option>
-                </select>
+  <!-- Mapa -->
+  <div id="map" style="height: 400px; width: 100%; margin-bottom: 20px; background-color: #e0e0e0;"></div>
+
+   <div class="search-container row">
+    <aside class="sidebar col-md-3">
+      <form method="get" action="" id="filter-form" class="p-3 border rounded">
+        <label for="q">Pesquisar</label>
+        <input type="text" name="q" id="q" class="form-control mb-2" value="{{ request.GET.q }}" placeholder="Nome, cor, endereço...">
+
+        <label for="status">Status</label>
+        <select name="status" id="status" class="form-control mb-2">
+          <option value="">Todos</option>
+          <option value="perdido" {% if status == "perdido" %}selected{% endif %}>Perdido</option>
+          <option value="encontrado" {% if status == "encontrado" %}selected{% endif %}>Encontrado</option>
+        </select>
+
+        <label for="species">Espécie</label>
+        <select name="species" id="species" class="form-control mb-2">
+          <option value="">Todas</option>
+          <option value="gato" {% if species == "gato" %}selected{% endif %}>Gato</option>
+          <option value="dog" {% if species == "dog" %}selected{% endif %}>Cachorro</option>
+        </select>
+
+        <label for="sex">Sexo</label>
+        <select name="sex" id="sex" class="form-control mb-2">
+          <option value="">Todos</option>
+          <option value="macho" {% if sex == "macho" %}selected{% endif %}>Macho</option>
+          <option value="femea" {% if sex == "femea" %}selected{% endif %}>Fêmea</option>
+        </select>
+
+        <label for="lost_date">Data da Perda</label>
+        <input type="date" name="lost_date" id="lost_date" class="form-control mb-2" value="{{ lost_date }}">
+
+        <label for="size">Tamanho</label>
+        <select name="size" id="size" class="form-control mb-2">
+          <option value="">Todos</option>
+          <option value="pequeno" {% if size == "pequeno" %}selected{% endif %}>Pequeno</option>
+          <option value="medio" {% if size == "medio" %}selected{% endif %}>Médio</option>
+          <option value="grande" {% if size == "grande" %}selected{% endif %}>Grande</option>
+        </select>
+
                 <label for="breed">Raça</label>
-                <input type="text" name="breed" id="breed" class="form-control mb-2" value="{{ request.GET.breed }}">
-                <label for="color">Cor</label>
-                <input type="text" name="color" id="color" class="form-control mb-2" value="{{ request.GET.color }}">
-                <label for="sex">Sexo</label>
-                <select name="sex" id="sex" class="form-control mb-2">
-                    <option value="">Todos</option>
-                    <option value="male" {% if request.GET.sex == "male" %}selected{% endif %}>Macho</option>
-                    <option value="female" {% if request.GET.sex == "female" %}selected{% endif %}>Fêmea</option>
-                </select>
-                <label for="q">Pesquisar</label>
-                <input type="text" name="q" id="q" class="form-control mb-2" value="{{ request.GET.q }}" placeholder="Nome, cor, endereço...">
-                <button type="submit" class="btn btn-primary mt-2 w-100">Filtrar</button>
-                <a href="/search/lost/" class="btn btn-secondary mt-2 w-100">Limpar Filtros</a>
-            </form>
-        </aside>
-        <section class="results col-md-9">
-            <h3>Resultados ({{ lost_pets|length }})</h3>
-            <div class="row" id="pets-list">
-                {% for pet in lost_pets %}
-                    <div class="col-md-4 mb-4 pet-item" data-id="{{ pet.id }}" data-lat="{{ pet.latitude|floatformat:"6"|default:"" }}" data-lng="{{ pet.longitude|floatformat:"6"|default:"" }}" data-status="{{ pet.status }}" data-especie="{{ pet.get_species_display|default:'Não especificada' }}" data-sexo="{{ pet.get_sex_display|default:'Não especificado' }}" data-size="{{ pet.get_size_display|default:'Não especificado' }}">
-                        <div class="card h-100">
-                            {% if pet.photo_1 %}
-                                <img src="{{ pet.photo_1.url }}" class="card-img-top" alt="{{ pet.name|default:'Pet sem nome' }}" style="height: 200px; object-fit: cover;">
-                            {% else %}
-                                <div class="card-img-top text-center bg-light" style="height: 200px; line-height: 200px; color: #aaa;">Sem imagem</div>
-                            {% endif %}
-                            <div class="card-body">
-                                <h5 class="card-title">{{ pet.name|default:"Pet sem nome" }}</h5>
-                                <ul class="list-unstyled">
-                                    <li><strong>Status:</strong> {{ pet.get_status_display }}</li>
-                                    <li><strong>Espécie:</strong> {{ pet.get_species_display }}</li>
-                                    <li><strong>Tamanho:</strong> {{ pet.get_size_display }}</li>
-                                    <li><strong>Raça:</strong> {{ pet.breed|default:"Não especificado" }}</li>
-                                    <li><strong>Cor:</strong> {{ pet.color }}</li>
-                                    <li><strong>Sexo:</strong> {{ pet.get_sex_display }}</li>
-                                    <li><strong>Data de Perda:</strong> {{ pet.lost_date }}</li>
-                                    <li><strong>Local:</strong> <span id="location-{{ pet.id }}" data-address="{{ pet.lost_location }}">{{ pet.lost_location }}</span></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                {% endfor %}
-            </div>
-        </section>
-    </div>
-</div>
+        <select name="breed" id="breed" class="form-control mb-2">
+          <option value="">Selecione uma espécie primeiro</option>
+        </select>
 
+        <label for="eye_color">Cor dos Olhos</label>
+        <select name="eye_color" id="eye_color" class="form-control mb-2">
+          <option value="">Todas</option>
+          <option value="castanho" {% if eye_color == "castanho" %}selected{% endif %}>Castanho</option>
+          <option value="azul" {% if eye_color == "azul" %}selected{% endif %}>Azul</option>
+          <option value="verde" {% if eye_color == "verde" %}selected{% endif %}>Verde</option>
+          <option value="amber" {% if eye_color == "amber" %}selected{% endif %}>Âmbar</option>
+          <option value="cinza" {% if eye_color == "cinza" %}selected{% endif %}>Cinza</option>
+        </select>
+
+        <label for="coat_color">Cor da Pelagem</label>
+        <select name="coat_color" id="coat_color" class="form-control mb-2">
+          <option value="">Todas</option>
+          <option value="preto" {% if coat_color == "preto" %}selected{% endif %}>Preto</option>
+          <option value="branco" {% if coat_color == "branco" %}selected{% endif %}>Branco</option>
+          <option value="caramelo" {% if coat_color == "caramelo" %}selected{% endif %}>Caramelo</option>
+          <option value="cinza" {% if coat_color == "cinza" %}selected{% endif %}>Cinza</option>
+          <option value="marrom" {% if coat_color == "marrom" %}selected{% endif %}>Marrom</option>
+          <option value="rajado" {% if coat_color == "rajado" %}selected{% endif %}>Rajado</option>
+          <option value="outro" {% if coat_color == "outro" %}selected{% endif %}>Outro</option>
+        </select>
+
+        <label for="coat_type">Tipo de Pelagem</label>
+        <select name="coat_type" id="coat_type" class="form-control mb-2">
+          <option value="">Todos</option>
+          <option value="curto" {% if coat_type == "curto" %}selected{% endif %}>Curto</option>
+          <option value="medio" {% if coat_type == "medio" %}selected{% endif %}>Médio</option>
+          <option value="longo" {% if coat_type == "longo" %}selected{% endif %}>Longo</option>
+          <option value="hairless" {% if coat_type == "hairless" %}selected{% endif %}>Sem Pelo</option>
+        </select>
+
+        <label for="age_min">Idade (mín)</label>
+        <input type="number" name="age_min" class="form-control mb-2" value="{{ age_min }}">
+
+        <label for="age_max">Idade (máx)</label>
+        <input type="number" name="age_max" class="form-control mb-2" value="{{ age_max }}">
+
+        <label for="weight_min">Peso (mín)</label>
+        <input type="number" name="weight_min" class="form-control mb-2" value="{{ weight_min }}">
+
+        <label for="weight_max">Peso (máx)</label>
+        <input type="number" name="weight_max" class="form-control mb-2" value="{{ weight_max }}">
+
+        <button type="submit" class="btn btn-primary mt-2 w-100">Filtrar</button>
+        <a href="/search/lost/" class="btn btn-secondary mt-2 w-100">Limpar Filtros</a>
+      </form>
+    </aside>
+
+    <section class="results col-md-9">
+      <h3>Resultados ({{ lost_pets|length }})</h3>
+      <div class="row" id="pets-list">
+        {% for pet in lost_pets %}
+          <div class="col-md-4 mb-4 pet-item"
+               data-id="{{ pet.id }}"
+               data-lat="{{ pet.latitude|floatformat:"6"|default:"" }}"
+               data-lng="{{ pet.longitude|floatformat:"6"|default:"" }}"
+               data-status="{{ pet.status }}">
+            <div class="card h-100">
+              {% if pet.photo_1 %}
+                <img src="{{ pet.photo_1.url }}" class="card-img-top" alt="{{ pet.name|default:'Pet sem nome' }}" style="height: 200px; object-fit: cover;">
+              {% else %}
+                <div class="card-img-top text-center bg-light" style="height: 200px; line-height: 200px; color: #aaa;">Sem imagem</div>
+              {% endif %}
+              <div class="card-body">
+                <h5 class="card-title">{{ pet.name|default:"Pet sem nome" }}</h5>
+                <ul class="list-unstyled">
+                  <li><strong>Status:</strong> {{ pet.status|capfirst }}</li>
+                  <li><strong>Espécie:</strong> {{ pet.species|capfirst }}</li>
+                  <li><strong>Tamanho:</strong> {{ pet.size|capfirst }}</li>
+                  <li><strong>Raça:</strong> {{ pet.breed|default:"Não especificado" }}</li>
+                  <li><strong>Cor:</strong> {{ pet.color }}</li>
+                  <li><strong>Sexo:</strong> {{ pet.sex|capfirst }}</li>
+                  <li><strong>Data de Perda:</strong> {{ pet.lost_date|date:"d \d\e F \d\e Y" }}</li>
+                  <li><strong>Local:</strong> {{ pet.lost_location }}</li>
+                </ul>
+                <a href="{% url 'pet_registration:pet_detail' pet.id %}" class="btn btn-outline-primary btn-sm w-100 mt-2">Ver detalhes</a>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </section>
+  </div>
+</div>
+<!-- Incluindo Leaflet CSS e JS -->
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
-  document.addEventListener('DOMContentLoaded', function () {
-    const map = L.map('map').setView([-23.5489, -46.6388], 13);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(map);
+document.addEventListener('DOMContentLoaded', function() {
+  console.log("Iniciando script do mapa...");
 
-    const iconLost = L.icon({ iconUrl: '{% static "images/small-red-cutout.png" %}', iconSize: [31, 43], iconAnchor: [15, 30], popupAnchor: [0, -30] });
-    const iconFound = L.icon({ iconUrl: '{% static "images/small-green-cutout.png" %}', iconSize: [31, 43], iconAnchor: [15, 30], popupAnchor: [0, -30] });
+  const map = L.map('map').setView([-23.5489, -46.6388], 13);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19
+  }).addTo(map);
 
-    function centralizarPeloIP() {
-      fetch('/search/api/user-location/')
-        .then(res => res.json())
-        .then(data => {
-          if (data.latitude && data.longitude) map.setView([data.latitude, data.longitude], 13);
-        })
-        .catch(err => console.warn('Não foi possível obter a localização por IP:', err));
-    }
+  const iconLost = L.icon({
+    iconUrl: '{% static "images/small-red-cutout.png" %}',
+    iconSize: [31, 43],
+    iconAnchor: [15, 30],
+    popupAnchor: [0, -30]
+  });
 
-    function formatarEndereco(endereco) {
-      if (!endereco) return 'Não informado';
-      const partes = endereco.split(',').map(p => p.trim());
-      return [partes[1], partes[2], partes[3], partes[7]].join(', ');
-    }
+  const iconFound = L.icon({
+    iconUrl: '{% static "images/small-green-cutout.png" %}',
+    iconSize: [31, 43],
+    iconAnchor: [15, 30],
+    popupAnchor: [0, -30]
+  });
 
-    function adicionarMarcadores() {
-      document.querySelectorAll('.pet-item').forEach(item => {
-        let lat = parseFloat(item.dataset.lat?.replace(',', '.') || '');
-        let lng = parseFloat(item.dataset.lng?.replace(',', '.') || '');
-        const status = item.dataset.status;
-        const id = item.dataset.id;
+  function adicionarMarcadores() {
+    console.log("Adicionando marcadores...");
+    document.querySelectorAll('.pet-item').forEach(item => {
+      const lat = parseFloat(item.dataset.lat?.replace(',', '.') || '');
+      const lng = parseFloat(item.dataset.lng?.replace(',', '.') || '');
+      if (!isNaN(lat) && !isNaN(lng)) {
+        const status = item.dataset.status.toLowerCase();
         const nome = item.querySelector('.card-title')?.innerText || 'Pet';
         const imagem = item.querySelector('img')?.src || '';
-        const endereco = document.getElementById(`location-${id}`)?.dataset.address || 'Não informado';
-        const especie = item.dataset.especie;
-        const sexo = item.dataset.sexo;
-        const tamanho = item.dataset.size;
+        const id = item.dataset.id;
+        const markerIcon = (status === 'found' || status === 'encontrado') ? iconFound : iconLost;
+        const content = `
+          <div style="width: 220px">
+            ${imagem ? `<img src="${imagem}" alt="${nome}" style="width:100%; height:120px; object-fit: cover; border-radius: 5px;" />` : ''}
+            <h5 class="mt-2">${nome}</h5>
+            <a href="/pet/${id}/" class="btn btn-outline-primary btn-sm">Ver detalhes</a>
+          </div>
+        `;
+        L.marker([lat, lng], { icon: markerIcon }).addTo(map).bindPopup(content);
+      } else {
+        console.warn("Coordenadas inválidas para o pet ID:", item.dataset.id);
+      }
+    });
+  }
 
-        if (!isNaN(lat) && !isNaN(lng)) {
-          const icon = status === 'found' ? iconFound : iconLost;
-          const content = `
-            <div style="width: 250px">
-              ${imagem ? `<img src="${imagem}" alt="Imagem do ${nome}" style="width: 100%; height: 130px; object-fit: cover; border-radius: 5px;"/>` : ''}
-              <h4 class="mt-2">${nome}</h4>
-              <p><strong>Disponível desde:</strong> hoje<br>
-              <strong>Espécie:</strong> ${especie}<br>
-              <strong>Sexo:</strong> ${sexo}<br>
-              <strong>Tamanho:</strong> ${tamanho}<br>
-              <strong>Endereço:</strong> ${formatarEndereco(endereco)}</p>
-              <a href="/pet/${id}/" class="btn btn-outline-primary btn-sm">Ver detalhes</a>
-
-            </div>
-          `;
-          L.marker([lat, lng], { icon }).addTo(map).bindPopup(content);
+  function centralizarPelaApiIPInfo() {
+    console.log("Tentando centralizar via IPInfo...");
+    fetch('https://ipinfo.io/json?token=91e3040b4f78f5')
+      .then(response => response.json())
+      .then(data => {
+        console.log("Resposta IPInfo:", data);
+        if (data.loc) {
+          const [latStr, lngStr] = data.loc.split(',');
+          const lat = parseFloat(latStr);
+          const lng = parseFloat(lngStr);
+          console.log("Coordenadas extraídas:", lat, lng);
+          map.setView([lat, lng], 13);
+        } else {
+          console.warn("IPInfo não retornou 'loc' válido.");
         }
+        adicionarMarcadores();
+      })
+      .catch(err => {
+        console.warn('Erro na requisição IPInfo:', err);
+        adicionarMarcadores();
       });
-    }
+  }
 
-    centralizarPeloIP();
-    adicionarMarcadores();
-  });
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const lat = position.coords.latitude;
+        const lng = position.coords.longitude;
+        console.log("Geolocalização HTML5 obtida:", lat, lng);
+        map.setView([lat, lng], 13);
+        adicionarMarcadores();
+      },
+      (error) => {
+        console.warn("Erro na geolocalização HTML5, usando IPInfo:", error);
+        centralizarPelaApiIPInfo();
+      }
+    );
+  } else {
+    console.warn("Geolocalização não suportada, usando IPInfo.");
+    centralizarPelaApiIPInfo();
+  }
+});
 </script>
+
+<script>
+const breedsCats = [
+  "Sem Raça", "Abissínio", "American Bobtail", "American Curl", "American Shorthair",
+  "Balinese", "Bengal", "Birmanês", "Bombaim", "British Shorthair",
+  "Burmês", "Chartreux", "Cornish Rex", "Devon Rex", "Egyptian Mau",
+  "Exótico", "Himalaio", "Japanese Bobtail", "Korat", "LaPerm",
+  "Maine Coon", "Manx", "Florestal Norueguês", "Ocicat", "Oriental",
+  "Persa", "Ragdoll", "Azul Russo", "Scottish Fold", "Selkirk Rex",
+  "Siamês", "Siberiano", "Singapura", "Snowshoe", "Somali", "Sphynx",
+  "Tonquinês", "Angorá Turco", "Van Turco", "Outra Raça"
+];
+
+const breedsDogs = [
+  "Sem Raça", "Pastor Alemão", "Pastor Belga", "Pastor de Shetland",
+  "Affenpinscher", "Afghan Hound", "Airedale Terrier", "Akita",
+  "Alaskan Malamute", "American Bulldog", "American Pit Bull Terrier",
+  "Australian Cattle Dog", "Australian Shepherd", "Basset Hound",
+  "Beagle", "Belgian Malinois", "Bernese Mountain Dog", "Bichon Frisé",
+  "Bloodhound", "Border Collie", "Boston Terrier", "Boxer",
+  "Bull Terrier", "Bulldog Francês", "Bulldog Inglês", "Cairn Terrier",
+  "Cane Corso", "Cavalier King Charles Spaniel", "Chihuahua",
+  "Chow Chow", "Cocker Spaniel", "Collie", "Dachshund", "Dálmata",
+  "Doberman", "Dogo Argentino", "Golden Retriever", "Dog Alemão",
+  "Greyhound", "Havanês", "Jack Russell Terrier", "Labrador Retriever",
+  "Lhasa Apso", "Maltês", "Mastiff", "Pinscher Miniatura",
+  "Terra Nova", "Papillon", "Pequinês", "Corgi", "Poodle",
+  "Spitz Alemão", "Pug", "Rottweiler", "São Bernardo",
+  "Samoyeda", "Schnauzer", "Scottish Terrier", "Shar Pei", "Shiba Inu",
+  "Shih Tzu", "Husky Siberiano", "Staffordshire Bull Terrier",
+  "Weimaraner", "West Highland Terrier", "Whippet", "Yorkshire Terrier",
+  "Outra Raça"
+];
+
+const speciesSelect = document.getElementById('species');
+const breedSelect = document.getElementById('breed');
+const currentSelected = "{{ breed }}";
+
+function updateBreedOptions() {
+  const species = speciesSelect.value;
+  let breeds = [];
+  if (species === "gato") breeds = breedsCats;
+  else if (species === "dog") breeds = breedsDogs;
+
+  if (breeds.length === 0) {
+    breedSelect.innerHTML = '<option value="">Selecione uma espécie primeiro</option>';
+    return;
+  }
+
+  breedSelect.innerHTML = '<option value="">Todas</option>';
+  breeds.forEach(breed => {
+    const opt = document.createElement('option');
+    opt.value = breed;
+    opt.text = breed;
+    if (breed === currentSelected) opt.selected = true;
+    breedSelect.appendChild(opt);
+  });
+}
+
+updateBreedOptions();
+speciesSelect.addEventListener('change', updateBreedOptions);
+</script>
+
 {% endblock %}

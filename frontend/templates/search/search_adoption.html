@@ -146,7 +146,7 @@
                      </ul>
                   </div>
                   <div class="card-footer text-center">
-                     <button class="btn btn-primary" onclick="openModal('{{ pet.id }}')">Ver detalhes</button>
+
                   </div>
                </div>
             </div>
@@ -183,7 +183,11 @@
                      <li><strong>Gênero:</strong> <span id="modalPetSex"></span></li>
                      <li><strong>Tamanho:</strong> <span id="modalPetSize"></span></li>
                      <li><strong>Localização:</strong> <span id="modalPetLocation"></span></li>
+                     <a href="{% url 'pet_registration:adoption_pet_detail' pet.id %}" class="btn btn-outline-primary btn-sm w-100 mt-2">Ver detalhes</a>
+
                   </ul>
+
+
                </div>
             </div>
          </div>
@@ -254,29 +258,25 @@
        popupAnchor: [0, -41]  // Popup ancorado acima do ícone
    });
 
-   // Função para obter a localização do usuário via API do Django
-   function obterLocalizacaoUsuario() {
-       console.log("Obtendo localização do usuário...");
-       fetch('/search/api/user-location/')
-           .then(response => {
-               if (!response.ok) throw new Error("Erro na API de localização: " + response.status);
-               return response.json();
-           })
-           .then(data => {
-               if (data.error) {
-                   console.error("Erro retornado pela API:", data.error);
-                   return;
-               }
-               const latitude = data.latitude;
-               const longitude = data.longitude;
-               console.log(`Localização obtida: [${latitude}, ${longitude}]`);
-               map.setView([latitude, longitude], 12);
-           })
-           .catch(error => {
-               console.error('Erro ao obter a localização do usuário:', error);
-               map.setView([-23.5489, -46.6388], 13);
-           });
-   }
+ function obterLocalizacaoUsuario() {
+        console.log("Obtendo localização do usuário...");
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                position => {
+                    const lat = position.coords.latitude;
+                    const lng = position.coords.longitude;
+                    map.setView([lat, lng], 13);
+                },
+                error => {
+                    console.warn("Erro na geolocalização HTML5. Fallback para IPInfo:", error);
+                    obterLocalizacaoUsuarioViaIP();
+                }
+            );
+        } else {
+            console.warn("Geolocalização não suportada. Usando IPInfo...");
+            obterLocalizacaoUsuarioViaIP();
+        }
+    }
 
    // Formatar data
    function formatarData(dataISO) {

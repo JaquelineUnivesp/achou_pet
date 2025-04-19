@@ -19,3 +19,40 @@ class Notification(models.Model):
 
     def __str__(self):
         return f"{self.get_notification_type_display()} para {self.user.email}: {self.message}"
+
+
+class ChatMessage(models.Model):
+    sender = models.ForeignKey(User, related_name='sent_messages', on_delete=models.CASCADE)
+    recipient = models.ForeignKey(User, related_name='received_messages', on_delete=models.CASCADE)
+    message = models.TextField()
+    timestamp = models.DateTimeField(auto_now_add=True)
+    is_deleted = models.BooleanField(default=False)
+
+    class Meta:
+        ordering = ['timestamp']
+
+    def __str__(self):
+        return f"{self.sender} → {self.recipient}: {self.message[:30]}"
+
+
+class BlockedUser(models.Model):
+    blocker = models.ForeignKey(User, related_name='blocked_users', on_delete=models.CASCADE)
+    blocked = models.ForeignKey(User, related_name='blocked_by', on_delete=models.CASCADE)
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('blocker', 'blocked')
+
+    def __str__(self):
+        return f"{self.blocker} bloqueou {self.blocked}"
+
+
+class ChatReport(models.Model):
+    reporter = models.ForeignKey(User, related_name='reports_made', on_delete=models.CASCADE)
+    reported = models.ForeignKey(User, related_name='reports_received', on_delete=models.CASCADE)
+    message = models.ForeignKey(ChatMessage, related_name='reports', on_delete=models.CASCADE)
+    reason = models.TextField()
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Denúncia de {self.reporter} contra {self.reported}"

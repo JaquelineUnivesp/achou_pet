@@ -1,0 +1,60 @@
+{% extends 'core/base.html' %}
+{% block title %}Usuários Bloqueados - Achou Pet{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1>Usuários Bloqueados</h1>
+    <p class="text-muted">Aqui você pode ver e gerenciar quem você bloqueou.</p>
+
+    {% if blocked_users %}
+        <ul class="list-group">
+            {% for item in blocked_users %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    {{ item.blocked.username }}
+                    <button class="btn btn-sm btn-outline-success unblock-btn" data-user-id="{{ item.blocked.id }}">
+                        Desbloquear
+                    </button>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <div class="alert alert-info mt-4">Você não bloqueou nenhum usuário ainda.</div>
+    {% endif %}
+</div>
+
+<script>
+    document.querySelectorAll('.unblock-btn').forEach(btn => {
+        btn.addEventListener('click', function () {
+            const userId = this.getAttribute('data-user-id');
+            if (confirm('Deseja desbloquear este usuário?')) {
+                fetch(`/notifications/chat/unblock/${userId}/`, {
+                    method: 'POST',
+                    headers: { 'X-CSRFToken': getCookie('csrftoken') },
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert(data.message || 'Usuário desbloqueado!');
+                        location.reload();
+                    }
+                });
+            }
+        });
+    });
+
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+</script>
+{% endblock %}

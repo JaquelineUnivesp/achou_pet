@@ -1,8 +1,10 @@
 from channels.generic.websocket import WebsocketConsumer
 import json
 from asgiref.sync import async_to_sync
-from .models import Notification
+from django.contrib.auth import get_user_model
+from .models import Notification, ChatMessage, BlockedUser
 
+User = get_user_model()
 
 class ChatConsumer(WebsocketConsumer):
     def connect(self):
@@ -25,55 +27,86 @@ class ChatConsumer(WebsocketConsumer):
             )
 
     def receive(self, text_data):
-        data = json.loads(text_data)
-        message_type = data.get("type", "chat")  # Tipo padrão é "chat"
-        message = data["message"]
-        recipient_id = data["recipient_id"]
-        sender_username = self.user.username
+        print(">> MENSAGEM RECEBIDA NO WEBSOCKET")  # DEBUG
+        try:
+            data = json.loads(text_data)
+            message_type = data.get("type", "chat")
+            message = data.get("message", "").strip()
+            recipient_id = data.get("recipient_id")
 
-        recipient_group_name = f"user_{recipient_id}"
+            if not message or not recipient_id:
+                return
 
-        if message_type == "chat":
-            # Salvar notificação para o destinatário
-            Notification.objects.create(
-                user_id=recipient_id,
-                message=f"Nova mensagem de {sender_username}: {message}",
-                notification_type="chat"
-            )
+            sender = self.user
+            recipient = User.objects.filter(id=recipient_id).first()
 
-            # Enviar mensagem de chat
-            async_to_sync(self.channel_layer.group_send)(
-                recipient_group_name,
-                {
-                    "type": "chat.message",
-                    "message": message,
-                    "sender": sender_username,
-                }
-            )
-            async_to_sync(self.channel_layer.group_send)(
-                self.room_group_name,
-                {
-                    "type": "chat.message",
-                    "message": message,
-                    "sender": sender_username,
-                }
-            )
-        elif message_type == "notification":
-            # Salvar notificação genérica
-            Notification.objects.create(
-                user_id=recipient_id,
-                message=message,
-                notification_type=data.get("notification_type", "other")
-            )
-            # Enviar notificação
-            async_to_sync(self.channel_layer.group_send)(
-                recipient_group_name,
-                {
-                    "type": "notification.message",
-                    "message": message,
-                    "notification_type": data.get("notification_type", "other"),
-                }
-            )
+            if not recipient:
+                self.send(text_data=json.dumps({
+                    "type": "error",
+                    "message": "Usuário destinatário não encontrado."
+                }))
+                return
+
+            if BlockedUser.objects.filter(blocker=recipient, blocked=sender).exists():
+                self.send(text_data=json.dumps({
+                    "type": "error",
+                    "message": "Você foi bloqueado por este usuário."
+                }))
+                return
+
+            recipient_group_name = f"user_{recipient_id}"
+
+            if message_type == "chat":
+                ChatMessage.objects.create(
+                    sender=sender,
+                    recipient=recipient,
+                    message=message
+                )
+
+                Notification.objects.create(
+                    user=recipient,
+                    message=f"Nova mensagem de {sender.username}: {message}",
+                    notification_type="chat"
+                )
+
+                async_to_sync(self.channel_layer.group_send)(
+                    recipient_group_name,
+                    {
+                        "type": "chat.message",
+                        "message": message,
+                        "sender": sender.username,
+                    }
+                )
+
+                async_to_sync(self.channel_layer.group_send)(
+                    self.room_group_name,
+                    {
+                        "type": "chat.message",
+                        "message": message,
+                        "sender": sender.username,
+                    }
+                )
+
+            elif message_type == "notification":
+                Notification.objects.create(
+                    user=recipient,
+                    message=message,
+                    notification_type=data.get("notification_type", "other")
+                )
+                async_to_sync(self.channel_layer.group_send)(
+                    recipient_group_name,
+                    {
+                        "type": "notification.message",
+                        "message": message,
+                        "notification_type": data.get("notification_type", "other"),
+                    }
+                )
+
+        except Exception as e:
+            self.send(text_data=json.dumps({
+                "type": "error",
+                "message": f"Erro no servidor: {str(e)}"
+            }))
 
     def chat_message(self, event):
         self.send(text_data=json.dumps({

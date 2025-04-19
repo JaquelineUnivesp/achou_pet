@@ -1,11 +1,12 @@
-<!-- backend/apps/notifications/templates/notifications/chat.html -->
 {% extends 'core/base.html' %}
 {% block title %}Chat - Achou Pet{% endblock %}
 {% block content %}
 <p>Usuário atual: {{ request.user.username }} (ID: {{ request.user.id }})</p>
+
 <div class="container mt-5">
     <h1>Chat em Tempo Real</h1>
     <div class="row">
+        <!-- Lista de usuários -->
         <div class="col-md-4">
             <h3>Usuários</h3>
             {% if users %}
@@ -18,15 +19,26 @@
                 <p>Nenhum outro usuário encontrado.</p>
             {% endif %}
         </div>
+
+        <!-- Área de conversa -->
         <div class="col-md-8">
             <h3>Conversa</h3>
+
+            <div class="d-flex justify-content-end gap-2 mb-2">
+                <button id="clear-chat-btn" class="btn btn-outline-secondary btn-sm">Limpar Conversa</button>
+                <button id="block-user-btn" class="btn btn-outline-danger btn-sm">Bloquear Usuário</button>
+                <button id="unblock-user-btn" class="btn btn-outline-success btn-sm" style="display: none;">Desbloquear Usuário</button>
+            </div>
+
             <div id="chat-messages" class="border p-3" style="height: 300px; overflow-y: scroll;"></div>
+
             <form id="chat-form" class="mt-3">
                 <div class="input-group">
                     <input type="text" id="message-input" class="form-control" placeholder="Digite sua mensagem">
                     <button type="submit" class="btn btn-primary">Enviar</button>
                 </div>
             </form>
+
             <div id="notification" class="alert alert-info mt-3" style="display: none;"></div>
         </div>
     </div>
@@ -34,19 +46,24 @@
 
 <script>
     const userId = '{{ request.user.id }}';
-    const chatSocket = new WebSocket('ws://' + window.location.host + '/ws/chat/');
+    const blockedUsers = {{ blocked_ids|safe }};
     let selectedUserId = null;
+
+    const chatSocket = new WebSocket('ws://' + window.location.host + '/ws/chat/');
 
     chatSocket.onmessage = function(e) {
         const data = JSON.parse(e.data);
         const messagesDiv = document.getElementById('chat-messages');
-        messagesDiv.innerHTML += `<p><strong>${data.sender}:</strong> ${data.message}</p>`;
-        messagesDiv.scrollTop = messagesDiv.scrollHeight;
 
-        if (data.sender !== '{{ request.user.username }}') {
-            document.getElementById('notification').innerHTML = `Nova mensagem de ${data.sender}!`;
-            document.getElementById('notification').style.display = 'block';
-            setTimeout(() => { document.getElementById('notification').style.display = 'none'; }, 3000);
+        if (data.type === 'error') {
+            alert(data.message);
+        } else if (data.type === 'chat') {
+            messagesDiv.innerHTML += `<p><strong>${data.sender}:</strong> ${data.message}</p>`;
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+
+            if (data.sender !== '{{ request.user.username }}') {
+                showNotification(`Nova mensagem de ${data.sender}!`);
+            }
         }
     };
 
@@ -64,6 +81,31 @@
             document.getElementById('chat-messages').innerHTML = '';
             document.querySelectorAll('#user-list li').forEach(li => li.classList.remove('active'));
             this.classList.add('active');
+
+            // Mostrar/ocultar botões de bloqueio
+            const unblockBtn = document.getElementById('unblock-user-btn');
+            const blockBtn = document.getElementById('block-user-btn');
+            if (blockedUsers.includes(parseInt(selectedUserId))) {
+                unblockBtn.style.display = 'inline-block';
+                blockBtn.style.display = 'none';
+            } else {
+                unblockBtn.style.display = 'none';
+                blockBtn.style.display = 'inline-block';
+            }
+
+            // Buscar histórico da conversa
+            fetch(`/notifications/chat/history/${selectedUserId}/`)
+                .then(response => response.json())
+                .then(data => {
+                    const messagesDiv = document.getElementById('chat-messages');
+                    if (data.messages) {
+                        data.messages.forEach(msg => {
+                            const text = msg.message === "" ? "mensagem removida" : msg.message;
+                            messagesDiv.innerHTML += `<p><strong>${msg.sender}:</strong> ${text}</p>`;
+                        });
+                        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+                    }
+                });
         });
     });
 
@@ -71,13 +113,91 @@
         e.preventDefault();
         const messageInput = document.getElementById('message-input');
         const message = messageInput.value;
+
         if (selectedUserId && message) {
             chatSocket.send(JSON.stringify({
-                'message': message,
-                'recipient_id': selectedUserId
+                type: 'chat',
+                message: message,
+                recipient_id: selectedUserId
             }));
             messageInput.value = '';
         }
     });
+
+    document.getElementById('clear-chat-btn').addEventListener('click', function () {
+        if (selectedUserId && confirm("Tem certeza que deseja limpar a conversa?")) {
+            fetch(`/notifications/chat/clear/${selectedUserId}/`, {
+                method: 'POST',
+                headers: { 'X-CSRFToken': getCookie('csrftoken') },
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById('chat-messages').innerHTML = '';
+                }
+            });
+        }
+    });
+
+    document.getElementById('block-user-btn').addEventListener('click', function () {
+        if (selectedUserId && confirm("Deseja realmente bloquear este usuário?")) {
+            fetch(`/notifications/chat/block/${selectedUserId}/`, {
+                method: 'POST',
+                headers: { 'X-CSRFToken': getCookie('csrftoken') },
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert(data.message || 'Usuário bloqueado.');
+                    blockedUsers.push(parseInt(selectedUserId));
+                    document.getElementById('block-user-btn').style.display = 'none';
+                    document.getElementById('unblock-user-btn').style.display = 'inline-block';
+                }
+            });
+        }
+    });
+
+    document.getElementById('unblock-user-btn').addEventListener('click', function () {
+        if (selectedUserId && confirm("Deseja desbloquear este usuário?")) {
+            fetch(`/notifications/chat/unblock/${selectedUserId}/`, {
+                method: 'POST',
+                headers: { 'X-CSRFToken': getCookie('csrftoken') },
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert(data.message || 'Usuário desbloqueado.');
+                    const index = blockedUsers.indexOf(parseInt(selectedUserId));
+                    if (index > -1) blockedUsers.splice(index, 1);
+                    document.getElementById('unblock-user-btn').style.display = 'none';
+                    document.getElementById('block-user-btn').style.display = 'inline-block';
+                }
+            });
+        }
+    });
+
+    function showNotification(msg) {
+        const notif = document.getElementById('notification');
+        notif.innerHTML = msg;
+        notif.style.display = 'block';
+        setTimeout(() => {
+            notif.style.display = 'none';
+        }, 3000);
+    }
+
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
 </script>
 {% endblock %}

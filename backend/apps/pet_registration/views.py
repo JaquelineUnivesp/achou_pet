@@ -150,7 +150,7 @@ def delete_pet(request, pet_id):
 # Views para PetAdoption
 @login_required
 def adoption_pet_detail(request, pet_id):
-    pet = get_object_or_404(PetAdoption, id=pet_id, owner=request.user)
+    pet = get_object_or_404(PetAdoption.objects.select_related('owner'), id=pet_id)
     context = {'pet': pet}
     return render(request, 'pet_registration/adoption_pet_detail.html', context)
 

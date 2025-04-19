@@ -191,6 +191,7 @@ document.addEventListener('DOMContentLoaded', function() {
             ${imagem ? `<img src="${imagem}" alt="${nome}" style="width:100%; height:120px; object-fit: cover; border-radius: 5px;" />` : ''}
             <h5 class="mt-2">${nome}</h5>
             <a href="/pet/${id}/" class="btn btn-outline-primary btn-sm">Ver detalhes</a>
+
           </div>
         `;
         L.marker([lat, lng], { icon: markerIcon }).addTo(map).bindPopup(content);

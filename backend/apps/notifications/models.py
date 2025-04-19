@@ -1,11 +1,7 @@
 from django.db import models
 from django.contrib.auth import get_user_model
 
-
-
-def get_user():
-    return get_user_model()
-
+User = get_user_model()
 
 class Notification(models.Model):
     NOTIFICATION_TYPES = (
@@ -60,6 +56,3 @@ class ChatReport(models.Model):
 
     def __str__(self):
         return f"Denúncia de {self.reporter} contra {self.reported}"
-
-
-

@@ -1,17 +1,50 @@
-# Ocultar configurações sensíveis
+# 🔒 Arquivos sensíveis
 .env
 
-# Arquivos do Python
-*.pyc
+# 🐍 Arquivos Python compilados
 __pycache__/
+*.py[cod]
+*$py.class
 
-# Dependências
+# 📦 Ambientes virtuais
 venv/
 .venv/
 env/
+ENV/
+env.bak/
 
-# Arquivos de cache e logs
-*.log
+# ⚙️ Configurações de IDEs
+.vscode/
+.idea/
+*.swp
+
+# 🗃️ Arquivos de banco e cache locais
 db.sqlite3
+*.sqlite3
+*.db
+*.log
+
+# 📁 Diretórios gerados em produção
 staticfiles/
 media/
+static/
+build/
+dist/
+
+# 🧪 Cobertura de testes
+htmlcov/
+.coverage
+coverage.xml
+.tox/
+.pytest_cache/
+
+# 🔍 Arquivos do sistema
+.DS_Store
+Thumbs.db
+
+# 🔄 Docker & Heroku (se usar)
+*.pid
+*.tgz
+*.bak
+*.tmp
+*.lock

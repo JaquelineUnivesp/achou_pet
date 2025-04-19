@@ -3,22 +3,23 @@ import os
 from dotenv import load_dotenv
 from datetime import timedelta
 
-IPINFO_TOKEN = os.getenv('IPINFO_TOKEN', '91e3040b4f78f5')
-
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
-
-# Carregar variáveis do .env
+# Carrega variáveis do .env
 load_dotenv()
 
-# Quick-start development settings - unsuitable for production
-SECRET_KEY = 'django-insecure-843qjerhh!z3^v^nfo!@@yg$yb$6s3%!i(&ry)7#fxkyl__xxp'
-DEBUG = True
+# Caminhos base
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+# Segurança
+SECRET_KEY = os.getenv('SECRET_KEY')
+DEBUG = os.getenv('DEBUG', 'False') == 'True'
 ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
-# Application definition
+# Token de IP
+IPINFO_TOKEN = os.getenv('IPINFO_TOKEN')
+
+# Aplicações
 INSTALLED_APPS = [
-    'daphne',  # Prioridade para ASGI
+    'daphne',
     'django.contrib.admin',
     'django.contrib.auth',
     'dj_rest_auth',
@@ -27,26 +28,23 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # Django Allauth
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
-    # Django REST Framework + Autenticação JWT e Tokens
     'rest_framework',
     'rest_framework.authtoken',
     'rest_framework_simplejwt',
     'corsheaders',
     'channels',
-    # Apps do projeto
     'apps.accounts',
     'apps.core',
     'apps.notifications',
     'apps.pet_registration',
     'apps.search',
     'django.contrib.gis',
-
 ]
 
+# Middlewares
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
@@ -59,8 +57,7 @@ MIDDLEWARE = [
     'allauth.account.middleware.AccountMiddleware',
 ]
 
-ROOT_URLCONF = 'config.urls'
-
+# Templates
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -78,73 +75,43 @@ TEMPLATES = [
     },
 ]
 
-# Configuração dos arquivos estáticos
-STATIC_URL = '/static/'  # URL base para acessar arquivos estáticos
-STATICFILES_DIRS = [
-    BASE_DIR / '..' / 'frontend' / 'static',  # Caminho para a pasta frontend/static/
-]
-
-# Opcional: para produção
-STATIC_ROOT = BASE_DIR / 'staticfiles'
-
-# Configuração do ASGI
+ROOT_URLCONF = 'config.urls'
 ASGI_APPLICATION = 'config.asgi.application'
 
-# Configuração do Channels com Redis
-CHANNEL_LAYERS = {
-    'default': {
-        'BACKEND': 'channels_redis.core.RedisChannelLayer',
-        'CONFIG': {
-            "hosts": [('localhost', 6379)],
-        },
-    },
-}
+# Arquivos estáticos e de mídia
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [BASE_DIR / '..' / 'frontend' / 'static']
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
-# Database
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('DB_NAME', 'achou_pet'),
-        'USER': os.getenv('DB_USER', 'admin'),
-        'PASSWORD': os.getenv('DB_PASSWORD', '12345'),
-        'HOST': os.getenv('DB_HOST', 'localhost'),
-        'PORT': os.getenv('DB_PORT', '5432'),
-    }
-}
-
-# Password validation
-AUTH_PASSWORD_VALIDATORS = [
-    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
-    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
-    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'},
-    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
-]
-
-# Internationalization
-LANGUAGE_CODE = 'pt-br'
-TIME_ZONE = 'America/Sao_Paulo'
-USE_I18N = True
-USE_TZ = True
-
-# Static files (CSS, JavaScript, Images)
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'lost_pets')
 
-# Default primary key field type
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+# Banco de Dados
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.getenv('DB_NAME'),
+        'USER': os.getenv('DB_USER'),
+        'PASSWORD': os.getenv('DB_PASSWORD'),
+        'HOST': os.getenv('DB_HOST'),
+        'PORT': os.getenv('DB_PORT'),
+    }
+}
 
+# Autenticação
+AUTH_USER_MODEL = 'accounts.CustomUser'
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
     'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
 SITE_ID = 1
-
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_EMAIL_VERIFICATION = "mandatory"
 ACCOUNT_UNIQUE_EMAIL = True
 
+# REST Framework + JWT
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
@@ -160,37 +127,58 @@ SIMPLE_JWT = {
     "AUTH_HEADER_TYPES": ("Bearer",),
 }
 
-# Modelo de usuário personalizado
-AUTH_USER_MODEL = 'accounts.CustomUser'
-
-# Configuração de e-mail com Gmail SMTP
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'alertapetpi3@gmail.com'
-EMAIL_HOST_PASSWORD = 'wrlu xjef vtim nsnf'
-
-# Configuração de CORS
-CORS_ALLOW_ALL_ORIGINS = True
-
 REST_AUTH = {
     'USE_JWT': True,
     'JWT_AUTH_HTTPONLY': False,
 }
 
-LOGIN_URL = '/account/login/'
-LOGIN_REDIRECT_URL = '/account/'
-LOGOUT_REDIRECT_URL = '/account/login/'
+# E-mail
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 
-# Configuração de logging
+# CORS
+CORS_ALLOW_ALL_ORIGINS = True
+
+# Internacionalização
+LANGUAGE_CODE = 'pt-br'
+TIME_ZONE = 'America/Sao_Paulo'
+USE_I18N = True
+USE_TZ = True
+
+# Cache e Redis
+REDIS_HOST = os.getenv('REDIS_HOST', 'localhost')
+REDIS_PORT = int(os.getenv('REDIS_PORT', 6379))
+REDIS_DB = int(os.getenv('REDIS_DB', 0))
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [(REDIS_HOST, REDIS_PORT)],
+        },
+    },
+}
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': f'redis://{REDIS_HOST}:{REDIS_PORT}/1',
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+        }
+    }
+}
+
+# Logging
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
     'handlers': {
-        'console': {
-            'class': 'logging.StreamHandler',
-        },
+        'console': {'class': 'logging.StreamHandler'},
     },
     'loggers': {
         '': {
@@ -200,22 +188,11 @@ LOGGING = {
     },
 }
 
-# Configuração do Redis como cache (opcional)
-CACHES = {
-    'default': {
-         'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-        'LOCATION': 'redis://127.0.0.1:6379/1',
-        'OPTIONS': {
-            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
-        }
-    }
-}
-
-# Configuração básica do Redis para uso geral
-REDIS_HOST = 'localhost'
-REDIS_PORT = 6379
-REDIS_DB = 0
-
-# LocationIQ API Key
-LOCATIONIQ_API_KEY = 'pk.227bb16be8af10a97550047d4932e148'
+# LocationIQ
+LOCATIONIQ_API_KEY = os.getenv('LOCATIONIQ_API_KEY')
 SETTINGS_EXPORT = ['LOCATIONIQ_API_KEY']
+
+# Rotas de login
+LOGIN_URL = '/account/login/'
+LOGIN_REDIRECT_URL = '/account/'
+LOGOUT_REDIRECT_URL = '/account/login/'

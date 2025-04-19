@@ -15,7 +15,7 @@ class Notification(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.get_notification_type_display()} para {self.user.email}: {self.message[:30]}"
+        return f"{self.get_notification_type_display()} - {self.message[:30]}"
 
 
 class ChatMessage(models.Model):
@@ -29,7 +29,7 @@ class ChatMessage(models.Model):
         ordering = ['timestamp']
 
     def __str__(self):
-        return f"{self.sender} → {self.recipient}: {self.message[:30]}"
+        return f"Mensagem de {self.sender_id} para {self.recipient_id}"
 
 
 class BlockedUser(models.Model):
@@ -41,7 +41,7 @@ class BlockedUser(models.Model):
         unique_together = ('blocker', 'blocked')
 
     def __str__(self):
-        return f"{self.blocker} bloqueou {self.blocked}"
+        return f"{self.blocker_id} bloqueou {self.blocked_id}"
 
 
 class ChatReport(models.Model):
@@ -52,4 +52,4 @@ class ChatReport(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"Denúncia de {self.reporter} contra {self.reported}"
+        return f"Denúncia ID {self.id} sobre mensagem {self.message_id}"

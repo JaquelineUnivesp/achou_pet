@@ -86,6 +86,44 @@
 </footer>
      <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+
+<script>
+    const ws = new WebSocket('ws://' + window.location.host + '/ws/chat/');
+    ws.onmessage = function(event) {
+        const data = JSON.parse(event.data);
+        if (data.type === 'notification') {
+            const badge = document.querySelector('.nav-link .badge');
+            if (badge) {
+                badge.innerText = parseInt(badge.innerText) + 1;
+            } else {
+                const link = document.querySelector('.nav-link[href$="/notifications/notifications/"]');
+                if (link) {
+                    const span = document.createElement('span');
+                    span.className = "position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger";
+                    span.innerText = "1";
+                    link.appendChild(span);
+                }
+            }
+
+            const list = document.getElementById('notifications-list');
+            if (list) {
+                const newNotification = `
+                    <div class="alert alert-info">
+                        <p>${data.message} (${new Date().toLocaleString()})</p>
+                        <form method="post" style="display:inline;">
+                            <input type="hidden" name="notification_id" value="new">
+                            <button type="submit" name="mark_read" class="btn btn-sm btn-primary">Marcar como lida</button>
+                        </form>
+                    </div>`;
+                list.insertAdjacentHTML('afterbegin', newNotification);
+            }
+        }
+    };
+</script>
+
+
+
 </body>
 </html>
 

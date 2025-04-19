@@ -1,4 +1,4 @@
-from django.db import models  # Adicione esta linha
+from django.db import models
 from django.contrib.auth import get_user_model
 
 User = get_user_model()
@@ -12,13 +12,14 @@ class Notification(models.Model):
     )
 
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='notifications')
+    sender = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='sent_notifications')
     message = models.TextField()
     notification_type = models.CharField(max_length=20, choices=NOTIFICATION_TYPES, default='other')
     is_read = models.BooleanField(default=False)
     timestamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.get_notification_type_display()} para {self.user.email}: {self.message}"
+        return f"{self.get_notification_type_display()} para {self.user.email}: {self.message[:30]}"
 
 
 class ChatMessage(models.Model):
@@ -56,3 +57,6 @@ class ChatReport(models.Model):
 
     def __str__(self):
         return f"Denúncia de {self.reporter} contra {self.reported}"
+
+
+

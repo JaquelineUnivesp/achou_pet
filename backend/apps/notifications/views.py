@@ -1,24 +1,31 @@
-
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
-from .models import Notification
-from .models import BlockedUser
-from django.db.models import Q
-from .models import ChatMessage
 from django.shortcuts import render, get_object_or_404, redirect
+from django.http import JsonResponse
+from django.views.decorators.http import require_GET, require_POST
+from django.db.models import Q
 
+from apps.notifications.models import Notification, ChatMessage, BlockedUser
 
 User = get_user_model()
 
+# 🔔 Cria uma notificação ao receber mensagem
+def criar_notificacao_mensagem(sender, recipient, texto):
+    if sender != recipient:
+        Notification.objects.create(
+            user=recipient,
+            sender=sender,
+            message=f"Você recebeu uma nova mensagem de {sender.username}: \"{texto[:50]}...\"",
+            notification_type='chat'
+        )
 
+# 💬 Página principal do chat
 @login_required
 def chat_view(request):
-    User = get_user_model()
     interacted_user_ids = ChatMessage.objects.filter(
         Q(sender=request.user) | Q(recipient=request.user)
     ).values_list('sender', 'recipient')
 
-    # Pegamos todos os IDs relacionados, exceto o do próprio usuário
     user_ids = set()
     for sender_id, recipient_id in interacted_user_ids:
         if sender_id != request.user.id:
@@ -34,35 +41,35 @@ def chat_view(request):
         'blocked_ids': list(blocked_ids),
     })
 
+# 🔔 Página de notificações
 @login_required
 def notifications_view(request):
     notifications = Notification.objects.filter(user=request.user).order_by('-timestamp')
-    if request.method == "POST" and "mark_read" in request.POST:
-        notification_id = request.POST.get("notification_id")
-        notification = notifications.filter(id=notification_id).first()
-        if notification:
-            notification.is_read = True
-            notification.save()
+
+    if request.method == "POST":
+        if "mark_read" in request.POST:
+            notification_id = request.POST.get("notification_id")
+            notification = notifications.filter(id=notification_id).first()
+            if notification:
+                notification.is_read = True
+                notification.save()
+
+        elif "delete_notification_id" in request.POST:
+            notification_id = request.POST.get("delete_notification_id")
+            notification = notifications.filter(id=notification_id).first()
+            if notification:
+                notification.delete()
+
+        return redirect('notifications:notifications')
+
     return render(request, 'notifications/notifications.html', {'notifications': notifications})
 
-
-
-from django.http import JsonResponse
-from django.contrib.auth.decorators import login_required
-from django.views.decorators.http import require_GET
-from .models import ChatMessage
-from django.contrib.auth import get_user_model
-
-User = get_user_model()
-
+# 🔄 Histórico de mensagens
 @login_required
 @require_GET
 def chat_history(request, user_id):
     current_user = request.user
-    other_user = User.objects.filter(id=user_id).first()
-
-    if not other_user:
-        return JsonResponse({"error": "Usuário não encontrado"}, status=404)
+    other_user = get_object_or_404(User, id=user_id)
 
     messages = ChatMessage.objects.filter(
         sender__in=[current_user, other_user],
@@ -80,11 +87,7 @@ def chat_history(request, user_id):
 
     return JsonResponse({"messages": messages_data})
 
-
-from django.views.decorators.http import require_POST
-from django.shortcuts import get_object_or_404
-from .models import BlockedUser
-
+# 🧹 Limpa mensagens enviadas para outro usuário
 @login_required
 @require_POST
 def clear_chat(request, user_id):
@@ -92,6 +95,7 @@ def clear_chat(request, user_id):
     ChatMessage.objects.filter(sender=request.user, recipient=other_user).delete()
     return JsonResponse({"success": True})
 
+# 🚫 Bloquear usuário
 @login_required
 @require_POST
 def block_user(request, user_id):
@@ -102,7 +106,7 @@ def block_user(request, user_id):
     BlockedUser.objects.get_or_create(blocker=request.user, blocked=other_user)
     return JsonResponse({"success": True, "message": f"Você bloqueou {other_user.username}."})
 
-
+# ✅ Desbloquear usuário
 @login_required
 @require_POST
 def unblock_user(request, user_id):
@@ -110,12 +114,14 @@ def unblock_user(request, user_id):
     BlockedUser.objects.filter(blocker=request.user, blocked=other_user).delete()
     return JsonResponse({"success": True, "message": f"Você desbloqueou {other_user.username}."})
 
+# 👥 Listar usuários bloqueados (JSON)
 @login_required
 def blocked_users_list(request):
     blocked = BlockedUser.objects.filter(blocker=request.user).select_related('blocked')
     data = [{"id": b.blocked.id, "username": b.blocked.username} for b in blocked]
     return JsonResponse({"blocked_users": data})
 
+# 👥 Página de usuários bloqueados
 @login_required
 def blocked_users_page(request):
     blocked_users = BlockedUser.objects.filter(blocker=request.user).select_related('blocked')
@@ -123,16 +129,14 @@ def blocked_users_page(request):
         'blocked_users': blocked_users
     })
 
-
+# 📩 Abre ou inicia conversa com usuário específico
 @login_required
 def chat_with_user(request, user_id):
     if request.user.id == user_id:
-        return redirect('chat')  # evita abrir chat consigo mesmo
+        return redirect('notifications:chat')
 
-    User = get_user_model()
     recipient = get_object_or_404(User, id=user_id)
 
-    # cria uma mensagem vazia se não existe histórico
     if not ChatMessage.objects.filter(
         Q(sender=request.user, recipient=recipient) |
         Q(sender=recipient, recipient=request.user)

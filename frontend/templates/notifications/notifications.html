@@ -1,42 +1,62 @@
 {% extends "core/base.html" %}
+{% block title %}Notificações - Achou Pet{% endblock %}
+
 {% block content %}
 <div class="container mt-5">
-    <h1>Notificações</h1>
-    <div id="notifications-list">
-        {% for notification in notifications %}
-            <div class="alert {% if notification.is_read %}alert-secondary{% else %}alert-info{% endif %}">
-                <p>{{ notification.message }} ({{ notification.timestamp|date:"d/m/Y H:i" }})</p>
-                {% if not notification.is_read %}
-                    <form method="post" style="display:inline;">
-                        {% csrf_token %}
-                        <input type="hidden" name="notification_id" value="{{ notification.id }}">
-                        <button type="submit" name="mark_read" class="btn btn-sm btn-primary">Marcar como lida</button>
-                    </form>
-                {% endif %}
-            </div>
-        {% empty %}
-            <p>Sem notificações.</p>
-        {% endfor %}
-    </div>
-</div>
+    <h1 class="mb-4"><i class="bi bi-bell me-2"></i>Suas Notificações</h1>
 
-<script>
-    const ws = new WebSocket('ws://' + window.location.host + '/ws/chat/');
-    ws.onmessage = function(event) {
-        const data = JSON.parse(event.data);
-        if (data.type === 'notification') {
-            const list = document.getElementById('notifications-list');
-            const newNotification = `
-                <div class="alert alert-info">
-                    <p>${data.message} (${new Date().toLocaleString()})</p>
-                    <form method="post" style="display:inline;">
+    {% if notifications %}
+        {% for notification in notifications %}
+            <div class="alert {% if notification.is_read %}alert-secondary{% else %}alert-info{% endif %} d-flex justify-content-between align-items-center">
+                <div>
+                    <p class="mb-1">{{ notification.message }}</p>
+
+                    {% if notification.sender %}
+                        <small class="text-muted">De: {{ notification.sender.username }}</small><br>
+                    {% else %}
+                        <small class="text-muted fst-italic">Notificação do sistema</small><br>
+                    {% endif %}
+
+                    <small class="text-muted">{{ notification.timestamp|date:"d/m/Y H:i" }}</small>
+                </div>
+
+                <div class="btn-group">
+
+                    {# Botão Ver Conversa (chat direto) #}
+                    {% if notification.notification_type == "chat" and notification.sender %}
+                        <a href="{% url 'notifications:chat_with_user' notification.sender.id %}" class="btn btn-outline-primary btn-sm">
+                            <i class="bi bi-chat-left-text me-1"></i> Ver conversa
+                        </a>
+                    {% else %}
+                        <button class="btn btn-outline-secondary btn-sm" disabled>
+                            <i class="bi bi-exclamation-circle me-1"></i> Sem remetente
+                        </button>
+                    {% endif %}
+
+                    {# Botão Marcar como lida #}
+                    {% if not notification.is_read %}
+                        <form method="post" class="d-inline ms-2">
+                            {% csrf_token %}
+                            <input type="hidden" name="notification_id" value="{{ notification.id }}">
+                            <button type="submit" name="mark_read" class="btn btn-outline-success btn-sm">
+                                <i class="bi bi-check2-circle me-1"></i> Marcar como lida
+                            </button>
+                        </form>
+                    {% endif %}
+
+                    {# Botão Excluir #}
+                    <form method="post" class="d-inline ms-2">
                         {% csrf_token %}
-                        <input type="hidden" name="notification_id" value="new">
-                        <button type="submit" name="mark_read" class="btn btn-sm btn-primary">Marcar como lida</button>
+                        <input type="hidden" name="delete_notification_id" value="{{ notification.id }}">
+                        <button type="submit" class="btn btn-outline-danger btn-sm">
+                            <i class="bi bi-trash me-1"></i> Excluir
+                        </button>
                     </form>
-                </div>`;
-            list.insertAdjacentHTML('afterbegin', newNotification);
-        }
-    };
-</script>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p class="text-muted">Nenhuma notificação por enquanto.</p>
+    {% endif %}
+</div>
 {% endblock %}

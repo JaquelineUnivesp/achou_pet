@@ -121,3 +121,29 @@ class ChatConsumer(WebsocketConsumer):
             "message": event["message"],
             "notification_type": event["notification_type"],
         }))
+
+
+
+
+# apps/notifications/consumers.py
+from apps.notifications.utils import criar_notificacao_mensagem
+
+async def receive(self, text_data):
+    data = json.loads(text_data)
+    mensagem = data['message']
+    recipient_id = data['recipient_id']
+
+    sender = self.scope['user']
+    recipient = await database_sync_to_async(User.objects.get)(id=recipient_id)
+
+    if mensagem:
+        await database_sync_to_async(ChatMessage.objects.create)(
+            sender=sender,
+            recipient=recipient,
+            message=mensagem
+        )
+
+        # cria notificação
+        criar_notificacao_mensagem(sender, recipient, mensagem)
+
+        # (e aqui você continua enviando o broadcast da mensagem)

@@ -1,13 +1,9 @@
-# backend/config/settings.py
 from pathlib import Path
 import os
 from dotenv import load_dotenv
 from datetime import timedelta
 
-
-
 IPINFO_TOKEN = os.getenv('IPINFO_TOKEN', '91e3040b4f78f5')
-
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -76,6 +72,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'apps.notifications.context_processors.unread_notifications',
             ],
         },
     },
@@ -133,7 +130,6 @@ USE_TZ = True
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'lost_pets')
 
-
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
@@ -144,7 +140,6 @@ AUTHENTICATION_BACKENDS = [
 
 SITE_ID = 1
 
-#ACCOUNT_LOGIN_METHODS = {'email'}  # Ajustado para corrigir o aviso
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_EMAIL_VERIFICATION = "mandatory"
@@ -169,9 +164,7 @@ SIMPLE_JWT = {
 AUTH_USER_MODEL = 'accounts.CustomUser'
 
 # Configuração de e-mail com Gmail SMTP
-# Configurações de e-mail para desenvolvimento
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend' # Isso vai imprimir o e-mail no console
-
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True

@@ -1,0 +1,69 @@
+{# templates/core/shared_pet_fields.html #}
+
+<div class="mb-3">
+   <label for="id_pet_name">Nome do Pet</label>
+   {{ form.pet_name }}
+</div>
+
+<div class="mb-3">
+   <label for="species">Espécie</label>
+   {{ form.species }}
+</div>
+
+<div class="mb-3">
+   <label for="size">Tamanho</label>
+   {{ form.size }}
+</div>
+
+<div class="mb-3">
+   <label for="breed">Raça</label>
+   {{ form.breed }}
+</div>
+
+<div class="mb-3">
+   <label for="color">Cor</label>
+   {{ form.color }}
+</div>
+
+<div class="mb-3">
+   <label for="coat_type">Tipo de Pelagem</label>
+   {{ form.coat_type }}
+</div>
+
+<div class="mb-3">
+   <label for="eye_color">Cor dos Olhos</label>
+   {{ form.eye_color }}
+</div>
+
+<div class="mb-3">
+   <label for="sex">Sexo</label>
+   {{ form.sex }}
+</div>
+
+<div class="mb-3">
+   <label for="lost_date">Data</label>
+   {{ form.lost_date }}
+</div>
+
+<div class="mb-3">
+   <label for="location">Localização</label>
+   {{ form.location }}
+</div>
+
+<div class="mb-3">
+   <label for="id_image">Foto do Pet</label>
+   {{ form.image }}
+   <img id="preview_image" src="#" alt="Pré-visualização" style="display:none; max-width:200px; margin-top:10px;"/>
+</div>
+
+<div class="mb-3">
+   <label for="id_image_2">Foto Secundária</label>
+   {{ form.image_2 }}
+   <img id="preview_image_2" src="#" alt="Pré-visualização" style="display:none; max-width:200px; margin-top:10px;"/>
+</div>
+
+<div class="mb-3">
+   <label for="id_image_3">Foto Adicional</label>
+   {{ form.image_3 }}
+   <img id="preview_image_3" src="#" alt="Pré-visualização" style="display:none; max-width:200px; margin-top:10px;"/>
+</div>

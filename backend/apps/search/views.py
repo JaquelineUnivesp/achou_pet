@@ -132,6 +132,7 @@ def search_adoption_pets(request):
     size_by_age = request.GET.get('size_by_age', '')
     location = request.GET.get('location', '')
     distance = request.GET.get('distance', '')
+    breed = request.GET.get('breed', '').strip()  # Novo filtro de raça
 
     logger.info(f"Parâmetros recebidos: {request.GET}")
     adoption_pets = PetAdoption.objects.filter(status='adoption')
@@ -189,6 +190,10 @@ def search_adoption_pets(request):
         else:
             logger.warning(f"Tamanho inválido: {size_by_age}. Esperado: {valid_sizes}")
 
+    if breed:
+        adoption_pets = adoption_pets.filter(breed__icontains=breed)
+        logger.info(f"Filtro raça ({breed}): {adoption_pets.count()} pets")
+
     if location:
         if distance:
             try:
@@ -230,10 +235,12 @@ def search_adoption_pets(request):
         'size_by_age': size_by_age,
         'location': location,
         'distance': distance,
+        'breed': breed,
         'months': months,
         'years': years,
     }
     return render(request, 'search/search_adoption.html', context)
+
 
 # View ajustada para busca de pets para reprodução
 def search_breeding_pets(request):

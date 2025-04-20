@@ -10,10 +10,15 @@ load_dotenv()
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Segurança
+# Segurança
 SECRET_KEY = os.getenv('SECRET_KEY', 'chave-padrao-insegura')
 DEBUG = os.getenv('DEBUG', 'False') == 'True'
 ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
 
+# Confiança para verificação CSRF (evita erro 403 em produção)
+CSRF_TRUSTED_ORIGINS = [
+    "https://achou-pet.onrender.com",
+]
 
 
 
@@ -199,3 +204,5 @@ SETTINGS_EXPORT = ['LOCATIONIQ_API_KEY']
 LOGIN_URL = '/account/login/'
 LOGIN_REDIRECT_URL = '/account/'
 LOGOUT_REDIRECT_URL = '/account/login/'
+
+

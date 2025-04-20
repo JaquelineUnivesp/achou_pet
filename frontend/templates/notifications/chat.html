@@ -49,7 +49,8 @@
     const blockedUsers = {{ blocked_ids|safe }};
     let selectedUserId = null;
 
-    const chatSocket = new WebSocket('ws://' + window.location.host + '/ws/chat/');
+    const ws_scheme = window.location.protocol === "https:" ? "wss" : "ws";
+    const chatSocket = new WebSocket(ws_scheme + '://' + window.location.host + '/ws/chat/');
 
     chatSocket.onmessage = function(e) {
         const data = JSON.parse(e.data);
@@ -82,7 +83,6 @@
             document.querySelectorAll('#user-list li').forEach(li => li.classList.remove('active'));
             this.classList.add('active');
 
-            // Mostrar/ocultar botões de bloqueio
             const unblockBtn = document.getElementById('unblock-user-btn');
             const blockBtn = document.getElementById('block-user-btn');
             if (blockedUsers.includes(parseInt(selectedUserId))) {
@@ -93,7 +93,6 @@
                 blockBtn.style.display = 'inline-block';
             }
 
-            // Buscar histórico da conversa
             fetch(`/notifications/chat/history/${selectedUserId}/`)
                 .then(response => response.json())
                 .then(data => {
@@ -200,4 +199,5 @@
         return cookieValue;
     }
 </script>
+
 {% endblock %}

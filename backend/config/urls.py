@@ -18,7 +18,7 @@ urlpatterns = [
     path('notifications/', include('apps.notifications.urls')),
     path('pet_registration/', include('apps.pet_registration.urls')),
     path('search/', include('apps.search.urls')),
-    path("healthz", health_check),
+    path('healthz', health_check),
 
  ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

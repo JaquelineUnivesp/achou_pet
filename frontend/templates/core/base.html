@@ -121,6 +121,14 @@
         }
     };
 </script>
+<script src="{% static 'js/api.js' %}"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", async function () {
+    const pets = await fetchPets();
+    console.log("Pets recebidos:", pets);
+    // Aqui você pode atualizar o DOM com os dados
+  });
+</script>
 
 
 

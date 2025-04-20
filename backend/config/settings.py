@@ -2,17 +2,17 @@ from pathlib import Path
 import os
 from dotenv import load_dotenv
 from datetime import timedelta
+from dotenv import load_dotenv
 
-# Carrega variáveis do .env
 load_dotenv()
 
-# Caminhos base
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Segurança
-SECRET_KEY = os.getenv('SECRET_KEY')
+SECRET_KEY = os.getenv('SECRET_KEY', 'chave-padrao-insegura')
 DEBUG = os.getenv('DEBUG', 'False') == 'True'
-ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "localhost").split(",")
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
+
 
 
 
@@ -24,39 +24,42 @@ INSTALLED_APPS = [
     'daphne',
     'django.contrib.admin',
     'django.contrib.auth',
-    'dj_rest_auth',
-    'dj_rest_auth.registration',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # Apps de terceiros
+    'whitenoise.runserver_nostatic',
+    'rest_framework',
+    'rest_framework.authtoken',
+    'corsheaders',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
-    'rest_framework',
-    'rest_framework.authtoken',
-    'rest_framework_simplejwt',
-    'corsheaders',
-    'channels',
+    'dj_rest_auth',
+    'dj_rest_auth.registration',
+    # Seus apps
     'apps.accounts',
     'apps.core',
     'apps.notifications',
     'apps.pet_registration',
     'apps.search',
-    'django.contrib.gis',
 ]
 
-# Middlewares
+# Middlewaresf
+
+# Middleware
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'allauth.account.middleware.AccountMiddleware',  # <-- aqui
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'allauth.account.middleware.AccountMiddleware',
 ]
 
 # Templates
@@ -85,8 +88,12 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / '..' / 'frontend' / 'static']
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
+# Habilita WhiteNoise para servir os arquivos corretamente no Render
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'lost_pets')
+
 
 # Banco de Dados
 DATABASES = {

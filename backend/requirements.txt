@@ -12,7 +12,6 @@ cryptography==44.0.2
 daphne==4.1.2
 dj-rest-auth==7.0.1
 Django==5.1.6
-gunicorn
 django-allauth==65.4.1
 django-cors-headers==4.7.0
 django-redis==5.4.0
@@ -43,5 +42,5 @@ Twisted==24.11.0
 txaio==23.1.1
 typing_extensions==4.12.2
 urllib3==2.3.0
+whitenoise==6.9.0
 zope.interface==7.2
-

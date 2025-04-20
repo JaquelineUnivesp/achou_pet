@@ -24,12 +24,7 @@ db.sqlite3
 *.db
 *.log
 
-# 📁 Diretórios gerados em produção
-staticfiles/
-media/
-static/
-build/
-dist/
+
 
 # 🧪 Cobertura de testes
 htmlcov/

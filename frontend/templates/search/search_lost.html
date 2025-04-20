@@ -25,6 +25,7 @@
    <div class="search-container row">
     <aside class="sidebar col-md-3">
       <form method="get" action="" id="filter-form" class="p-3 border rounded">
+        {% csrf_token %}
         <label for="q">Pesquisar</label>
         <input type="text" name="q" id="q" class="form-control mb-2" value="{{ request.GET.q }}" placeholder="Nome, cor, endereço...">
 

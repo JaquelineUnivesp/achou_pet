@@ -9,6 +9,7 @@
     <!-- Formulário de Filtro -->
     <div class="filter">
         <form method="GET" action="{% url 'search:search_pets' %}">
+            {% csrf_token %}
             <label for="type">Filtrar por tipo:</label>
             <select name="type" id="type">
                 <option value="all" {% if filter_type == 'all' %}selected{% endif %}>Todos</option>

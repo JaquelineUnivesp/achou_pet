@@ -33,6 +33,53 @@
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
 
+
+
+    {% if request.user.is_authenticated %}
+<script>
+  const ws_scheme = window.location.protocol === "https:" ? "wss" : "ws";
+  const chatSocket = new WebSocket(ws_scheme + '://' + window.location.host + '/ws/chat/');
+
+  chatSocket.onmessage = function(event) {
+      const data = JSON.parse(event.data);
+      const badge = document.querySelector('.nav-link .badge');
+      if (data.type === 'notification') {
+          if (badge) {
+              badge.innerText = parseInt(badge.innerText || 0) + 1;
+          } else {
+              const link = document.querySelector('.nav-link[href$="/notifications/notifications/"]');
+              if (link) {
+                  const span = document.createElement('span');
+                  span.className = "position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger";
+                  span.innerText = "1";
+                  link.appendChild(span);
+              }
+          }
+
+          const list = document.getElementById('notifications-list');
+          if (list) {
+              const newNotification = `
+                  <div class="alert alert-info">
+                      <p>${data.message} (${new Date().toLocaleString()})</p>
+                      <form method="post" style="display:inline;">
+                          <input type="hidden" name="notification_id" value="new">
+                          <button type="submit" name="mark_read" class="btn btn-sm btn-primary">Marcar como lida</button>
+                      </form>
+                  </div>`;
+              list.insertAdjacentHTML('afterbegin', newNotification);
+          }
+      }
+  };
+
+  chatSocket.onclose = () => console.warn('WebSocket fechado');
+  chatSocket.onerror = e => console.error('Erro no WebSocket', e);
+</script>
+{% endif %}
+
+
+
+
+
 </head>
 
 <body>

@@ -1,70 +1,45 @@
 {% load static %}
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container">
-        <!-- Logo centralizado -->
         <a class="navbar-brand" href="{% url 'home' %}">
-            <img src="{% static 'images/logo-3.svg' %}" alt="{{ pet.pet_name }}" width="200">
+            <img src="{% static 'images/logo-3.svg' %}" alt="Logo Achou Pet" width="200">
         </a>
 
-        <!-- Botão de toggler para mobile -->
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
 
-        <!-- Menu institucional à esquerda -->
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav me-auto">
                 <li class="nav-item"><a class="nav-link" href="{% url 'home' %}">Home</a></li>
-                <li class="nav-item"><a class="nav-link" href="http://127.0.0.1:8000/como-funciona/">Como Funciona</a></li>
-                <li class="nav-item"><a class="nav-link" href="http://127.0.0.1:8000/sobre">Sobre</a></li>
-                 <li class="nav-item"><a class="nav-link" href="http://127.0.0.1:8000/search/lost/">Pets Perdidos</a></li>
-                <li class="nav-item"><a class="nav-link" href="http://127.0.0.1:8000/pet_registration/search/adoption/">Pets para Adoção</a></li>
-                 <li class="nav-item"><a class="nav-link" href="http://127.0.0.1:8000/search/breeding">Pets para Cruzamento</a></li>
-
-
-
+                <li class="nav-item"><a class="nav-link" href="{% url 'como_funciona' %}">Como Funciona</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'sobre' %}">Sobre</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'search:lost_pets' %}">Pets Perdidos</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'search:adoption_pets' %}">Pets para Adoção</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'search:breeding_pets' %}">Pets para Cruzamento</a></li>
             </ul>
 
-            <!-- Botões de login/cadastro ou informações do usuário à direita -->
             <ul class="navbar-nav ms-auto">
                 {% if user.is_authenticated %}
+                    <!-- Notificações -->
+                    <li class="nav-item position-relative">
+                        <a class="nav-link d-flex align-items-center" href="{% url 'notifications:notifications' %}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-bell-fill" viewBox="0 0 16 16">
+                                <path d="M8 16a2 2 0 0 0 1.985-1.75H6.015A2 2 0 0 0 8 16zm.104-14a5 5 0 0 0-4.905 4.01c-.324 1.683-.882 3.058-1.588 4.148a1.007 1.007 0 0 0 .83 1.527h11.118a1.007 1.007 0 0 0 .83-1.527c-.706-1.09-1.264-2.465-1.588-4.148A5 5 0 0 0 8.104 2z"/>
+                            </svg>
+                            {% if unread_notifications_count > 0 %}
+                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                    {{ unread_notifications_count }}
+                                    <span class="visually-hidden">notificações não lidas</span>
+                                </span>
+                            {% endif %}
+                        </a>
+                        <span class="t-12 d-block text-muted small text-center" style="font-size: 0.75rem;">
+                            Notificações
+                        </span>
+                    </li>
 
-
-                <!-- -->
-
-                <li class="nav-item position-relative">
-    <a class="nav-link d-flex align-items-center" href="{% url 'notifications:notifications' %}">
-        <!-- Ícone do sininho (SVG estilo LinkedIn) -->
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
-             class="bi bi-bell-fill" viewBox="0 0 16 16">
-            <path d="M8 16a2 2 0 0 0 1.985-1.75H6.015A2 2 0 0 0 8 16zm.104-14a5 5 0 0 0-4.905 4.01c-.324 1.683-.882 3.058-1.588 4.148a1.007 1.007 0 0 0 .83 1.527h11.118a1.007 1.007 0 0 0 .83-1.527c-.706-1.09-1.264-2.465-1.588-4.148A5 5 0 0 0 8.104 2z"/>
-        </svg>
-
-        <!-- Badge com contador (só aparece se houver notificações não lidas) -->
-        {% if unread_notifications_count > 0 %}
-            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                {{ unread_notifications_count }}
-                <span class="visually-hidden">notificações não lidas</span>
-            </span>
-        {% endif %}
-    </a>
-
-    <!-- Texto de apoio (opcional, removível se quiser só o ícone) -->
-    <span class="t-12 d-block text-muted small text-center" style="font-size: 0.75rem;">
-        Notificações
-    </span>
-</li>
-
-
-
-
-                <!-- -->
-
-
-
-
-
-
+                    <!-- Menu do usuário -->
                     <li class="nav-item">
                         <a class="nav-link" href="#">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
@@ -73,6 +48,7 @@
                             </svg>
                         </a>
                     </li>
+
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             {{ user.username }}
@@ -82,11 +58,11 @@
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <li><a class="dropdown-item" href="{% url 'pet_registration:register_lost_pet' %}">Cadastro Pet</a></li>
-                            <li><a class="dropdown-item" href="http://localhost:8000/notifications/chat">Chat</a></li>
-                            <li><a class="dropdown-item" href="http://127.0.0.1:8000/pet_registration/pets_user">Pets usuario</a></li>
+                            <li><a class="dropdown-item" href="{% url 'notifications:chat' %}">Chat</a></li>
+                            <li><a class="dropdown-item" href="{% url 'pet_registration:user_pets_list' %}">Pets do Usuário</a></li>
                             <li><a class="dropdown-item" href="{% url 'pet_registration:register_adoption_pet' %}">Cadastro Adoção</a></li>
-                            <li><a class="dropdown-item" href="http://localhost:8000/pet_registration/breeding/register">Cadastro Reprodução</a></li>
-                            <li><a class="dropdown-item" href="http://127.0.0.1:8000/account/profile/">Perfil</a></li>
+                            <li><a class="dropdown-item" href="{% url 'pet_registration:register_breeding_pet' %}">Cadastro Reprodução</a></li>
+                            <li><a class="dropdown-item" href="{% url 'profile' %}">Perfil</a></li>
                             <li><a class="dropdown-item" href="#">Configurações</a></li>
                             <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item" href="{% url 'logout' %}">Sair</a></li>
@@ -104,4 +80,3 @@
 <p style="font-size: 0.8rem; color: gray;">
     Usuário logado: {{ request.user.email }} (ID: {{ request.user.id }})
 </p>
-

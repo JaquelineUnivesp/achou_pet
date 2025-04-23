@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth import get_user_model
 from django.utils import timezone
 from apps.core.choices.breeds import BREEDS_DOGS, BREEDS_CATS
+from cloudinary.models import CloudinaryField
 
 # Choices reutilizáveis
 COLOR_CHOICES = [
@@ -46,9 +47,9 @@ class LostPet(models.Model):
     age_value = models.PositiveIntegerField(blank=True, null=True, verbose_name='Idade')
     age_unit = models.CharField(max_length=10, choices=AGE_UNIT_CHOICES, blank=True, null=True, verbose_name='Unidade de Idade')
     weight = models.CharField(max_length=10, choices=WEIGHT_CHOICES, blank=True, null=True, verbose_name='Peso')
-    photo_1 = models.ImageField(upload_to='lost_pets/', blank=True, null=True, verbose_name='Foto 1')
-    photo_2 = models.ImageField(upload_to='lost_pets/', blank=True, null=True, verbose_name='Foto 2')
-    photo_3 = models.ImageField(upload_to='lost_pets/', blank=True, null=True, verbose_name='Foto 3')
+    photo_1 = CloudinaryField('image', blank=True, null=True)
+    photo_2 = CloudinaryField('image', blank=True, null=True)
+    photo_3 = CloudinaryField('image', blank=True, null=True)
     terms_accepted = models.BooleanField(default=False, verbose_name='Termos Aceitos')
     privacy_accepted = models.BooleanField(default=False, verbose_name='Privacidade Aceita')
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Criado em')

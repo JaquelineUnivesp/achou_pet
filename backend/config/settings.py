@@ -103,8 +103,8 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 # Habilita WhiteNoise para servir os arquivos corretamente no Render
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-#MEDIA_URL = '/media/'
-#MEDIA_ROOT = os.path.join(BASE_DIR, 'lost_pets')
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'lost_pets')
 
 
 # Banco de Dados
@@ -218,8 +218,7 @@ LOGOUT_REDIRECT_URL = '/account/login/'
 if not all([os.getenv('CLOUD_NAME'), os.getenv('CLOUD_API_KEY'), os.getenv('CLOUD_API_SECRET')]):
     raise Exception("⚠️ Variáveis do Cloudinary não configuradas corretamente.")
 
-# Cloudinary
-DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
 
 CLOUDINARY_STORAGE = {
     'CLOUD_NAME': os.getenv('CLOUD_NAME'),

@@ -15,6 +15,9 @@ SECRET_KEY = os.getenv('SECRET_KEY', 'chave-padrao-insegura')
 DEBUG = os.getenv('DEBUG', 'False') == 'True'
 ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
 
+# Campo primário padrão para novos modelos
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
 # Confiança para verificação CSRF (evita erro 403 em produção)
 CSRF_TRUSTED_ORIGINS = [
     "https://achou-pet.onrender.com",
@@ -50,6 +53,9 @@ INSTALLED_APPS = [
     'apps.notifications',
     'apps.pet_registration',
     'apps.search',
+
+    'cloudinary',
+    'cloudinary_storage',
 ]
 
 # Middlewaresf
@@ -97,8 +103,8 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 # Habilita WhiteNoise para servir os arquivos corretamente no Render
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'lost_pets')
+#MEDIA_URL = '/media/'
+#MEDIA_ROOT = os.path.join(BASE_DIR, 'lost_pets')
 
 
 # Banco de Dados
@@ -205,4 +211,19 @@ LOGIN_URL = '/account/login/'
 LOGIN_REDIRECT_URL = '/account/'
 LOGOUT_REDIRECT_URL = '/account/login/'
 
+
+
+
+# Verificação de segurança das variáveis do Cloudinary
+if not all([os.getenv('CLOUD_NAME'), os.getenv('CLOUD_API_KEY'), os.getenv('CLOUD_API_SECRET')]):
+    raise Exception("⚠️ Variáveis do Cloudinary não configuradas corretamente.")
+
+# Cloudinary
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': os.getenv('CLOUD_NAME'),
+    'API_KEY': os.getenv('CLOUD_API_KEY'),
+    'API_SECRET': os.getenv('CLOUD_API_SECRET'),
+}
+
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 

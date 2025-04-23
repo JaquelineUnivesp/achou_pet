@@ -29,8 +29,9 @@
 
     {% if request.user.is_authenticated %}
     <script>
-      const ws_scheme = window.location.protocol === "https:" ? "wss" : "ws";
-      const chatSocket = new WebSocket(ws_scheme + '://' + window.location.host + '/ws/chat/');
+const ws_scheme = window.location.protocol === "https:" ? "wss" : "ws";
+const ws = new WebSocket(ws_scheme + '://' + window.location.host + '/ws/chat/');
+
 
       chatSocket.onmessage = function(event) {
           const data = JSON.parse(event.data);

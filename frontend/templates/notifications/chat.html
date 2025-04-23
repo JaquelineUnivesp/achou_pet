@@ -49,9 +49,9 @@
     const blockedUsers = {{ blocked_ids|safe }};
     let selectedUserId = null;
 
-const ws_scheme = window.location.protocol === "https:" ? "wss" : "ws";
-const chatSocket = new WebSocket(ws_scheme + '://' + window.location.host + '/ws/chat/');
-
+    // Corrigido: evita erro de variável duplicada
+    const ws_scheme_final = window.location.protocol === "https:" ? "wss" : "ws";
+    const chatSocket = new WebSocket(`${ws_scheme_final}://${window.location.host}/ws/chat/`);
 
     chatSocket.onmessage = function(e) {
         const data = JSON.parse(e.data);
@@ -200,5 +200,6 @@ const chatSocket = new WebSocket(ws_scheme + '://' + window.location.host + '/ws
         return cookieValue;
     }
 </script>
+
 
 {% endblock %}

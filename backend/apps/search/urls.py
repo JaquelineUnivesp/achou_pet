@@ -1,6 +1,9 @@
 from django.urls import path
 from . import views
 
+from django.conf import settings
+from django.conf.urls.static import static
+
 app_name = 'search'
 
 urlpatterns = [
@@ -12,3 +15,6 @@ urlpatterns = [
     path('api/user-location/', views.get_user_location, name='get_user_location'),
 
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

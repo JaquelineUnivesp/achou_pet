@@ -9,7 +9,8 @@ load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Segurança
+print("🌩️ Cloudinary:", os.getenv('CLOUD_NAME'), os.getenv('CLOUD_API_KEY'), os.getenv('CLOUD_API_SECRET'))
+
 # Segurança
 SECRET_KEY = os.getenv('SECRET_KEY', 'chave-padrao-insegura')
 DEBUG = os.getenv('DEBUG', 'False') == 'True'

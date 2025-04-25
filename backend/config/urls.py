@@ -3,6 +3,7 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.http import HttpResponse
+from apps.accounts.views import CustomEmailConfirmView
 
 from django.conf.urls.static import static
 
@@ -12,7 +13,9 @@ def health_check(request):
 urlpatterns = [
     path('admin/', admin.site.urls),
 
-    path('account/', include('apps.accounts.urls')),
+    path('account/confirm-email/<str:key>/', CustomEmailConfirmView.as_view(), name='account_confirm_email'),
+    path('account/', include(('apps.accounts.urls', 'accounts'), namespace='accounts')),
+
     path('api/auth/', include('dj_rest_auth.urls')),
     path('', include('apps.core.urls')),
     path('notifications/', include('apps.notifications.urls')),

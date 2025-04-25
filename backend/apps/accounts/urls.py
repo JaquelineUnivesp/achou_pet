@@ -37,10 +37,5 @@ urlpatterns = [
     path('profile/', profile_view, name='profile'),
     path('edit_profile/', views.edit_profile, name='edit_profile'),
 
-    path(
-        'account/confirm-email/<str:key>/',
-        CustomEmailConfirmView.as_view(),
-        name='account_confirm_email'
-    ),
 
 ]

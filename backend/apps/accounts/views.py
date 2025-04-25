@@ -11,6 +11,7 @@ from django.contrib.auth.views import PasswordResetView
 from django.contrib.auth import get_user_model
 from allauth.account.utils import send_email_confirmation
 from allauth.account.models import EmailConfirmationHMAC, EmailAddress
+from django.db import IntegrityError
 
 from .models import CustomUser
 from .forms import CustomUserRegistrationForm, UserProfileForm
@@ -60,21 +61,19 @@ class CustomEmailConfirmView(TemplateView):
 # ===================== Frontend Views =====================
 
 def register_view(request):
-    logger.info("Acessou register_view")
     if request.method == 'POST':
         form = CustomUserRegistrationForm(request.POST, request.FILES)
         if form.is_valid():
-            user = form.save(commit=False)
-            user.set_password(form.cleaned_data['password'])
-            user.save()
             try:
+                user = form.save(commit=False)
+                user.set_password(form.cleaned_data['password'])
+                user.save()
                 send_email_confirmation(request, user, signup=True)
-                logger.info(f"E-mail de confirmação enviado para {user.email}")
-            except Exception as e:
-                logger.error(f"Erro ao enviar e-mail para {user.email}: {str(e)}")
-            return redirect('login')
-        else:
-            logger.warning(f"Erros no formulário: {form.errors}")
+                return redirect('accounts:login')  # ou outro nome, dependendo da sua url
+            except IntegrityError:
+                form.add_error('email', 'Este e-mail já está em uso.')
+        # se não for válido ou erro de integridade
+        return render(request, 'account/register.html', {'form': form})
     else:
         form = CustomUserRegistrationForm()
     return render(request, 'account/register.html', {'form': form})

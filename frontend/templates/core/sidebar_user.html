@@ -20,7 +20,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{% url 'profile' %}" class="nav-link">
+                    <a href="{% url 'accounts:profile' %}" class="nav-link">
                         <i class="fas fa-user me-2"></i> Perfil
                     </a>
                 </li>
@@ -30,7 +30,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{% url 'edit_profile' %}" class="nav-link">
+                    <a href="{% url 'accounts:edit_profile' %}" class="nav-link">
                         <i class="fas fa-cogs me-2"></i> Gerenciar Conta
                     </a>
                 </li>
@@ -71,12 +71,12 @@
             </h4>
             <ul>
                 <li class="nav-item">
-                    <a href="{% url 'change_email' %}" class="nav-link">
+                    <a href="{% url 'accounts:change_email' %}" class="nav-link">
                         <i class="fas fa-envelope me-2"></i> Trocar E-mail
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{% url 'password_reset' %}" class="nav-link">
+                    <a href="{% url 'accounts:password_reset' %}" class="nav-link">
                         <i class="fas fa-key me-2"></i> Redefinir Senha
                     </a>
                 </li>
@@ -120,17 +120,17 @@
             </h4>
             <ul>
                 <li class="nav-item">
-                    <a href="{% url 'login' %}" class="nav-link">
+                    <a href="{% url 'accounts:login' %}" class="nav-link">
                         <i class="fas fa-sign-in-alt me-2"></i> Login
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{% url 'logout' %}" class="nav-link">
+                    <a href="{% url 'accounts:logout' %}" class="nav-link">
                         <i class="fas fa-sign-out-alt me-2"></i> Logout
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{% url 'register' %}" class="nav-link">
+                    <a href="{% url 'accounts:register' %}" class="nav-link">
                         <i class="fas fa-user-plus me-2"></i> Criar Conta
                     </a>
                 </li>

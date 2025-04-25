@@ -14,17 +14,17 @@
                 <ul class="navbar-nav ms-auto">
                     {% if user.is_authenticated %}
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'change_email' %}">Trocar E-mail</a>
+                            <a class="nav-link" href="{% url 'accounts:change_email' %}">Trocar E-mail</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'logout' %}">Sair</a>
+                            <a class="nav-link" href="{% url 'accounts:logout' %}">Sair</a>
                         </li>
                     {% else %}
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'login' %}">Entrar</a>
+                            <a class="nav-link" href="{% url 'accounts:login' %}">Entrar</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'register' %}">Cadastrar</a>
+                            <a class="nav-link" href="{% url 'accounts:register' %}">Cadastrar</a>
                         </li>
                     {% endif %}
                 </ul>
@@ -43,8 +43,8 @@
                 <a href="#" class="btn btn-secondary">Procurar Pets Encontrados</a>
             {% else %}
                 <p>Faça parte da nossa comunidade! Cadastre-se ou entre agora.</p>
-                <a href="{% url 'register' %}" class="btn btn-primary">Cadastrar</a>
-                <a href="{% url 'login' %}" class="btn btn-secondary">Entrar</a>
+                <a href="{% url 'accounts:register' %}" class="btn btn-primary">Cadastrar</a>
+                <a href="{% url 'accounts:login' %}" class="btn btn-secondary">Entrar</a>
             {% endif %}
         </div>
     </div>

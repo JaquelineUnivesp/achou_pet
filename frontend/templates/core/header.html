@@ -62,15 +62,15 @@
                             <li><a class="dropdown-item" href="{% url 'pet_registration:user_pets_list' %}">Pets do Usuário</a></li>
                             <li><a class="dropdown-item" href="{% url 'pet_registration:register_adoption_pet' %}">Cadastro Adoção</a></li>
                             <li><a class="dropdown-item" href="{% url 'pet_registration:register_breeding_pet' %}">Cadastro Reprodução</a></li>
-                            <li><a class="dropdown-item" href="{% url 'profile' %}">Perfil</a></li>
+                            <li><a class="dropdown-item" href="{% url 'accounts:profile' %}">Perfil</a></li>
                             <li><a class="dropdown-item" href="#">Configurações</a></li>
                             <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="{% url 'logout' %}">Sair</a></li>
+                            <li><a class="dropdown-item" href="{% url 'accounts:logout' %}">Sair</a></li>
                         </ul>
                     </li>
                 {% else %}
-                    <li class="nav-item"><a class="btn background_project" href="{% url 'register' %}">Cadastro</a></li>
-                    <li class="nav-item"><a class="btn background_project" href="{% url 'login' %}">Login</a></li>
+                    <li class="nav-item"><a class="btn background_project" href="{% url 'accounts:register' %}">Cadastro</a></li>
+                    <li class="nav-item"><a class="btn background_project" href="{% url 'accounts:login' %}">Login</a></li>
                 {% endif %}
             </ul>
         </div>

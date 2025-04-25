@@ -1,0 +1,55 @@
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+
+    <div class="mb-3">
+        <label class="form-label">Nome</label>
+        {{ form.first_name }}
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Sobrenome</label>
+        {{ form.last_name }}
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Nome de Usuário</label>
+        {{ form.username }}
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">E-mail</label>
+        {{ form.email }}
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Telefone para Notificação</label>
+        {{ form.notification_phone }}
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">CPF</label>
+        {{ form.cpf }}
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Foto de Perfil</label><br>
+        {% if user.photo %}
+            <img src="{{ user.photo.url }}" class="img-thumbnail mb-2" style="max-height: 150px;">
+        {% endif %}
+        {{ form.photo }}
+    </div>
+
+    <div class="form-check mb-2">
+        {{ form.notify_chat }} <label class="form-check-label">Notificações de Chat</label>
+    </div>
+    <div class="form-check mb-2">
+        {{ form.notify_pet_found }} <label class="form-check-label">Notificações de Pet Encontrado</label>
+    </div>
+    <div class="form-check mb-4">
+        {{ form.notify_other }} <label class="form-check-label">Outras Notificações</label>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Salvar</button>
+    <a href="{% url 'accounts:profile' %}" class="btn btn-secondary ms-2">Voltar</a>
+</form>

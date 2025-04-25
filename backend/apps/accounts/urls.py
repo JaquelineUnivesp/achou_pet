@@ -1,4 +1,6 @@
 # backend/apps/accounts/urls.py
+app_name = 'accounts'
+
 from django.urls import path
 from . import views
 

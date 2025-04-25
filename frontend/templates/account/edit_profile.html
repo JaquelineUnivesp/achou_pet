@@ -1,28 +1,15 @@
 {% extends "core/base.html" %}
+{% load static %}
 {% block content %}
-
 <div class="container mt-5">
-   <div class="row">
-      <div class="col-3">
-         {% include "core/sidebar_user.html" %}
-      </div>
-
-<div class="container mt-5">
-    <h1>Editar Perfil</h1>
-    <form method="post">
-        {% csrf_token %}
-        <div class="mb-3">
-            <label for="first_name" class="form-label">Nome</label>
-            <input type="text" class="form-control" id="first_name" name="first_name" value="{{ user.first_name }}">
+    <div class="row">
+        <div class="col-3">
+            {% include "core/sidebar_user.html" %}
         </div>
-        <div class="mb-3">
-            <label for="last_name" class="form-label">Sobrenome</label>
-            <input type="text" class="form-control" id="last_name" name="last_name" value="{{ user.last_name }}">
+        <div class="col-9">
+            <h1 class="mb-4">Editar Perfil</h1>
+            {% include "account/_form_user_profile.html" %}
         </div>
-        <button type="submit" class="btn btn-primary">Salvar</button>
-        <a href="{% url 'accounts:profile' %}" class="btn btn-secondary">Voltar</a>
-    </form>
+    </div>
 </div>
-     </div></div>
-
 {% endblock %}

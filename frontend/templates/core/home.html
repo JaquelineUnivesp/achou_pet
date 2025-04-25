@@ -16,8 +16,8 @@
             <h1>Conecte-se com outros tutores de pets!</h1>
             <p class="lead">Cadastre, busque pets perdidos, adote ou cruze seu pet com facilidade. Juntos, ajudamos mais animais!</p>
 
-            <a class="btn btn-primary mt-3 rounded-pill" href="{% url 'register' %}">Cadastro</a>
-            <a class="btn btn-primary mt-3 rounded-pill" href="{% url 'login' %}">Login</a>
+            <a class="btn btn-primary mt-3 rounded-pill" href="{% url 'accounts:register' %}">Cadastro</a>
+            <a class="btn btn-primary mt-3 rounded-pill" href="{% url 'accounts:login' %}">Login</a>
             </p>
          </div>
       </div>
@@ -51,7 +51,7 @@
             </div>
 
             <div class="col-md-4 mb-5">
-               <a class="text-decoration-none" href="http://127.0.0.1:8000/pet_registration/adoption/register">
+               <a class="text-decoration-none" href="{% url 'pet_registration:register_adoption_pet' %}">
                   <div class="h-100 border-0" role="button" tabindex="0">
                      <div class="service-card">
                         <div class="icon-circle text-center">
@@ -70,7 +70,7 @@
             </div>
 
             <div class="col-md-4 mb-5">
-               <a class="text-decoration-none" href="http://localhost:8000/pet_registration/breeding/register/">
+               <a class="text-decoration-none" href="{% url 'pet_registration:register_breeding_pet' %}">
                   <div class="h-100 border-0" role="button" tabindex="0">
                      <div class="service-card">
                         <div class="icon-circle text-center">

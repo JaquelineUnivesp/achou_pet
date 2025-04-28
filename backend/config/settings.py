@@ -104,6 +104,8 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 # Habilita WhiteNoise para servir os arquivos corretamente no Render
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'lost_pets')
 

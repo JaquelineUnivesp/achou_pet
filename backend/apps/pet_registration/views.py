@@ -694,3 +694,11 @@ def get_user_location(request):
     except ValueError as e:
         logger.error(f"Erro ao processar localização: {str(e)}")
         return JsonResponse({'error': 'Erro ao processar a localização', 'detail': str(e)}, status=500)
+
+
+
+
+def lost_pet_detail(request, pet_id):
+    pet = get_object_or_404(LostPet, id=pet_id)  # SEM filtro de user
+    context = {'pet': pet}
+    return render(request, 'search/lost_pet_detail.html', context)

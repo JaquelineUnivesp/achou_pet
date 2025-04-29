@@ -701,4 +701,4 @@ def get_user_location(request):
 def lost_pet_detail(request, pet_id):
     pet = get_object_or_404(LostPet, id=pet_id)  # SEM filtro de user
     context = {'pet': pet}
-    return render(request, 'search/lost_pet_detail.html', context)
+    return render(request, 'pet_registration/lost_pet_detail.html', context)

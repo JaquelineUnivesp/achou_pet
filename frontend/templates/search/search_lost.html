@@ -141,7 +141,7 @@
                   <li><strong>Data de Perda:</strong> {{ pet.lost_date|date:"d \d\e F \d\e Y" }}</li>
                   <li><strong>Local:</strong> {{ pet.lost_location }}</li>
                 </ul>
-                <a href="{% url 'pet_registration:pet_detail' pet.id %}" class="btn btn-outline-primary btn-sm w-100 mt-2">Ver detalhes</a>
+                <a href="{% url 'lost_pet_detail' pet_id=pet.id %}" class="btn btn-outline-primary btn-sm w-100 mt-2">Ver detalhes</a>
               </div>
             </div>
           </div>
@@ -191,7 +191,7 @@ document.addEventListener('DOMContentLoaded', function() {
           <div style="width: 220px">
             ${imagem ? `<img src="${imagem}" alt="${nome}" style="width:100%; height:120px; object-fit: cover; border-radius: 5px;" />` : ''}
             <h5 class="mt-2">${nome}</h5>
-            <a href="/pet/${id}/" class="btn btn-outline-primary btn-sm">Ver detalhes</a>
+                <a href="{% url 'lost_pet_detail' pet_id=pet.id %}">Ver detalhes</a>
 
           </div>
         `;

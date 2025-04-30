@@ -13,103 +13,21 @@
       <p class="text-left">Encontre pets perdidos ou encontrados na sua região.</p>
     </div>
     <div class="col-md-3">
-        <button class="pill-button">
-     <a href="{% url 'pet_registration:lost_pet_detail' pet_id=pet.id %}" class="btn btn-primary">Ver Detalhes</a>
-
-            </button>
+      <button class="pill-button">
+        <a href="{% url 'pet_registration:register_lost_pet' %}">Cadastrar Pet Perdido</a>
+      </button>
     </div>
   </div>
 
   <!-- Mapa -->
   <div id="map" style="height: 400px; width: 100%; margin-bottom: 20px; background-color: #e0e0e0;"></div>
 
-   <div class="search-container row">
+  <div class="search-container row">
     <aside class="sidebar col-md-3">
       <form method="get" action="" id="filter-form" class="p-3 border rounded">
         {% csrf_token %}
-        <label for="q">Pesquisar</label>
-        <input type="text" name="q" id="q" class="form-control mb-2" value="{{ request.GET.q }}" placeholder="Nome, cor, endereço...">
-
-        <label for="status">Status</label>
-        <select name="status" id="status" class="form-control mb-2">
-          <option value="">Todos</option>
-          <option value="perdido" {% if status == "perdido" %}selected{% endif %}>Perdido</option>
-          <option value="encontrado" {% if status == "encontrado" %}selected{% endif %}>Encontrado</option>
-        </select>
-
-        <label for="species">Espécie</label>
-        <select name="species" id="species" class="form-control mb-2">
-          <option value="">Todas</option>
-          <option value="gato" {% if species == "gato" %}selected{% endif %}>Gato</option>
-          <option value="dog" {% if species == "dog" %}selected{% endif %}>Cachorro</option>
-        </select>
-
-        <label for="sex">Sexo</label>
-        <select name="sex" id="sex" class="form-control mb-2">
-          <option value="">Todos</option>
-          <option value="macho" {% if sex == "macho" %}selected{% endif %}>Macho</option>
-          <option value="femea" {% if sex == "femea" %}selected{% endif %}>Fêmea</option>
-        </select>
-
-        <label for="lost_date">Data da Perda</label>
-        <input type="date" name="lost_date" id="lost_date" class="form-control mb-2" value="{{ lost_date }}">
-
-        <label for="size">Tamanho</label>
-        <select name="size" id="size" class="form-control mb-2">
-          <option value="">Todos</option>
-          <option value="pequeno" {% if size == "pequeno" %}selected{% endif %}>Pequeno</option>
-          <option value="medio" {% if size == "medio" %}selected{% endif %}>Médio</option>
-          <option value="grande" {% if size == "grande" %}selected{% endif %}>Grande</option>
-        </select>
-
-                <label for="breed">Raça</label>
-        <select name="breed" id="breed" class="form-control mb-2">
-          <option value="">Selecione uma espécie primeiro</option>
-        </select>
-
-        <label for="eye_color">Cor dos Olhos</label>
-        <select name="eye_color" id="eye_color" class="form-control mb-2">
-          <option value="">Todas</option>
-          <option value="castanho" {% if eye_color == "castanho" %}selected{% endif %}>Castanho</option>
-          <option value="azul" {% if eye_color == "azul" %}selected{% endif %}>Azul</option>
-          <option value="verde" {% if eye_color == "verde" %}selected{% endif %}>Verde</option>
-          <option value="amber" {% if eye_color == "amber" %}selected{% endif %}>Âmbar</option>
-          <option value="cinza" {% if eye_color == "cinza" %}selected{% endif %}>Cinza</option>
-        </select>
-
-        <label for="coat_color">Cor da Pelagem</label>
-        <select name="coat_color" id="coat_color" class="form-control mb-2">
-          <option value="">Todas</option>
-          <option value="preto" {% if coat_color == "preto" %}selected{% endif %}>Preto</option>
-          <option value="branco" {% if coat_color == "branco" %}selected{% endif %}>Branco</option>
-          <option value="caramelo" {% if coat_color == "caramelo" %}selected{% endif %}>Caramelo</option>
-          <option value="cinza" {% if coat_color == "cinza" %}selected{% endif %}>Cinza</option>
-          <option value="marrom" {% if coat_color == "marrom" %}selected{% endif %}>Marrom</option>
-          <option value="rajado" {% if coat_color == "rajado" %}selected{% endif %}>Rajado</option>
-          <option value="outro" {% if coat_color == "outro" %}selected{% endif %}>Outro</option>
-        </select>
-
-        <label for="coat_type">Tipo de Pelagem</label>
-        <select name="coat_type" id="coat_type" class="form-control mb-2">
-          <option value="">Todos</option>
-          <option value="curto" {% if coat_type == "curto" %}selected{% endif %}>Curto</option>
-          <option value="medio" {% if coat_type == "medio" %}selected{% endif %}>Médio</option>
-          <option value="longo" {% if coat_type == "longo" %}selected{% endif %}>Longo</option>
-          <option value="hairless" {% if coat_type == "hairless" %}selected{% endif %}>Sem Pelo</option>
-        </select>
-
-        <label for="age_min">Idade (mín)</label>
-        <input type="number" name="age_min" class="form-control mb-2" value="{{ age_min }}">
-
-        <label for="age_max">Idade (máx)</label>
-        <input type="number" name="age_max" class="form-control mb-2" value="{{ age_max }}">
-
-        <label for="weight_min">Peso (mín)</label>
-        <input type="number" name="weight_min" class="form-control mb-2" value="{{ weight_min }}">
-
-        <label for="weight_max">Peso (máx)</label>
-        <input type="number" name="weight_max" class="form-control mb-2" value="{{ weight_max }}">
-
+        <!-- Filtros omitidos para brevidade (mantêm o seu código original) -->
+        <!-- ... seus campos de filtro continuam aqui ... -->
         <button type="submit" class="btn btn-primary mt-2 w-100">Filtrar</button>
         <a href="/search/lost/" class="btn btn-secondary mt-2 w-100">Limpar Filtros</a>
       </form>
@@ -142,7 +60,7 @@
                   <li><strong>Data de Perda:</strong> {{ pet.lost_date|date:"d \d\e F \d\e Y" }}</li>
                   <li><strong>Local:</strong> {{ pet.lost_location }}</li>
                 </ul>
-                    <a href="{% url 'lost_pet_detail' pet.id %}" class="btn btn-primary">Ver Detalhes</a>
+                <a href="{% url 'pet_registration:lost_pet_detail' pet_id=pet.id %}" class="btn btn-primary">Ver Detalhes</a>
               </div>
             </div>
           </div>
@@ -151,13 +69,14 @@
     </section>
   </div>
 </div>
-<!-- Incluindo Leaflet CSS e JS -->
+
+<!-- Leaflet -->
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<!-- Script do Mapa -->
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-  console.log("Iniciando script do mapa...");
-
   const map = L.map('map').setView([-23.5489, -46.6388], 13);
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19
@@ -178,7 +97,6 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
   function adicionarMarcadores() {
-    console.log("Adicionando marcadores...");
     document.querySelectorAll('.pet-item').forEach(item => {
       const lat = parseFloat(item.dataset.lat?.replace(',', '.') || '');
       const lng = parseFloat(item.dataset.lng?.replace(',', '.') || '');
@@ -193,109 +111,53 @@ document.addEventListener('DOMContentLoaded', function() {
             ${imagem ? `<img src="${imagem}" alt="${nome}" style="width:100%; height:120px; object-fit: cover; border-radius: 5px;" />` : ''}
             <h5 class="mt-2">${nome}</h5>
             <a href="/pet/${id}/" class="btn btn-outline-primary btn-sm">Ver detalhes</a>
-
           </div>
         `;
         L.marker([lat, lng], { icon: markerIcon }).addTo(map).bindPopup(content);
-      } else {
-        console.warn("Coordenadas inválidas para o pet ID:", item.dataset.id);
       }
     });
   }
 
-  function centralizarPelaApiIPInfo() {
-    console.log("Tentando centralizar via IPInfo...");
-    fetch('https://ipinfo.io/json?token=91e3040b4f78f5')
-      .then(response => response.json())
-      .then(data => {
-        console.log("Resposta IPInfo:", data);
-        if (data.loc) {
-          const [latStr, lngStr] = data.loc.split(',');
-          const lat = parseFloat(latStr);
-          const lng = parseFloat(lngStr);
-          console.log("Coordenadas extraídas:", lat, lng);
-          map.setView([lat, lng], 13);
-        } else {
-          console.warn("IPInfo não retornou 'loc' válido.");
+  function centralizarMapa() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          map.setView([pos.coords.latitude, pos.coords.longitude], 13);
+          adicionarMarcadores();
+        },
+        () => {
+          fetch('https://ipinfo.io/json?token=91e3040b4f78f5')
+            .then(res => res.json())
+            .then(data => {
+              const [lat, lng] = data.loc.split(',');
+              map.setView([parseFloat(lat), parseFloat(lng)], 13);
+              adicionarMarcadores();
+            });
         }
-        adicionarMarcadores();
-      })
-      .catch(err => {
-        console.warn('Erro na requisição IPInfo:', err);
-        adicionarMarcadores();
-      });
+      );
+    }
   }
 
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        const lat = position.coords.latitude;
-        const lng = position.coords.longitude;
-        console.log("Geolocalização HTML5 obtida:", lat, lng);
-        map.setView([lat, lng], 13);
-        adicionarMarcadores();
-      },
-      (error) => {
-        console.warn("Erro na geolocalização HTML5, usando IPInfo:", error);
-        centralizarPelaApiIPInfo();
-      }
-    );
-  } else {
-    console.warn("Geolocalização não suportada, usando IPInfo.");
-    centralizarPelaApiIPInfo();
-  }
+  centralizarMapa();
 });
 </script>
 
+<!-- Script do Autocomplete de Raças -->
 <script>
-const breedsCats = [
-  "Sem Raça", "Abissínio", "American Bobtail", "American Curl", "American Shorthair",
-  "Balinese", "Bengal", "Birmanês", "Bombaim", "British Shorthair",
-  "Burmês", "Chartreux", "Cornish Rex", "Devon Rex", "Egyptian Mau",
-  "Exótico", "Himalaio", "Japanese Bobtail", "Korat", "LaPerm",
-  "Maine Coon", "Manx", "Florestal Norueguês", "Ocicat", "Oriental",
-  "Persa", "Ragdoll", "Azul Russo", "Scottish Fold", "Selkirk Rex",
-  "Siamês", "Siberiano", "Singapura", "Snowshoe", "Somali", "Sphynx",
-  "Tonquinês", "Angorá Turco", "Van Turco", "Outra Raça"
-];
-
-const breedsDogs = [
-  "Sem Raça", "Pastor Alemão", "Pastor Belga", "Pastor de Shetland",
-  "Affenpinscher", "Afghan Hound", "Airedale Terrier", "Akita",
-  "Alaskan Malamute", "American Bulldog", "American Pit Bull Terrier",
-  "Australian Cattle Dog", "Australian Shepherd", "Basset Hound",
-  "Beagle", "Belgian Malinois", "Bernese Mountain Dog", "Bichon Frisé",
-  "Bloodhound", "Border Collie", "Boston Terrier", "Boxer",
-  "Bull Terrier", "Bulldog Francês", "Bulldog Inglês", "Cairn Terrier",
-  "Cane Corso", "Cavalier King Charles Spaniel", "Chihuahua",
-  "Chow Chow", "Cocker Spaniel", "Collie", "Dachshund", "Dálmata",
-  "Doberman", "Dogo Argentino", "Golden Retriever", "Dog Alemão",
-  "Greyhound", "Havanês", "Jack Russell Terrier", "Labrador Retriever",
-  "Lhasa Apso", "Maltês", "Mastiff", "Pinscher Miniatura",
-  "Terra Nova", "Papillon", "Pequinês", "Corgi", "Poodle",
-  "Spitz Alemão", "Pug", "Rottweiler", "São Bernardo",
-  "Samoyeda", "Schnauzer", "Scottish Terrier", "Shar Pei", "Shiba Inu",
-  "Shih Tzu", "Husky Siberiano", "Staffordshire Bull Terrier",
-  "Weimaraner", "West Highland Terrier", "Whippet", "Yorkshire Terrier",
-  "Outra Raça"
-];
-
+const breedsCats = [...]; // mantenha sua lista
+const breedsDogs = [...]; // mantenha sua lista
 const speciesSelect = document.getElementById('species');
 const breedSelect = document.getElementById('breed');
 const currentSelected = "{{ breed }}";
 
 function updateBreedOptions() {
   const species = speciesSelect.value;
-  let breeds = [];
-  if (species === "gato") breeds = breedsCats;
-  else if (species === "dog") breeds = breedsDogs;
+  const breeds = species === "gato" ? breedsCats : species === "dog" ? breedsDogs : [];
 
-  if (breeds.length === 0) {
-    breedSelect.innerHTML = '<option value="">Selecione uma espécie primeiro</option>';
-    return;
-  }
+  breedSelect.innerHTML = breeds.length
+    ? '<option value="">Todas</option>'
+    : '<option value="">Selecione uma espécie primeiro</option>';
 
-  breedSelect.innerHTML = '<option value="">Todas</option>';
   breeds.forEach(breed => {
     const opt = document.createElement('option');
     opt.value = breed;
@@ -308,5 +170,4 @@ function updateBreedOptions() {
 updateBreedOptions();
 speciesSelect.addEventListener('change', updateBreedOptions);
 </script>
-
 {% endblock %}

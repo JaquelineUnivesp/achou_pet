@@ -4,7 +4,7 @@
 
 {% block content %}
 <div class="container mt-5">
-  <!-- Cabeçalho e Botão -->
+  <!-- Cabeçalho -->
   <div class="row">
     <div class="col-md-9">
       <h1 class="display-1 text-left">
@@ -23,16 +23,89 @@
   <div id="map" style="height: 400px; width: 100%; margin-bottom: 20px; background-color: #e0e0e0;"></div>
 
   <div class="search-container row">
+    <!-- Sidebar de Filtros -->
     <aside class="sidebar col-md-3">
       <form method="get" action="" id="filter-form" class="p-3 border rounded">
         {% csrf_token %}
-        <!-- Filtros omitidos para brevidade (mantêm o seu código original) -->
-        <!-- ... seus campos de filtro continuam aqui ... -->
+
+        <label for="q">Pesquisar</label>
+        <input type="text" name="q" id="q" class="form-control mb-2" value="{{ request.GET.q }}" placeholder="Nome, cor, endereço...">
+
+        <label for="status">Status</label>
+        <select name="status" id="status" class="form-control mb-2">
+          <option value="">Todos</option>
+          <option value="perdido" {% if status == "perdido" %}selected{% endif %}>Perdido</option>
+          <option value="encontrado" {% if status == "encontrado" %}selected{% endif %}>Encontrado</option>
+        </select>
+
+        <label for="species">Espécie</label>
+        <select name="species" id="species" class="form-control mb-2">
+          <option value="">Todas</option>
+          <option value="gato" {% if species == "gato" %}selected{% endif %}>Gato</option>
+          <option value="dog" {% if species == "dog" %}selected{% endif %}>Cachorro</option>
+        </select>
+
+        <label for="sex">Sexo</label>
+        <select name="sex" id="sex" class="form-control mb-2">
+          <option value="">Todos</option>
+          <option value="macho" {% if sex == "macho" %}selected{% endif %}>Macho</option>
+          <option value="femea" {% if sex == "femea" %}selected{% endif %}>Fêmea</option>
+        </select>
+
+        <label for="breed">Raça</label>
+        <select name="breed" id="breed" class="form-control mb-2">
+          <option value="">Selecione uma espécie primeiro</option>
+        </select>
+
+        <label for="eye_color">Cor dos Olhos</label>
+        <select name="eye_color" id="eye_color" class="form-control mb-2">
+          <option value="">Todas</option>
+          <option value="castanho">Castanho</option>
+          <option value="azul">Azul</option>
+          <option value="verde">Verde</option>
+          <option value="amber">Âmbar</option>
+          <option value="cinza">Cinza</option>
+        </select>
+
+        <label for="coat_color">Cor da Pelagem</label>
+        <select name="coat_color" id="coat_color" class="form-control mb-2">
+          <option value="">Todas</option>
+          <option value="preto">Preto</option>
+          <option value="branco">Branco</option>
+          <option value="caramelo">Caramelo</option>
+          <option value="cinza">Cinza</option>
+          <option value="marrom">Marrom</option>
+          <option value="rajado">Rajado</option>
+          <option value="outro">Outro</option>
+        </select>
+
+        <label for="coat_type">Tipo de Pelagem</label>
+        <select name="coat_type" id="coat_type" class="form-control mb-2">
+          <option value="">Todos</option>
+          <option value="curto">Curto</option>
+          <option value="medio">Médio</option>
+          <option value="longo">Longo</option>
+          <option value="hairless">Sem Pelo</option>
+        </select>
+
+        <label for="age_min">Idade (mín)</label>
+        <input type="number" name="age_min" class="form-control mb-2" value="{{ age_min }}">
+
+        <label for="age_max">Idade (máx)</label>
+        <input type="number" name="age_max" class="form-control mb-2" value="{{ age_max }}">
+
+        <label for="weight_min">Peso (mín)</label>
+        <input type="number" name="weight_min" class="form-control mb-2" value="{{ weight_min }}">
+
+        <label for="weight_max">Peso (máx)</label>
+        <input type="number" name="weight_max" class="form-control mb-2" value="{{ weight_max }}">
+
         <button type="submit" class="btn btn-primary mt-2 w-100">Filtrar</button>
         <a href="/search/lost/" class="btn btn-secondary mt-2 w-100">Limpar Filtros</a>
       </form>
     </aside>
 
+    <!-- Resultados -->
     <section class="results col-md-9">
       <h3>Resultados ({{ lost_pets|length }})</h3>
       <div class="row" id="pets-list">
@@ -74,7 +147,6 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-<!-- Script do Mapa -->
 <script>
 document.addEventListener('DOMContentLoaded', function() {
   const map = L.map('map').setView([-23.5489, -46.6388], 13);
@@ -84,16 +156,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
   const iconLost = L.icon({
     iconUrl: '{% static "images/small-red-cutout.png" %}',
-    iconSize: [31, 43],
-    iconAnchor: [15, 30],
-    popupAnchor: [0, -30]
+    iconSize: [31, 43], iconAnchor: [15, 30], popupAnchor: [0, -30]
   });
 
   const iconFound = L.icon({
     iconUrl: '{% static "images/small-green-cutout.png" %}',
-    iconSize: [31, 43],
-    iconAnchor: [15, 30],
-    popupAnchor: [0, -30]
+    iconSize: [31, 43], iconAnchor: [15, 30], popupAnchor: [0, -30]
   });
 
   function adicionarMarcadores() {
@@ -106,14 +174,14 @@ document.addEventListener('DOMContentLoaded', function() {
         const imagem = item.querySelector('img')?.src || '';
         const id = item.dataset.id;
         const markerIcon = (status === 'found' || status === 'encontrado') ? iconFound : iconLost;
-const content = `
-  <div style="width: 220px">
-    ${imagem ? `<img src="${imagem}" alt="${nome}" style="width:100%; height:120px; object-fit: cover; border-radius: 5px;" />` : ''}
-    <h5 class="mt-2">${nome}</h5>
-    <a href="{% url 'pet_registration:lost_pet_detail' pet_id=0 %}".replace("0", id) class="btn btn-outline-primary btn-sm">Ver detalhes</a>
-  </div>
-`;
-
+        const popupUrl = `{% url 'pet_registration:lost_pet_detail' pet_id=0 %}`.replace('0', id);
+        const content = `
+          <div style="width: 220px">
+            ${imagem ? `<img src="${imagem}" alt="${nome}" style="width:100%; height:120px; object-fit: cover; border-radius: 5px;" />` : ''}
+            <h5 class="mt-2">${nome}</h5>
+            <a href="${popupUrl}" class="btn btn-outline-primary btn-sm">Ver detalhes</a>
+          </div>
+        `;
         L.marker([lat, lng], { icon: markerIcon }).addTo(map).bindPopup(content);
       }
     });
@@ -143,10 +211,10 @@ const content = `
 });
 </script>
 
-<!-- Script do Autocomplete de Raças -->
+<!-- Autocomplete de Raças -->
 <script>
-const breedsCats = [...]; // mantenha sua lista
-const breedsDogs = [...]; // mantenha sua lista
+const breedsCats = [...];  // substitua pela sua lista completa
+const breedsDogs = [...];
 const speciesSelect = document.getElementById('species');
 const breedSelect = document.getElementById('breed');
 const currentSelected = "{{ breed }}";

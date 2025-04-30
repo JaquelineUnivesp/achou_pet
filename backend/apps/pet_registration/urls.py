@@ -18,10 +18,11 @@ urlpatterns = [
     # Pets do usuário
     path('pets_user/', views.user_pets_list, name='user_pets_list'),
 
+
     # Pets Perdidos
-    path('pet/<int:pet_id>/', pet_detail, name='pet_detail'),
-    path('pet/<int:pet_id>/editar/', edit_pet, name='edit_pet'),
-    path('pet/<int:pet_id>/deletar/', delete_pet, name='delete_pet'),
+    path('lost_pet/<int:pet_id>/', views.pet_detail, name='lost_pet_detail'),
+    path('lost_pet/<int:pet_id>/edit/', views.edit_pet, name='edit_lost_pet'),
+    path('lost_pet/<int:pet_id>/delete/', views.delete_pet, name='delete_lost_pet'),
 
     # Pets para adoção
     path('adoption_pet/<int:pet_id>/', views.adoption_pet_detail, name='adoption_pet_detail'),

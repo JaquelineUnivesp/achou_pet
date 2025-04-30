@@ -106,13 +106,14 @@ document.addEventListener('DOMContentLoaded', function() {
         const imagem = item.querySelector('img')?.src || '';
         const id = item.dataset.id;
         const markerIcon = (status === 'found' || status === 'encontrado') ? iconFound : iconLost;
-        const content = `
-          <div style="width: 220px">
-            ${imagem ? `<img src="${imagem}" alt="${nome}" style="width:100%; height:120px; object-fit: cover; border-radius: 5px;" />` : ''}
-            <h5 class="mt-2">${nome}</h5>
-            <a href="/pet/${id}/" class="btn btn-outline-primary btn-sm">Ver detalhes</a>
-          </div>
-        `;
+const content = `
+  <div style="width: 220px">
+    ${imagem ? `<img src="${imagem}" alt="${nome}" style="width:100%; height:120px; object-fit: cover; border-radius: 5px;" />` : ''}
+    <h5 class="mt-2">${nome}</h5>
+    <a href="{% url 'pet_registration:lost_pet_detail' pet_id=0 %}".replace("0", id) class="btn btn-outline-primary btn-sm">Ver detalhes</a>
+  </div>
+`;
+
         L.marker([lat, lng], { icon: markerIcon }).addTo(map).bindPopup(content);
       }
     });

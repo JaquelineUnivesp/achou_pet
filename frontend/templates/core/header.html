@@ -30,13 +30,13 @@
                             {% if unread_notifications_count > 0 %}
                                 <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
                                     {{ unread_notifications_count }}
-                                    <span class="visually-hidden">notificações não lidas</span>
+                                    <span class="visually-hidden">Notificações não lidas</span>
                                 </span>
                             {% endif %}
                         </a>
-                        <span class="t-12 d-block text-muted small text-center" style="font-size: 0.75rem;">
+
                             Notificações
-                        </span>
+
                     </li>
 
                     <!-- Menu do usuário -->
@@ -52,7 +52,7 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             {{ user.username }}
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-down" viewBox="0 0 16 16">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-chevron-down" viewBox="0 0 16 16">
                                 <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
                             </svg>
                         </a>

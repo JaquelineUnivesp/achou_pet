@@ -1,12 +1,19 @@
 {% if request.user.is_authenticated %}
-<div id="sidebar">
+<!-- BOTÃO DE MENU PARA MOBILE -->
+<button class="btn btn-primary d-md-none mb-3" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarOffcanvas" aria-controls="sidebarOffcanvas">
+    <i class="fas fa-bars me-2"></i> Menu
+</button>
+
+<!-- SIDEBAR: OFFCANVAS PARA MOBILE, FIXO NO DESKTOP -->
+<div class="offcanvas-md offcanvas-start" tabindex="-1" id="sidebarOffcanvas" aria-labelledby="sidebarLabel">
+  <div class="offcanvas-header d-md-none">
+    <h5 class="offcanvas-title" id="sidebarLabel">Menu</h5>
+    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Fechar"></button>
+  </div>
+  <div class="offcanvas-body">
     <h2 class="sidebar-title text-center mb-4">
         <i class="fas fa-cogs me-2"></i> Configurações
     </h2>
-
-    <button class="navbar-toggler d-md-none w-100 mb-3" type="button" onclick="toggleSidebar()">
-        <span class="navbar-toggler-icon"></span>
-    </button>
 
     <ul class="nav nav-pills flex-column mb-auto">
         <li class="nav-group">
@@ -137,8 +144,10 @@
             </ul>
         </li>
     </ul>
+  </div>
 </div>
 
+<!-- MODAL -->
 <div class="modal fade" id="dynamicModal" tabindex="-1" aria-labelledby="dynamicModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-scrollable modal-lg">
     <div class="modal-content">
@@ -153,10 +162,3 @@
   </div>
 </div>
 {% endif %}
-
-<script>
-    function toggleSidebar() {
-        const sidebar = document.getElementById('sidebar');
-        sidebar.classList.toggle('active');
-    }
-</script>

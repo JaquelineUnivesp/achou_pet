@@ -1,141 +1,87 @@
 {% if request.user.is_authenticated %}
 <div id="sidebar">
-    <h2 class="sidebar-title text-center mb-4">
-        <i class="fas fa-cogs me-2"></i> Configurações
-    </h2>
-
-    <button class="navbar-toggler d-md-none w-100 mb-3" type="button" onclick="toggleSidebar()">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-
     <ul class="nav nav-pills flex-column mb-auto">
-        <li class="nav-group">
-            <h4 class="nav-group-title">
-                <i class="fas fa-user-circle me-2"></i> Conta
-            </h4>
-            <ul>
-                <li class="nav-item">
-                    <a href="{% url 'search:search_pets' %}" class="nav-link">
-                        <i class="fas fa-search me-2"></i> Busca
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{% url 'accounts:profile' %}" class="nav-link">
-                        <i class="fas fa-user me-2"></i> Perfil
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{% url 'pet_registration:user_pets_list' %}" class="nav-link">
-                        <i class="fas fa-paw me-2"></i> Seus Pets
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{% url 'accounts:edit_profile' %}" class="nav-link">
-                        <i class="fas fa-cogs me-2"></i> Gerenciar Conta
-                    </a>
-                </li>
+
+        <!-- Home -->
+        <li class="nav-item">
+            <a href="{% url 'home' %}" class="nav-link">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" fill="currentColor" class="me-2">
+                  <path d="M12 5c.552 0 1 .448 1 1v5h5c.552 0 1 .448 1 1s-.448 1-1 1h-5v5c0 .552-.448 1-1 1s-1-.448-1-1v-5H6c-.552 0-1-.448-1-1s.448-1 1-1h5V6c0-.552.448-1 1-1z"/>
+                </svg>
+                Home
+            </a>
+        </li>
+
+        <!-- Meus Pets -->
+        <li class="nav-item">
+            <a href="{% url 'pet_registration:user_pets_list' %}" class="nav-link">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" fill="currentColor" class="me-2">
+                  <path d="m20.976,19.05l.192.315-.339,2.111c-.235,1.462-1.48,2.524-2.962,2.524h-4.867v-2h4.867c.494,0,.909-.354.987-.841l.223-1.385c-.534-.897-1.104-1.961-1.175-2.516-.14-1.106-.662-1.792-1.747-2.295-.059-.027-1.905-.963-2.604-.963-.798,0-1.256.22-1.261.222-3.243,1.909-6.29,4.437-6.29,9.778h-2c0-6.4,3.916-9.523,7.327-11.529.061-.033.292-.152.673-.262v-.209c0-1.657,1.343-3,3-3v3.271c.726.237,1.996.878,1.996.878,1.693.784,2.666,2.083,2.891,3.858.062.245.626,1.285,1.089,2.043Zm.297-13.05c-.829,0-1.609-.365-2.14-1.002l-.229-.275c-.912-1.094-2.251-1.722-3.676-1.722h-1.227V0c-1.657,0-3,1.343-3,3v.706l-4.046,6.294H0v2h8.046l4.5-7h2.681c.829,0,1.609.365,2.14,1.002l.229.275c.912,1.094,2.251,1.722,3.676,1.722h.727v2c0,1.103-.897,2-2,2h-1.001c.762.52,1.385,1.158,1.858,1.902,1.794-.394,3.143-1.992,3.143-3.902v-4h-2.727Z"/>
+                </svg>
+                Meus Pets
+            </a>
+        </li>
+
+        <!-- Busca Dropdown -->
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" fill="currentColor" class="me-2">
+                  <path d="M23.707,22.293l-5.969-5.969a10.016,10.016,0,1,0-1.414,1.414l5.969,5.969a1,1,0,0,0,1.414-1.414ZM10,18a8,8,0,1,1,8-8A8.009,8.009,0,0,1,10,18Z"/>
+                </svg>
+                Busca
+            </a>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="{% url 'search:search_lost_pets' %}">Pet Perdido</a></li>
+                <li><a class="dropdown-item" href="{% url 'search:search_adoption_pets' %}">Pet para Adoção</a></li>
+                <li><a class="dropdown-item" href="{% url 'search:search_breeding_pets' %}">Pet para Reprodução</a></li>
             </ul>
         </li>
 
-        <li class="nav-group">
-            <h4 class="nav-group-title">
-                <i class="fas fa-pen me-2"></i> Cadastros
-            </h4>
-            <ul>
-                <li class="nav-item">
-                    <a href="{% url 'pet_registration:register_lost_pet' %}" class="nav-link">
-                        <i class="fas fa-search me-2"></i> Pet Perdido
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{% url 'pet_registration:register_adoption_pet' %}" class="nav-link">
-                        <i class="fas fa-heart me-2"></i> Pet para Adoção
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{% url 'pet_registration:register_breeding_pet' %}" class="nav-link">
-                        <i class="fas fa-paw me-2"></i> Pet para Reprodução
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{% url 'search:search_pets' %}" class="nav-link">
-                        <i class="fas fa-search me-2"></i> Busca
-                    </a>
-                </li>
+        <!-- Cadastro Dropdown -->
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" fill="currentColor" class="me-2">
+                  <path d="M12 5c.552 0 1 .448 1 1v5h5c.552 0 1 .448 1 1s-.448 1-1 1h-5v5c0 .552-.448 1-1 1s-1-.448-1-1v-5H6c-.552 0-1-.448-1-1s.448-1 1-1h5V6c0-.552.448-1 1-1z"/>
+                </svg>
+                Cadastro
+            </a>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="{% url 'pet_registration:register_lost_pet' %}">Pet Perdido</a></li>
+                <li><a class="dropdown-item" href="{% url 'pet_registration:register_adoption_pet' %}">Pet para Adoção</a></li>
+                <li><a class="dropdown-item" href="{% url 'pet_registration:register_breeding_pet' %}">Pet para Reprodução</a></li>
             </ul>
         </li>
 
-        <li class="nav-group">
-            <h4 class="nav-group-title">
-                <i class="fas fa-shield-alt me-2"></i> Segurança
-            </h4>
-            <ul>
-                <li class="nav-item">
-                    <a href="{% url 'accounts:change_email' %}" class="nav-link">
-                        <i class="fas fa-envelope me-2"></i> Trocar E-mail
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{% url 'accounts:password_reset' %}" class="nav-link">
-                        <i class="fas fa-key me-2"></i> Redefinir Senha
-                    </a>
-                </li>
-            </ul>
+        <!-- Notificações -->
+        <li class="nav-item">
+            <a href="{% url 'notifications:notifications' %}" class="nav-link">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" fill="currentColor" class="me-2">
+                  <path d="M12 2a7 7 0 00-7 7v4.586l-1.707 1.707A1 1 0 004 18h16a1 1 0 00.707-1.707L19 13.586V9a7 7 0 00-7-7zm0 20a3 3 0 003-3H9a3 3 0 003 3z"/>
+                </svg>
+                Notificações
+            </a>
         </li>
 
-        <li class="nav-group">
-            <h4 class="nav-group-title">
-                <i class="fas fa-paint-brush me-2"></i> Aparência
-            </h4>
-            <ul>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="fas fa-eye me-2"></i> Visibilidade do Perfil
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="fas fa-palette me-2"></i> Ajustar Visual
-                    </a>
-                </li>
-            </ul>
+        <!-- Mensagens -->
+        <li class="nav-item">
+            <a href="{% url 'chat:inbox' %}" class="nav-link">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" fill="currentColor" class="me-2">
+                  <path d="M21 2H3a1 1 0 00-1 1v18a1 1 0 001.447.894L12 18.118l8.553 3.776A1 1 0 0022 21V3a1 1 0 00-1-1zm-1 16.382l-7.553-3.335a1 1 0 00-.894 0L4 18.382V4h16v14.382z"/>
+                </svg>
+                Mensagens
+            </a>
         </li>
 
-        <li class="nav-group">
-            <h4 class="nav-group-title">
-                <i class="fas fa-bell me-2"></i> Notificações
-            </h4>
-            <ul>
-                <li class="nav-item">
-                    <a href="{% url 'notifications:notifications' %}" class="nav-link">
-                        <i class="fas fa-bell me-2"></i> Notificações
-                    </a>
-                </li>
-            </ul>
+        <!-- Configurações -->
+        <li class="nav-item mt-auto">
+            <a href="{% url 'accounts:edit_profile' %}" class="nav-link">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" fill="currentColor" class="me-2">
+                  <path d="M19.43 12.98a7.07 7.07 0 000-1.96l2.11-1.65a.5.5 0 00.11-.65l-2-3.46a.5.5 0 00-.61-.22l-2.49 1a7.007 7.007 0 00-1.69-.98l-.38-2.65a.5.5 0 00-.5-.42h-4a.5.5 0 00-.5.42l-.38 2.65a7.007 7.007 0 00-1.69.98l-2.49-1a.5.5 0 00-.61.22l-2 3.46a.5.5 0 00.11.65l2.11 1.65a7.07 7.07 0 000 1.96L2.07 14.63a.5.5 0 00-.11.65l2 3.46a.5.5 0 00.61.22l2.49-1c.52.39 1.09.72 1.69.98l.38 2.65a.5.5 0 00.5.42h4a.5.5 0 00.5-.42l.38-2.65a7.007 7.007 0 001.69-.98l2.49 1a.5.5 0 00.61-.22l2-3.46a.5.5 0 00-.11-.65l-2.11-1.65zM12 15a3 3 0 113-3 3.003 3.003 0 01-3 3z"/>
+                </svg>
+                Configurações
+            </a>
         </li>
 
-        <li class="nav-group">
-            <h4 class="nav-group-title">
-                <i class="fas fa-sign-in-alt me-2"></i> Autenticação
-            </h4>
-            <ul>
-                <li class="nav-item">
-                    <a href="{% url 'accounts:login' %}" class="nav-link">
-                        <i class="fas fa-sign-in-alt me-2"></i> Login
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{% url 'accounts:logout' %}" class="nav-link">
-                        <i class="fas fa-sign-out-alt me-2"></i> Logout
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{% url 'accounts:register' %}" class="nav-link">
-                        <i class="fas fa-user-plus me-2"></i> Criar Conta
-                    </a>
-                </li>
-            </ul>
-        </li>
     </ul>
 </div>
 
@@ -152,7 +98,6 @@
     </div>
   </div>
 </div>
-{% endif %}
 
 <script>
     function toggleSidebar() {
@@ -160,3 +105,4 @@
         sidebar.classList.toggle('active');
     }
 </script>
+{% endif %}

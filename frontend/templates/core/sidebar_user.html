@@ -1,164 +1,156 @@
-{% if request.user.is_authenticated %}
-<!-- BOTÃO DE MENU PARA MOBILE -->
-<button class="btn btn-primary d-md-none mb-3" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarOffcanvas" aria-controls="sidebarOffcanvas">
-    <i class="fas fa-bars me-2"></i> Menu
-</button>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sidebar Estilo Pinterest</title>
 
-<!-- SIDEBAR: OFFCANVAS PARA MOBILE, FIXO NO DESKTOP -->
-<div class="offcanvas-md offcanvas-start" tabindex="-1" id="sidebarOffcanvas" aria-labelledby="sidebarLabel">
-  <div class="offcanvas-header d-md-none">
-    <h5 class="offcanvas-title" id="sidebarLabel">Menu</h5>
-    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Fechar"></button>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+    }
+
+    /* Sidebar Desktop */
+    .sidebar {
+      width: 80px;
+      height: 100vh;
+      position: fixed;
+      background-color: #fff;
+      border-right: 1px solid #ddd;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 1rem;
+    }
+
+    .sidebar .icon-btn {
+      width: 48px;
+      height: 48px;
+      margin-bottom: 1.2rem;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 20px;
+      color: #111;
+      position: relative;
+    }
+
+    .sidebar .icon-btn.active {
+      background-color: #000;
+      color: #fff;
+    }
+
+    .sidebar .icon-btn.notification::after {
+      content: "1";
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      background: red;
+      color: #fff;
+      font-size: 12px;
+      width: 18px;
+      height: 18px;
+      text-align: center;
+      line-height: 18px;
+      border-radius: 50%;
+    }
+
+    /* Mobile Menu */
+    .bottom-nav {
+      display: none;
+    }
+
+    @media (max-width: 768px) {
+      .sidebar {
+        display: none;
+      }
+
+      .bottom-nav {
+        display: flex;
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        background-color: #111;
+        justify-content: space-around;
+        align-items: center;
+        padding: 10px 0;
+        z-index: 9999;
+      }
+
+      .bottom-nav .nav-item {
+        text-align: center;
+        color: #fff;
+        font-size: 12px;
+      }
+
+      .bottom-nav .nav-item i {
+        font-size: 20px;
+        margin-bottom: 2px;
+      }
+
+      .bottom-nav .nav-item .dot {
+        position: absolute;
+        top: 5px;
+        right: 16px;
+        width: 8px;
+        height: 8px;
+        background-color: red;
+        border-radius: 50%;
+      }
+
+      .bottom-nav .nav-item .img-profile {
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Sidebar Desktop -->
+  <div class="sidebar d-none d-md-flex">
+    <div class="icon-btn text-danger"><i class="fab fa-pinterest-p"></i></div>
+    <div class="icon-btn"><i class="fas fa-home"></i></div>
+    <div class="icon-btn"><i class="fas fa-compass"></i></div>
+    <div class="icon-btn active"><i class="fas fa-plus"></i></div>
+    <div class="icon-btn"><i class="far fa-bell"></i></div>
+    <div class="icon-btn notification"><i class="far fa-comment-dots"></i></div>
+    <div class="icon-btn mt-auto mb-4"><i class="fas fa-cog"></i></div>
   </div>
-  <div class="offcanvas-body">
-    <h2 class="sidebar-title text-center mb-4">
-        <i class="fas fa-cogs me-2"></i> Configurações
-    </h2>
 
-    <ul class="nav nav-pills flex-column mb-auto">
-        <li class="nav-group">
-            <h4 class="nav-group-title">
-                <i class="fas fa-user-circle me-2"></i> Conta
-            </h4>
-            <ul>
-                <li class="nav-item">
-                    <a href="{% url 'search:search_pets' %}" class="nav-link">
-                        <i class="fas fa-search me-2"></i> Busca
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{% url 'accounts:profile' %}" class="nav-link">
-                        <i class="fas fa-user me-2"></i> Perfil
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{% url 'pet_registration:user_pets_list' %}" class="nav-link">
-                        <i class="fas fa-paw me-2"></i> Seus Pets
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{% url 'accounts:edit_profile' %}" class="nav-link">
-                        <i class="fas fa-cogs me-2"></i> Gerenciar Conta
-                    </a>
-                </li>
-            </ul>
-        </li>
-
-        <li class="nav-group">
-            <h4 class="nav-group-title">
-                <i class="fas fa-pen me-2"></i> Cadastros
-            </h4>
-            <ul>
-                <li class="nav-item">
-                    <a href="{% url 'pet_registration:register_lost_pet' %}" class="nav-link">
-                        <i class="fas fa-search me-2"></i> Pet Perdido
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{% url 'pet_registration:register_adoption_pet' %}" class="nav-link">
-                        <i class="fas fa-heart me-2"></i> Pet para Adoção
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{% url 'pet_registration:register_breeding_pet' %}" class="nav-link">
-                        <i class="fas fa-paw me-2"></i> Pet para Reprodução
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{% url 'search:search_pets' %}" class="nav-link">
-                        <i class="fas fa-search me-2"></i> Busca
-                    </a>
-                </li>
-            </ul>
-        </li>
-
-        <li class="nav-group">
-            <h4 class="nav-group-title">
-                <i class="fas fa-shield-alt me-2"></i> Segurança
-            </h4>
-            <ul>
-                <li class="nav-item">
-                    <a href="{% url 'accounts:change_email' %}" class="nav-link">
-                        <i class="fas fa-envelope me-2"></i> Trocar E-mail
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{% url 'accounts:password_reset' %}" class="nav-link">
-                        <i class="fas fa-key me-2"></i> Redefinir Senha
-                    </a>
-                </li>
-            </ul>
-        </li>
-
-        <li class="nav-group">
-            <h4 class="nav-group-title">
-                <i class="fas fa-paint-brush me-2"></i> Aparência
-            </h4>
-            <ul>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="fas fa-eye me-2"></i> Visibilidade do Perfil
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="fas fa-palette me-2"></i> Ajustar Visual
-                    </a>
-                </li>
-            </ul>
-        </li>
-
-        <li class="nav-group">
-            <h4 class="nav-group-title">
-                <i class="fas fa-bell me-2"></i> Notificações
-            </h4>
-            <ul>
-                <li class="nav-item">
-                    <a href="{% url 'notifications:notifications' %}" class="nav-link">
-                        <i class="fas fa-bell me-2"></i> Notificações
-                    </a>
-                </li>
-            </ul>
-        </li>
-
-        <li class="nav-group">
-            <h4 class="nav-group-title">
-                <i class="fas fa-sign-in-alt me-2"></i> Autenticação
-            </h4>
-            <ul>
-                <li class="nav-item">
-                    <a href="{% url 'accounts:login' %}" class="nav-link">
-                        <i class="fas fa-sign-in-alt me-2"></i> Login
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{% url 'accounts:logout' %}" class="nav-link">
-                        <i class="fas fa-sign-out-alt me-2"></i> Logout
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{% url 'accounts:register' %}" class="nav-link">
-                        <i class="fas fa-user-plus me-2"></i> Criar Conta
-                    </a>
-                </li>
-            </ul>
-        </li>
-    </ul>
-  </div>
-</div>
-
-<!-- MODAL -->
-<div class="modal fade" id="dynamicModal" tabindex="-1" aria-labelledby="dynamicModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-scrollable modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="dynamicModalLabel">Carregando...</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
-      </div>
-      <div class="modal-body">
-        <div id="modalContent">Carregando conteúdo...</div>
-      </div>
+  <!-- Mobile Bottom Menu -->
+  <div class="bottom-nav d-flex d-md-none">
+    <div class="nav-item">
+      <i class="fas fa-home"></i><br />
+      Página inicial
+    </div>
+    <div class="nav-item">
+      <i class="fas fa-search"></i><br />
+      Pesquisar
+    </div>
+    <div class="nav-item">
+      <i class="fas fa-plus"></i><br />
+      Criar
+    </div>
+    <div class="nav-item position-relative">
+      <i class="far fa-comment-dots"></i><br />
+      Caixa
+      <span class="dot"></span>
+    </div>
+    <div class="nav-item">
+      <img src="https://via.placeholder.com/30x30" class="img-profile" alt="perfil" /><br />
+      Salvos
     </div>
   </div>
-</div>
-{% endif %}
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

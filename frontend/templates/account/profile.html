@@ -1,92 +1,78 @@
 {% extends "core/base.html" %}
 {% load static %}
 {% block content %}
-
 <pre>{{ user|safe }}</pre>
-
 <div class="container mt-5">
-    <div class="row">
-        <div class="col-3">
-            {% include "core/sidebar_user.html" %}
-        </div>
-
-        <div class="col-9">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <h1 class="display-4">Meu <span class="color_project">Perfil</span></h1>
-                <a href="{% url 'accounts:edit_profile' %}" class="btn btn-outline-primary">
-                    <i class="bi bi-pencil-square me-2"></i> Editar Perfil
-                </a>
+   <div class="row">
+      <div class="col-3">
+         {% include "core/sidebar_user.html" %}
+      </div>
+      <div class="d-flex justify-content-between align-items-center mb-4">
+         <h1 class="display-4">Meu <span class="color_project">Perfil</span></h1>
+         <a href="{% url 'accounts:edit_profile' %}" class="btn btn-outline-primary">
+         <i class="bi bi-pencil-square me-2"></i> Editar Perfil
+         </a>
+      </div>
+      {% if user.photo %}
+      <figure class="p-3 mb-4">
+         <img src="{{ user.photo.url }}" alt="Foto de perfil"
+            class="img-thumbnail shadow"
+            style="width: 150px; height: 150px; object-fit: cover; border-radius: 50%; border: 2px solid #000;">
+         <figcaption class="mt-2 fw-bold">Foto de Perfil</figcaption>
+      </figure>
+      {% endif %}
+      <!-- Dados do perfil -->
+      <div class="row g-4">
+         <!-- Nome -->
+         <div class="col-md-6">
+            <div class="card p-3">
+               <p class="h6"><strong>Nome</strong></p>
+               <p class="h4">{{ user.first_name }} {{ user.last_name }}</p>
             </div>
-
-            {% if user.photo %}
-            <figure class="p-3 mb-4">
-<img src="{{ user.photo.url }}" alt="Foto de perfil"
-     class="img-thumbnail shadow"
-     style="width: 150px; height: 150px; object-fit: cover; border-radius: 50%; border: 2px solid #000;">
-
-                <figcaption class="mt-2 fw-bold">Foto de Perfil</figcaption>
-            </figure>
-            {% endif %}
-
-            <!-- Dados do perfil -->
-            <div class="row g-4">
-                <!-- Nome -->
-                <div class="col-md-6">
-                    <div class="card p-3">
-                        <p class="h6"><strong>Nome</strong></p>
-                        <p class="h4">{{ user.first_name }} {{ user.last_name }}</p>
-                    </div>
-                </div>
-
-                <!-- Nome de Usuário -->
-                <div class="col-md-6">
-                    <div class="card p-3">
-                        <p class="h6"><strong>Nome de Usuário</strong></p>
-                        <p class="h4">{{ user.username }}</p>
-                    </div>
-                </div>
-
-                <!-- E-mail -->
-                <div class="col-md-6">
-                    <div class="card p-3">
-                        <p class="h6"><strong>E-mail</strong></p>
-                        <p class="h4">{{ user.email }}</p>
-                    </div>
-                </div>
-
-                <!-- Verificado -->
-                <div class="col-md-6">
-                    <div class="card p-3">
-                        <p class="h6"><strong>Verificado</strong></p>
-                        <p class="h4">{% if user.is_verified %}Sim{% else %}Não{% endif %}</p>
-                    </div>
-                </div>
-
-                <!-- Último login -->
-                <div class="col-md-6">
-                    <div class="card p-3">
-                        <p class="h6"><strong>Último Login</strong></p>
-                        <p class="h4">{{ user.last_login|date:"d/m/Y H:i" }}</p>
-                    </div>
-                </div>
-
-                <!-- Telefone -->
-                <div class="col-md-6">
-                    <div class="card p-3">
-                        <p class="h6"><strong>Telefone para Notificações</strong></p>
-                        <p class="h4">{{ user.notification_phone|default:"—" }}</p>
-                    </div>
-                </div>
-
-                <!-- CPF -->
-                <div class="col-md-6">
-                    <div class="card p-3">
-                        <p class="h6"><strong>CPF</strong></p>
-                        <p class="h4">{{ user.cpf|default:"—" }}</p>
-                    </div>
-                </div>
+         </div>
+         <!-- Nome de Usuário -->
+         <div class="col-md-6">
+            <div class="card p-3">
+               <p class="h6"><strong>Nome de Usuário</strong></p>
+               <p class="h4">{{ user.username }}</p>
             </div>
-        </div>
-    </div>
+         </div>
+         <!-- E-mail -->
+         <div class="col-md-6">
+            <div class="card p-3">
+               <p class="h6"><strong>E-mail</strong></p>
+               <p class="h4">{{ user.email }}</p>
+            </div>
+         </div>
+         <!-- Verificado -->
+         <div class="col-md-6">
+            <div class="card p-3">
+               <p class="h6"><strong>Verificado</strong></p>
+               <p class="h4">{% if user.is_verified %}Sim{% else %}Não{% endif %}</p>
+            </div>
+         </div>
+         <!-- Último login -->
+         <div class="col-md-6">
+            <div class="card p-3">
+               <p class="h6"><strong>Último Login</strong></p>
+               <p class="h4">{{ user.last_login|date:"d/m/Y H:i" }}</p>
+            </div>
+         </div>
+         <!-- Telefone -->
+         <div class="col-md-6">
+            <div class="card p-3">
+               <p class="h6"><strong>Telefone para Notificações</strong></p>
+               <p class="h4">{{ user.notification_phone|default:"—" }}</p>
+            </div>
+         </div>
+         <!-- CPF -->
+         <div class="col-md-6">
+            <div class="card p-3">
+               <p class="h6"><strong>CPF</strong></p>
+               <p class="h4">{{ user.cpf|default:"—" }}</p>
+            </div>
+         </div>
+      </div>
+   </div>
 </div>
 {% endblock %}

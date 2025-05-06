@@ -29,6 +29,14 @@
      <link rel="stylesheet" href="{% static 'css/custom.css' %}">
 
     {% if request.user.is_authenticated %}
+
+    {% include "core/sidebar_user.html" %}
+
+
+
+
+
+
     <script>
 const ws_scheme = window.location.protocol === "https:" ? "wss" : "ws";
 const ws = new WebSocket(ws_scheme + '://' + window.location.host + '/ws/chat/');

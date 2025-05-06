@@ -173,23 +173,9 @@ p { font-size: 16px; !important;}
 }
 
 
-#sidebar {background: #ffffff;
-padding: 30px;
-border-radius: 30px
-}
 
-/* Estilos gerais da Sidebar */
-.sidebar {
-    width: 280px;
-    background-color: #ffffff;
-    border-right: 1px solid #e0e0e0;
-    padding: 20px;
-    height: 100vh;
-    overflow-y: auto;
-    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-}
 
-#sidebar ul { margin: 0px; padding: 0px;}
+
 
 
 /* Seção do Perfil do Usuário */
@@ -293,14 +279,7 @@ border-radius: 30px
     right: -8px;
 }
 
-/* Responsividade */
-@media (max-width: 768px) {
-    .sidebar {
-        width: 100%;
-        height: auto;
-        position: relative;
-    }
-}
+
 
 
 

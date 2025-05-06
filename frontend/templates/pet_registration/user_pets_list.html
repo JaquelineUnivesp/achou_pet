@@ -1,125 +1,108 @@
 {% extends 'core/base.html' %}
 {% block title %}Meus Pets Cadastrados - Achou Pet{% endblock %}
 {% block content %}
-
 <div class="container mt-5">
-    <div class="row">
-        <div class="col-3">
-            {% include "core/sidebar_user.html" %}
-        </div>
-        <div class="col-9">
-            <h1 class="display-1 text-center">Meus Pets <span class="color_project">Cadastrados</span></h1>
+   <div class="row">
 
+      <div class="col-9">
+         <h1 class="display-1 text-center">Meus Pets <span class="color_project">Cadastrados</span></h1>
+         <!-- Seção de Pets Perdidos -->
+         <h2 class="mt-4">Pets Perdidos</h2>
+         {% if lost_pets %}
+         {% for pet in lost_pets %}
+         <div class="card mb-3 shadow-sm">
+            <div class="row g-0">
+               <div class="col-md-4">
+                  {% if pet.photo_1 %}
+                  <img src="{{ pet.photo_1.url }}" class="img-fluid rounded-start" alt="Foto de {{ pet.name }}">
+                  {% else %}
+                  <div class="bg-light h-100 d-flex align-items-center justify-content-center">Sem Foto</div>
+                  {% endif %}
+               </div>
+               <div class="col-md-8">
+                  <div class="card-body">
+                     <h5 class="card-title fw-bold">{{ pet.name|default:"Pet sem Nome" }}</h5>
+                     <p class="card-text text-muted">{{ pet.get_species_display }} - {{ pet.get_status_display }}</p>
+                     <p class="card-text">📍 {{ pet.lost_location }}</p>
+                     <p class="card-text"><small class="text-muted">Data: {{ pet.lost_date|date:"d/m/Y" }}</small></p>
+                     <div class="d-flex gap-2">
+                        <a href="{% url 'pet_registration:pet_detail' pet.id %}" class="btn btn-primary">Visualizar</a>
+                        <a href="{% url 'pet_registration:edit_pet' pet.id %}" class="btn btn-warning">Editar</a>
+                        <a href="{% url 'pet_registration:delete_pet' pet.id %}" class="btn btn-danger">Deletar</a>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+         {% endfor %}
+         {% else %}
+         <p class="text-muted">Nenhum pet perdido cadastrado.</p>
+         {% endif %}
+         <!-- Seção de Pets para Adoção -->
+         <h2 class="mt-4">Pets para Adoção</h2>
+         {% if adoption_pets %}
+         {% for pet in adoption_pets %}
+         <div class="card mb-3 shadow-sm">
+            <div class="row g-0">
+               <div class="col-md-4">
+                  {% if pet.photo_1 %}
+                  <img src="{{ pet.photo_1.url }}" class="img-fluid rounded-start" alt="Foto de {{ pet.pet_name }}">
+                  {% else %}
+                  <div class="bg-light h-100 d-flex align-items-center justify-content-center">Sem Foto</div>
+                  {% endif %}
+               </div>
+               <div class="col-md-8">
+                  <div class="card-body">
+                     <h5 class="card-title fw-bold">{{ pet.pet_name|default:"Pet sem Nome" }}</h5>
+                     <p class="card-text text-muted">{{ pet.get_relationship_with_pet_display }} - Para Adoção</p>
+                     <p class="card-text">📍 {{ pet.location }}</p>
+                     <p class="card-text"><small class="text-muted">Data de Cadastro: {{ pet.created_at|date:"d/m/Y" }}</small></p>
+                     <div class="d-flex gap-2">
+                        <a href="{% url 'pet_registration:adoption_pet_detail' pet.id %}" class="btn btn-primary">Visualizar</a>
+                        <a href="{% url 'pet_registration:edit_adoption_pet' pet.id %}" class="btn btn-warning">Editar</a>
+                        <a href="{% url 'pet_registration:delete_adoption_pet' pet.id %}" class="btn btn-danger">Deletar</a>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+         {% endfor %}
+         {% else %}
+         <p class="text-muted">Nenhum pet para adoção cadastrado.</p>
+         {% endif %}
+         <!-- Seção de Pets para Reprodução -->
+         <h2 class="mt-4">Pets para Reprodução</h2>
+         {% if breeding_pets %}
+         {% for pet in breeding_pets %}
+         <div class="card mb-3 shadow-sm">
+            <div class="row g-0">
+               <div class="col-md-4">
+                  {% if pet.photo_1 %}
+                  <img src="{{ pet.photo_1.url }}" class="img-fluid rounded-start" alt="Foto de {{ pet.pet_name }}">
+                  {% else %}
+                  <div class="bg-light h-100 d-flex align-items-center justify-content-center">Sem Foto</div>
+                  {% endif %}
+               </div>
+               <div class="col-md-8">
+                  <div class="card-body">
+                     <h5 class="card-title fw-bold">{{ pet.pet_name|default:"Pet sem Nome" }}</h5>
+                     <p class="card-text text-muted">Reprodução</p>
+                     <p class="card-text">📍 {{ pet.location }}</p>
+                     <p class="card-text"><small class="text-muted">Data de Cadastro: {{ pet.created_at|date:"d/m/Y" }}</small></p>
+                     <div class="d-flex gap-2">
+                        <a href="{% url 'pet_registration:breeding_pet_detail' pet.id %}" class="btn btn-primary">Visualizar</a>
+                        <a href="{% url 'pet_registration:edit_breeding_pet' pet.id %}" class="btn btn-warning">Editar</a>
+                        <a href="{% url 'pet_registration:delete_breeding_pet' pet.id %}" class="btn btn-danger">Deletar</a>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+         {% endfor %}
+         {% else %}
+         <p class="text-muted">Nenhum pet para reprodução cadastrado.</p>
+         {% endif %}
+      </div>
 
-            <h2>DEBUG CONTEXTO</h2>
-<p><strong>Usuário logado:</strong> {{ request.user }}</p>
-<p><strong>Lost Pets:</strong> {{ lost_pets|length }}</p>
-<p><strong>Adoption Pets:</strong> {{ adoption_pets|length }}</p>
-<p><strong>Breeding Pets:</strong> {{ breeding_pets|length }}</p>
-<hr>
-
-
-            <!-- Seção de Pets Perdidos -->
-            <h2 class="mt-4">Pets Perdidos</h2>
-            {% if lost_pets %}
-                {% for pet in lost_pets %}
-                <div class="card mb-3 shadow-sm">
-                    <div class="row g-0">
-                        <div class="col-md-4">
-                            {% if pet.photo_1 %}
-                                <img src="{{ pet.photo_1.url }}" class="img-fluid rounded-start" alt="Foto de {{ pet.name }}">
-                            {% else %}
-                                <div class="bg-light h-100 d-flex align-items-center justify-content-center">Sem Foto</div>
-                            {% endif %}
-                        </div>
-                        <div class="col-md-8">
-                            <div class="card-body">
-                                <h5 class="card-title fw-bold">{{ pet.name|default:"Pet sem Nome" }}</h5>
-                                <p class="card-text text-muted">{{ pet.get_species_display }} - {{ pet.get_status_display }}</p>
-                                <p class="card-text">📍 {{ pet.lost_location }}</p>
-                                <p class="card-text"><small class="text-muted">Data: {{ pet.lost_date|date:"d/m/Y" }}</small></p>
-                                <div class="d-flex gap-2">
-                                    <a href="{% url 'pet_registration:pet_detail' pet.id %}" class="btn btn-primary">Visualizar</a>
-                                    <a href="{% url 'pet_registration:edit_pet' pet.id %}" class="btn btn-warning">Editar</a>
-                                    <a href="{% url 'pet_registration:delete_pet' pet.id %}" class="btn btn-danger">Deletar</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                {% endfor %}
-            {% else %}
-                <p class="text-muted">Nenhum pet perdido cadastrado.</p>
-            {% endif %}
-
-            <!-- Seção de Pets para Adoção -->
-            <h2 class="mt-4">Pets para Adoção</h2>
-            {% if adoption_pets %}
-                {% for pet in adoption_pets %}
-                <div class="card mb-3 shadow-sm">
-                    <div class="row g-0">
-                        <div class="col-md-4">
-                            {% if pet.photo_1 %}
-                                <img src="{{ pet.photo_1.url }}" class="img-fluid rounded-start" alt="Foto de {{ pet.pet_name }}">
-                            {% else %}
-                                <div class="bg-light h-100 d-flex align-items-center justify-content-center">Sem Foto</div>
-                            {% endif %}
-                        </div>
-                        <div class="col-md-8">
-                            <div class="card-body">
-                                <h5 class="card-title fw-bold">{{ pet.pet_name|default:"Pet sem Nome" }}</h5>
-                                <p class="card-text text-muted">{{ pet.get_relationship_with_pet_display }} - Para Adoção</p>
-                                <p class="card-text">📍 {{ pet.location }}</p>
-                                <p class="card-text"><small class="text-muted">Data de Cadastro: {{ pet.created_at|date:"d/m/Y" }}</small></p>
-                                <div class="d-flex gap-2">
-                                    <a href="{% url 'pet_registration:adoption_pet_detail' pet.id %}" class="btn btn-primary">Visualizar</a>
-                                    <a href="{% url 'pet_registration:edit_adoption_pet' pet.id %}" class="btn btn-warning">Editar</a>
-                                    <a href="{% url 'pet_registration:delete_adoption_pet' pet.id %}" class="btn btn-danger">Deletar</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                {% endfor %}
-            {% else %}
-                <p class="text-muted">Nenhum pet para adoção cadastrado.</p>
-            {% endif %}
-
-            <!-- Seção de Pets para Reprodução -->
-            <h2 class="mt-4">Pets para Reprodução</h2>
-
-            {% if breeding_pets %}
-                {% for pet in breeding_pets %}
-                <div class="card mb-3 shadow-sm">
-                    <div class="row g-0">
-                        <div class="col-md-4">
-                            {% if pet.photo_1 %}
-                                <img src="{{ pet.photo_1.url }}" class="img-fluid rounded-start" alt="Foto de {{ pet.pet_name }}">
-                            {% else %}
-                                <div class="bg-light h-100 d-flex align-items-center justify-content-center">Sem Foto</div>
-                            {% endif %}
-                        </div>
-                        <div class="col-md-8">
-                            <div class="card-body">
-                                <h5 class="card-title fw-bold">{{ pet.pet_name|default:"Pet sem Nome" }}</h5>
-                                <p class="card-text text-muted">Reprodução</p>
-                                <p class="card-text">📍 {{ pet.location }}</p>
-                                <p class="card-text"><small class="text-muted">Data de Cadastro: {{ pet.created_at|date:"d/m/Y" }}</small></p>
-                                <div class="d-flex gap-2">
-                                    <a href="{% url 'pet_registration:breeding_pet_detail' pet.id %}" class="btn btn-primary">Visualizar</a>
-                                    <a href="{% url 'pet_registration:edit_breeding_pet' pet.id %}" class="btn btn-warning">Editar</a>
-                                    <a href="{% url 'pet_registration:delete_breeding_pet' pet.id %}" class="btn btn-danger">Deletar</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                {% endfor %}
-            {% else %}
-                <p class="text-muted">Nenhum pet para reprodução cadastrado.</p>
-            {% endif %}
-        </div>
-    </div>
 </div>
-
 {% endblock %}

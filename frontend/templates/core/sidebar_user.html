@@ -9,7 +9,7 @@
         position: fixed;
         top: 0;
         left: 0;
-
+        border-right: 1px solid #ddd;
         z-index: 1000;
         overflow-x: hidden;
         display: block;
@@ -231,14 +231,41 @@
                 <span>Mensagens</span>
             </a>
         </li>
-        <li class="nav-item mobile-only">
-           <a class="nav-link" href="{% url 'accounts:profile' %}">
+
+
+                            <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M19.43 12.98a7.07 7.07 0 000-1.96l2.11-1.65a.5.5 0 00.11-.65l-2-3.46a.5.5 0 00-.61-.22l-2.49 1a7.007 7.007 0 00-1.69-.98l-.38-2.65a.5.5 0 00-.5-.42h-4a.5.5 0 00-.5.42l-.38 2.65a7.007 7.007 0 00-1.69.98l-2.49-1a.5.5 0 00-.61.22l-2 3.46a.5.5 0 00.11.65l2.11 1.65a7.07 7.07 0 000 1.96L2.07 14.63a.5.5 0 00-.11.65l2 3.46a.5.5 0 00.61.22l2.49-1c.52.39 1.09.72 1.69.98l.38 2.65a.5.5 0 00.5.42h4a.5.5 0 00.5-.42l.38-2.65a7.007 7.007 0 001.69-.98l2.49 1a.5.5 0 00.61-.22l2-3.46a.5.5 0 00-.11-.65l-2.11-1.65zM12 15a3 3 0 113-3 3.003 3.003 0 01-3 3z"/></svg>
-                <span>Configurações</span>
-            </a>
-        </li>
+ <span>Configurações</span>
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="{% url 'pet_registration:register_lost_pet' %}">Cadastro Pet</a></li>
+                            <li><a class="dropdown-item" href="{% url 'notifications:chat' %}">Chat</a></li>
+                            <li><a class="dropdown-item" href="{% url 'pet_registration:user_pets_list' %}">Pets do Usuário</a></li>
+                            <li><a class="dropdown-item" href="{% url 'pet_registration:register_adoption_pet' %}">Cadastro Adoção</a></li>
+                            <li><a class="dropdown-item" href="{% url 'pet_registration:register_breeding_pet' %}">Cadastro Reprodução</a></li>
+                            <li><a class="dropdown-item" href="{% url 'accounts:profile' %}">Perfil</a></li>
+                            <li><a class="dropdown-item" href="#">Configurações</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="{% url 'accounts:logout' %}">Sair</a></li>
+                        </ul>
+                    </li>
+
+
+
+
+
+
+
     </ul>
 </div>
+
+
+
+
+
+
 <!-- POPUPS -->
 <div id="popup-cadastro" class="popup">
     <button class="close-btn" onclick="closePopups()" aria-label="Fechar popup">&times;</button>

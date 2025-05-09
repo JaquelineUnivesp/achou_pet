@@ -1,311 +1,277 @@
-
 {% if request.user.is_authenticated %}
 <style>
-    #sidebar {
-        width: 72px;
-        transition: width 0.3s ease;
-        background-color: white;
-        height: 100vh;
-        position: fixed;
-        top: 0;
-        left: 0;
-        border-right: 1px solid #ddd;
-        z-index: 1000;
-        overflow-x: hidden;
-        display: block;
-        padding: 0px!important;
-        border-radius: 0px!important;
-    }
-
-    #sidebar:hover {
-        width: 220px;
-    }
-
-    #sidebar .nav-link {
-        display: flex;
-        align-items: center;
-        color: #333;
-        padding: 15px;
-        transition: background 0.2s;
-        white-space: nowrap;
-        overflow: hidden;
-    }
-
-    #sidebar .nav-link:hover {
-        background-color: #f4f4f4;
-    }
-
-    #sidebar svg, #sidebar img {
-        flex-shrink: 0;
-        width: 24px;
-        height: 24px;
-        fill: #333;
-    }
-
-    #sidebar:hover svg {
-        margin-right: 12px;
-    }
-
-    #sidebar .nav-link span {
-        opacity: 0;
-        transition: opacity 0.3s;
-        margin-left: 8px;
-    }
-
-    #sidebar:hover .nav-link span {
-        opacity: 1;
-    }
-
-    @media (max-width: 768px) {
-        #sidebar {
-            position: fixed;
-            bottom: 0;
-            top: auto !important;
-            height: auto !important;
-            width: 100% !important;
-            border-top: 1px solid #444;
-            border-right: none;
-            display: flex !important;
-            flex-direction: row !important;
-            justify-content: space-around !important;
-            transition: none !important;
-            background-color: white;
-        }
-
-        #sidebar:hover {
-            width: 100% !important;
-        }
-
-        #sidebar .nav-pills {
-            flex-direction: row !important;
-            width: 100% !important;
-            justify-content: space-around;
-            align-items: center;
-        }
-
-        #sidebar .nav-item {
-            flex-grow: 1;
-            text-align: center;
-        }
-
-        #sidebar .nav-link {
-            flex-direction: column;
-            justify-content: center;
-            padding: 10px 0;
-            color: #333 !important;
-        }
-
-        #sidebar .nav-link svg {
-            width: 30px;
-            height: 30px;
-            fill: #333 !important;
-        }
-
-        #sidebar .nav-link span {
-            display: none;
-        }
-
-        .hidden-mobile {
-            display: none !important;
-        }
-
-        .mobile-only {
-            display: block !important;
-        }
-    }
-
-    .popup {
-        display: none;
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        background: white;
-        border: 1px solid #ccc;
-        border-radius: 8px;
-        padding: 20px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-        z-index: 1100;
-        max-width: 90%;
-        width: 300px;
-        animation: fadeIn 0.3s ease;
-    }
-
-    .popup.active {
-        display: block;
-    }
-
-    @keyframes fadeIn {
-        from { opacity: 0; transform: translate(-50%, -60%); }
-        to { opacity: 1; transform: translate(-50%, -50%); }
-    }
-
-    .popup h5 {
-        margin-bottom: 15px;
-        font-size: 1.2rem;
-        text-align: center;
-    }
-
-    .popup button {
-        display: block;
-        width: 100%;
-        margin-bottom: 10px;
-        padding: 10px;
-        background-color: #FF5722;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        font-size: 1rem;
-        transition: background-color 0.3s;
-    }
-
-    .popup button:hover {
-        background-color: #e64a19;
-    }
-
-    .popup .close-btn {
-        position: absolute;
-        top: 10px;
-        right: 10px;
-        background: transparent;
-        border: none;
-        font-size: 1.2rem;
-        cursor: pointer;
-    }
+   #sidebar {
+   width: 72px;
+   transition: width 0.3s ease;
+   background-color: white;
+   height: 100vh;
+   position: fixed;
+   top: 0;
+   left: 0;
+   border-right: 1px solid #ddd;
+   z-index: 1000;
+   overflow-x: hidden;
+   display: block;
+   padding: 0px!important;
+   border-radius: 0px!important;
+   }
+   #sidebar:hover {
+   width: 220px;
+   }
+   #sidebar .nav-link {
+   display: flex;
+   align-items: center;
+   color: #333;
+   padding: 15px;
+   transition: background 0.2s;
+   white-space: nowrap;
+   overflow: hidden;
+   }
+   #sidebar .nav-link:hover {
+   background-color: #f4f4f4;
+   }
+   #sidebar svg, #sidebar img {
+   flex-shrink: 0;
+   width: 24px;
+   height: 24px;
+   fill: #333;
+   }
+   #sidebar:hover svg {
+   margin-right: 12px;
+   }
+   #sidebar .nav-link span {
+   opacity: 0;
+   transition: opacity 0.3s;
+   margin-left: 8px;
+   }
+   #sidebar:hover .nav-link span {
+   opacity: 1;
+   }
+   @media (max-width: 768px) {
+   #sidebar {
+   position: fixed;
+   bottom: 0;
+   top: auto !important;
+   height: auto !important;
+   width: 100% !important;
+   border-top: 1px solid #444;
+   border-right: none;
+   display: flex !important;
+   flex-direction: row !important;
+   justify-content: space-around !important;
+   transition: none !important;
+   background-color: white;
+   }
+   #sidebar:hover {
+   width: 100% !important;
+   }
+   #sidebar .nav-pills {
+   flex-direction: row !important;
+   width: 100% !important;
+   justify-content: space-around;
+   align-items: center;
+   }
+   #sidebar .nav-item {
+   flex-grow: 1;
+   text-align: center;
+   }
+   #sidebar .nav-link {
+   flex-direction: column;
+   justify-content: center;
+   padding: 10px 0;
+   color: #333 !important;
+   }
+   #sidebar .nav-link svg {
+   width: 30px;
+   height: 30px;
+   fill: #333 !important;
+   }
+   #sidebar .nav-link span {
+   display: none;
+   }
+   .hidden-mobile {
+   display: none !important;
+   }
+   .mobile-only {
+   display: block !important;
+   }
+   }
+   .popup {
+   display: none;
+   position: fixed;
+   top: 50%;
+   left: 50%;
+   transform: translate(-50%, -50%);
+   background: white;
+   border: 1px solid #ccc;
+   border-radius: 8px;
+   padding: 20px;
+   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+   z-index: 1100;
+   max-width: 90%;
+   width: 300px;
+   animation: fadeIn 0.3s ease;
+   }
+   .popup.active {
+   display: block;
+   }
+   @keyframes fadeIn {
+   from { opacity: 0; transform: translate(-50%, -60%); }
+   to { opacity: 1; transform: translate(-50%, -50%); }
+   }
+   .popup h5 {
+   margin-bottom: 15px;
+   font-size: 1.2rem;
+   text-align: center;
+   }
+   .popup button {
+   display: block;
+   width: 100%;
+   margin-bottom: 10px;
+   padding: 10px;
+   background-color: #FF5722;
+   color: white;
+   border: none;
+   border-radius: 5px;
+   cursor: pointer;
+   font-size: 1rem;
+   transition: background-color 0.3s;
+   }
+   .popup button:hover {
+   background-color: #e64a19;
+   }
+   .popup .close-btn {
+   position: absolute;
+   top: 10px;
+   right: 10px;
+   background: transparent;
+   border: none;
+   font-size: 1.2rem;
+   cursor: pointer;
+   }
 </style>
-
-
 <div id="sidebar">
-    <ul class="nav nav-pills mb-auto">
-        <li class="nav-item mobile-only ">
-            <a class="nav-link" href="{% url 'home' %}">
+   <ul class="nav nav-pills mb-auto">
+      <li class="nav-item mobile-only ">
+         <a class="nav-link" href="{% url 'home' %}">
+            <svg xmlns="http://www.w3.org/2000/svg" id="Outline" viewBox="0 0 24 24" width="512" height="512">
+               <path d="M23.121,9.069,15.536,1.483a5.008,5.008,0,0,0-7.072,0L.879,9.069A2.978,2.978,0,0,0,0,11.19v9.817a3,3,0,0,0,3,3H21a3,3,0,0,0,3-3V11.19A2.978,2.978,0,0,0,23.121,9.069ZM15,22.007H9V18.073a3,3,0,0,1,6,0Zm7-1a1,1,0,0,1-1,1H17V18.073a5,5,0,0,0-10,0v3.934H3a1,1,0,0,1-1-1V11.19a1.008,1.008,0,0,1,.293-.707L9.878,2.9a3.008,3.008,0,0,1,4.244,0l7.585,7.586A1.008,1.008,0,0,1,22,11.19Z"/>
+            </svg>
+            <span>Home</span>
+         </a>
+      </li>
+      <li class="nav-item hidden-mobile ">
+         <a href="{% url 'pet_registration:user_pets_list' %}" class="nav-link">
+            <svg xmlns="http://www.w3.org/2000/svg" id="Layer_1" data-name="Layer 1" viewBox="0 0 24 24">
+               <path d="m20.976,19.05l.192.315-.339,2.111c-.235,1.462-1.48,2.524-2.962,2.524h-4.867v-2h4.867c.494,0,.909-.354.987-.841l.223-1.385c-.534-.897-1.104-1.961-1.175-2.516-.14-1.106-.662-1.792-1.747-2.295-.059-.027-1.905-.963-2.604-.963-.798,0-1.256.22-1.261.222-3.243,1.909-6.29,4.437-6.29,9.778h-2c0-6.4,3.916-9.523,7.327-11.529.061-.033.292-.152.673-.262v-.209c0-1.657,1.343-3,3-3v3.271c.726.237,1.996.878,1.996.878,1.693.784,2.666,2.083,2.891,3.858.062.245.626,1.285,1.089,2.043Zm.297-13.05c-.829,0-1.609-.365-2.14-1.002l-.229-.275c-.912-1.094-2.251-1.722-3.676-1.722h-1.227V0c-1.657,0-3,1.343-3,3v.706l-4.046,6.294H0v2h8.046l4.5-7h2.681c.829,0,1.609.365,2.14,1.002l.229.275c.912,1.094,2.251,1.722,3.676,1.722h.727v2c0,1.103-.897,2-2,2h-1.001c.762.52,1.385,1.158,1.858,1.902,1.794-.394,3.143-1.992,3.143-3.902v-4h-2.727Z"/>
+            </svg>
+            <span>Meus Pets</span>
+         </a>
+      </li>
+      <li class="nav-item mobile-only ">
+         <a class="nav-link" data-popup="busca">
+            <svg xmlns="http://www.w3.org/2000/svg" id="Outline" viewBox="0 0 24 24" width="512" height="512">
+               <path d="M23.707,22.293l-5.969-5.969a10.016,10.016,0,1,0-1.414,1.414l5.969,5.969a1,1,0,0,0,1.414-1.414ZM10,18a8,8,0,1,1,8-8A8.009,8.009,0,0,1,10,18Z"/>
+            </svg>
+            <span>Busca</span>
+         </a>
+      </li>
+      <li class="nav-item mobile-only ">
+         <a class="nav-link" data-popup="cadastro">
+            <svg xmlns="http://www.w3.org/2000/svg" id="Layer_1" data-name="Layer 1" viewBox="0 0 24 24">
+               <path d="m14.998,14.883c0,.51-.202,1.117-1.166,1.117-.272-.012-.541-.059-.8-.139-.67-.211-1.397-.211-2.068,0-1.099.363-2.007.006-1.966-.978.002-1.455,1.487-2.883,3-2.883s2.998,1.428,2.998,2.883Zm.573-4.863c-.514-.061-.98.425-1.06,1.304-.163,2.075,1.623,2.346,1.862.222.08-.878-.287-1.464-.801-1.526Zm-7.258,0c-.514.061-.882.647-.802,1.526.239,2.124,2.024,1.852,1.862-.222-.081-.879-.546-1.365-1.06-1.304Zm3.29-.711c-.082-.879-.546-1.365-1.061-1.304-.516.061-.881.647-.8,1.526.239,2.125,2.025,1.852,1.861-.222Zm2.645.222c.08-.878-.288-1.464-.802-1.526-.514-.061-.98.425-1.06,1.304-.163,2.076,1.623,2.346,1.862.222Zm9.752-1.742c0,4.885-5.546,11.17-9.273,14.203-.82.667-1.824,1.001-2.827,1.001-1.009,0-2.018-.338-2.839-1.013C5.558,19.099,0,12.699,0,7.79,0,4.046,3.033,1,6.762,1c2.048,0,3.948.91,5.238,2.503,1.291-1.593,3.19-2.503,5.238-2.503,3.729,0,6.762,3.046,6.762,6.79Zm-2,0c0-2.641-2.136-4.79-4.762-4.79-1.478,0-2.847.675-3.757,1.854-.715.928-2.247.928-2.963,0-.91-1.178-2.279-1.853-3.756-1.853-2.625,0-4.762,2.148-4.762,4.79,0,3.996,4.872,9.801,8.331,12.646.919.756,2.208.758,3.134.005,4.138-3.366,8.535-8.944,8.535-12.651Z"/>
+            </svg>
+            <span>Cadastro</span>
+         </a>
+      </li>
+      <li class="nav-item mobile-only ">
+         <a class="nav-link" href="{% url 'notifications:notifications' %}">
+            <svg xmlns="http://www.w3.org/2000/svg" id="Layer_1" data-name="Layer 1" viewBox="0 0 24 24">
+               <path d="m20,8c2.206,0,4-1.794,4-4s-1.794-4-4-4-4,1.794-4,4,1.794,4,4,4Zm0-6c1.103,0,2,.897,2,2s-.897,2-2,2-2-.897-2-2,.897-2,2-2Zm1.868,8.301c-.127-.538-.675-.869-1.202-.745-.538.127-.871.665-.745,1.202l1.057,4.489c.184.658.051,1.348-.365,1.893-.419.547-1.056.86-1.748.86H5.135c-.67,0-1.294-.297-1.712-.815-.417-.517-.573-1.183-.439-1.786l2.094-7.777c.74-3.31,3.642-5.621,7.056-5.621.43,0,.859.038,1.275.114.551.098,1.064-.264,1.163-.806.099-.544-.263-1.064-.806-1.163-.534-.097-1.083-.146-1.633-.146C7.776,0,4.072,2.955,3.136,7.144l-2.094,7.776c-.278,1.244.022,2.527.824,3.521.799.991,1.991,1.56,3.269,1.56h1.966c.465,2.279,2.484,4,4.899,4s4.434-1.721,4.899-4h1.965c1.32,0,2.537-.6,3.337-1.646.801-1.048,1.057-2.377.713-3.605l-1.046-4.448Zm-9.868,11.699c-1.302,0-2.402-.839-2.816-2h5.631c-.414,1.161-1.514,2-2.816,2Z"/>
+            </svg>
+            <span>Notificações</span>
+         </a>
+      </li>
+      <li class="nav-item hidden-mobile">
+         <a class="nav-link" href="{% url 'notifications:chat' %}">
+            <svg xmlns="http://www.w3.org/2000/svg" id="Layer_1" data-name="Layer 1" viewBox="0 0 24 24" width="512" height="512">
+               <path d="m12,0C5.383,0,0,5.383,0,12s5.383,12,12,12h12v-12C24,5.383,18.617,0,12,0Zm10,22h-10c-5.514,0-10-4.486-10-10S6.486,2,12,2s10,4.486,10,10v10Zm-8.5-10c0,.828-.672,1.5-1.5,1.5s-1.5-.672-1.5-1.5.672-1.5,1.5-1.5,1.5.672,1.5,1.5Zm5,0c0,.828-.672,1.5-1.5,1.5s-1.5-.672-1.5-1.5.672-1.5,1.5-1.5,1.5.672,1.5,1.5Zm-10,0c0,.828-.672,1.5-1.5,1.5s-1.5-.672-1.5-1.5.672-1.5,1.5-1.5,1.5.672,1.5,1.5Z"/>
+            </svg>
+            <span>Mensagens</span>
+         </a>
+      </li>
 
-<svg xmlns="http://www.w3.org/2000/svg" id="Outline" viewBox="0 0 24 24" width="512" height="512">
-  <path d="M23.121,9.069,15.536,1.483a5.008,5.008,0,0,0-7.072,0L.879,9.069A2.978,2.978,0,0,0,0,11.19v9.817a3,3,0,0,0,3,3H21a3,3,0,0,0,3-3V11.19A2.978,2.978,0,0,0,23.121,9.069ZM15,22.007H9V18.073a3,3,0,0,1,6,0Zm7-1a1,1,0,0,1-1,1H17V18.073a5,5,0,0,0-10,0v3.934H3a1,1,0,0,1-1-1V11.19a1.008,1.008,0,0,1,.293-.707L9.878,2.9a3.008,3.008,0,0,1,4.244,0l7.585,7.586A1.008,1.008,0,0,1,22,11.19Z"/>
-</svg>
+   </ul>
+   <nav class="navbar bg-body-tertiary" aria-label="Light offcanvas navbar">
+      <div class="container-fluid">
+         <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbarLight" aria-controls="offcanvasNavbarLight" aria-label="Toggle navigation">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+               <path d="M19.43 12.98a7.07 7.07 0 000-1.96l2.11-1.65a.5.5 0 00.11-.65l-2-3.46a.5.5 0 00-.61-.22l-2.49 1a7.007 7.007 0 00-1.69-.98l-.38-2.65a.5.5 0 00-.5-.42h-4a.5.5 0 00-.5.42l-.38 2.65a7.007 7.007 0 00-1.69.98l-2.49-1a.5.5 0 00-.61.22l-2 3.46a.5.5 0 00.11.65l2.11 1.65a7.07 7.07 0 000 1.96L2.07 14.63a.5.5 0 00-.11.65l2 3.46a.5.5 0 00.61.22l2.49-1c.52.39 1.09.72 1.69.98l.38 2.65a.5.5 0 00.5.42h4a.5.5 0 00.5-.42l.38-2.65a7.007 7.007 0 001.69-.98l2.49 1a.5.5 0 00.61-.22l2-3.46a.5.5 0 00-.11-.65l-2.11-1.65zM12 15a3 3 0 113-3 3.003 3.003 0 01-3 3z"/>
+            </svg>
+         </button>
+         <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbarLight" aria-labelledby="offcanvasNavbarLightLabel">
+            <div class="offcanvas-header">
+               <h5 class="offcanvas-title" id="offcanvasNavbarLightLabel">Configurações</h5>
+               <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
+               <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+                  <li><a class="dropdown-item" href="{% url 'pet_registration:register_lost_pet' %}">Cadastro Pet</a></li>
+                  <li><a class="dropdown-item" href="{% url 'notifications:chat' %}">Chat</a></li>
+                  <li><a class="dropdown-item" href="{% url 'pet_registration:user_pets_list' %}">Pets do Usuário</a></li>
+                  <li><a class="dropdown-item" href="{% url 'pet_registration:register_adoption_pet' %}">Cadastro Adoção</a></li>
+                  <li><a class="dropdown-item" href="{% url 'pet_registration:register_breeding_pet' %}">Cadastro Reprodução</a></li>
+                  <li><a class="dropdown-item" href="{% url 'accounts:profile' %}">Perfil</a></li>
 
-                <span>Home</span>
-            </a>
-        </li>
-                <li class="nav-item hidden-mobile ">
-
-                 <a href="{% url 'pet_registration:user_pets_list' %}" class="nav-link">
-
-<svg xmlns="http://www.w3.org/2000/svg" id="Layer_1" data-name="Layer 1" viewBox="0 0 24 24">
-  <path d="m20.976,19.05l.192.315-.339,2.111c-.235,1.462-1.48,2.524-2.962,2.524h-4.867v-2h4.867c.494,0,.909-.354.987-.841l.223-1.385c-.534-.897-1.104-1.961-1.175-2.516-.14-1.106-.662-1.792-1.747-2.295-.059-.027-1.905-.963-2.604-.963-.798,0-1.256.22-1.261.222-3.243,1.909-6.29,4.437-6.29,9.778h-2c0-6.4,3.916-9.523,7.327-11.529.061-.033.292-.152.673-.262v-.209c0-1.657,1.343-3,3-3v3.271c.726.237,1.996.878,1.996.878,1.693.784,2.666,2.083,2.891,3.858.062.245.626,1.285,1.089,2.043Zm.297-13.05c-.829,0-1.609-.365-2.14-1.002l-.229-.275c-.912-1.094-2.251-1.722-3.676-1.722h-1.227V0c-1.657,0-3,1.343-3,3v.706l-4.046,6.294H0v2h8.046l4.5-7h2.681c.829,0,1.609.365,2.14,1.002l.229.275c.912,1.094,2.251,1.722,3.676,1.722h.727v2c0,1.103-.897,2-2,2h-1.001c.762.52,1.385,1.158,1.858,1.902,1.794-.394,3.143-1.992,3.143-3.902v-4h-2.727Z"/>
-</svg>
-
-
-                <span>Meus Pets</span>
-            </a>
-        </li>
-        <li class="nav-item mobile-only ">
-            <a class="nav-link" data-popup="busca">
-<svg xmlns="http://www.w3.org/2000/svg" id="Outline" viewBox="0 0 24 24" width="512" height="512">
-  <path d="M23.707,22.293l-5.969-5.969a10.016,10.016,0,1,0-1.414,1.414l5.969,5.969a1,1,0,0,0,1.414-1.414ZM10,18a8,8,0,1,1,8-8A8.009,8.009,0,0,1,10,18Z"/>
-</svg>
-                <span>Busca</span>
-            </a>
-        </li>
-        <li class="nav-item mobile-only ">
-           <a class="nav-link" data-popup="cadastro">
-<svg xmlns="http://www.w3.org/2000/svg" id="Layer_1" data-name="Layer 1" viewBox="0 0 24 24">
-  <path d="m14.998,14.883c0,.51-.202,1.117-1.166,1.117-.272-.012-.541-.059-.8-.139-.67-.211-1.397-.211-2.068,0-1.099.363-2.007.006-1.966-.978.002-1.455,1.487-2.883,3-2.883s2.998,1.428,2.998,2.883Zm.573-4.863c-.514-.061-.98.425-1.06,1.304-.163,2.075,1.623,2.346,1.862.222.08-.878-.287-1.464-.801-1.526Zm-7.258,0c-.514.061-.882.647-.802,1.526.239,2.124,2.024,1.852,1.862-.222-.081-.879-.546-1.365-1.06-1.304Zm3.29-.711c-.082-.879-.546-1.365-1.061-1.304-.516.061-.881.647-.8,1.526.239,2.125,2.025,1.852,1.861-.222Zm2.645.222c.08-.878-.288-1.464-.802-1.526-.514-.061-.98.425-1.06,1.304-.163,2.076,1.623,2.346,1.862.222Zm9.752-1.742c0,4.885-5.546,11.17-9.273,14.203-.82.667-1.824,1.001-2.827,1.001-1.009,0-2.018-.338-2.839-1.013C5.558,19.099,0,12.699,0,7.79,0,4.046,3.033,1,6.762,1c2.048,0,3.948.91,5.238,2.503,1.291-1.593,3.19-2.503,5.238-2.503,3.729,0,6.762,3.046,6.762,6.79Zm-2,0c0-2.641-2.136-4.79-4.762-4.79-1.478,0-2.847.675-3.757,1.854-.715.928-2.247.928-2.963,0-.91-1.178-2.279-1.853-3.756-1.853-2.625,0-4.762,2.148-4.762,4.79,0,3.996,4.872,9.801,8.331,12.646.919.756,2.208.758,3.134.005,4.138-3.366,8.535-8.944,8.535-12.651Z"/>
-</svg>
-                <span>Cadastro</span>
-            </a>
-        </li>
-        <li class="nav-item mobile-only ">
-           <a class="nav-link" href="{% url 'notifications:notifications' %}">
-<svg xmlns="http://www.w3.org/2000/svg" id="Layer_1" data-name="Layer 1" viewBox="0 0 24 24">
-  <path d="m20,8c2.206,0,4-1.794,4-4s-1.794-4-4-4-4,1.794-4,4,1.794,4,4,4Zm0-6c1.103,0,2,.897,2,2s-.897,2-2,2-2-.897-2-2,.897-2,2-2Zm1.868,8.301c-.127-.538-.675-.869-1.202-.745-.538.127-.871.665-.745,1.202l1.057,4.489c.184.658.051,1.348-.365,1.893-.419.547-1.056.86-1.748.86H5.135c-.67,0-1.294-.297-1.712-.815-.417-.517-.573-1.183-.439-1.786l2.094-7.777c.74-3.31,3.642-5.621,7.056-5.621.43,0,.859.038,1.275.114.551.098,1.064-.264,1.163-.806.099-.544-.263-1.064-.806-1.163-.534-.097-1.083-.146-1.633-.146C7.776,0,4.072,2.955,3.136,7.144l-2.094,7.776c-.278,1.244.022,2.527.824,3.521.799.991,1.991,1.56,3.269,1.56h1.966c.465,2.279,2.484,4,4.899,4s4.434-1.721,4.899-4h1.965c1.32,0,2.537-.6,3.337-1.646.801-1.048,1.057-2.377.713-3.605l-1.046-4.448Zm-9.868,11.699c-1.302,0-2.402-.839-2.816-2h5.631c-.414,1.161-1.514,2-2.816,2Z"/>
-</svg>                <span>Notificações</span>
-
-            </a>
-        </li>
-
-        <li class="nav-item hidden-mobile">
-            <a class="nav-link" href="{% url 'notifications:chat' %}">
-            <svg xmlns="http://www.w3.org/2000/svg" id="Layer_1" data-name="Layer 1" viewBox="0 0 24 24" width="512" height="512"><path d="m12,0C5.383,0,0,5.383,0,12s5.383,12,12,12h12v-12C24,5.383,18.617,0,12,0Zm10,22h-10c-5.514,0-10-4.486-10-10S6.486,2,12,2s10,4.486,10,10v10Zm-8.5-10c0,.828-.672,1.5-1.5,1.5s-1.5-.672-1.5-1.5.672-1.5,1.5-1.5,1.5.672,1.5,1.5Zm5,0c0,.828-.672,1.5-1.5,1.5s-1.5-.672-1.5-1.5.672-1.5,1.5-1.5,1.5.672,1.5,1.5Zm-10,0c0,.828-.672,1.5-1.5,1.5s-1.5-.672-1.5-1.5.672-1.5,1.5-1.5,1.5.672,1.5,1.5Z"/></svg>
-                <span>Mensagens</span>
-            </a>
-        </li>
-
-
-                            <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M19.43 12.98a7.07 7.07 0 000-1.96l2.11-1.65a.5.5 0 00.11-.65l-2-3.46a.5.5 0 00-.61-.22l-2.49 1a7.007 7.007 0 00-1.69-.98l-.38-2.65a.5.5 0 00-.5-.42h-4a.5.5 0 00-.5.42l-.38 2.65a7.007 7.007 0 00-1.69.98l-2.49-1a.5.5 0 00-.61.22l-2 3.46a.5.5 0 00.11.65l2.11 1.65a7.07 7.07 0 000 1.96L2.07 14.63a.5.5 0 00-.11.65l2 3.46a.5.5 0 00.61.22l2.49-1c.52.39 1.09.72 1.69.98l.38 2.65a.5.5 0 00.5.42h4a.5.5 0 00.5-.42l.38-2.65a7.007 7.007 0 001.69-.98l2.49 1a.5.5 0 00.61-.22l2-3.46a.5.5 0 00-.11-.65l-2.11-1.65zM12 15a3 3 0 113-3 3.003 3.003 0 01-3 3z"/></svg>
- <span>Configurações</span>
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="{% url 'pet_registration:register_lost_pet' %}">Cadastro Pet</a></li>
-                            <li><a class="dropdown-item" href="{% url 'notifications:chat' %}">Chat</a></li>
-                            <li><a class="dropdown-item" href="{% url 'pet_registration:user_pets_list' %}">Pets do Usuário</a></li>
-                            <li><a class="dropdown-item" href="{% url 'pet_registration:register_adoption_pet' %}">Cadastro Adoção</a></li>
-                            <li><a class="dropdown-item" href="{% url 'pet_registration:register_breeding_pet' %}">Cadastro Reprodução</a></li>
-                            <li><a class="dropdown-item" href="{% url 'accounts:profile' %}">Perfil</a></li>
-                            <li><a class="dropdown-item" href="#">Configurações</a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="{% url 'accounts:logout' %}">Sair</a></li>
-                        </ul>
-                    </li>
-
-
-
-
-
-
-
-    </ul>
+                  <li>
+                     <hr class="dropdown-divider">
+                  </li>
+                  <li><a class="dropdown-item" href="{% url 'accounts:logout' %}">Sair</a></li>
+               </ul>
+               <form class="d-flex mt-3" role="search"> <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"> <button class="btn btn-outline-success" type="submit">Search</button> </form>
+            </div>
+         </div>
+      </div>
+   </nav>
 </div>
-
-
-
-
-
-
 <!-- POPUPS -->
 <div id="popup-cadastro" class="popup">
-    <button class="close-btn" onclick="closePopups()" aria-label="Fechar popup">&times;</button>
-    <h5>Cadastro</h5>
-    <button onclick="window.location.href='{% url 'pet_registration:register_lost_pet' %}'">Cadastrar Pet Perdido</button>
-    <button onclick="window.location.href='{% url 'pet_registration:register_adoption_pet' %}'">Cadastrar para Adoção</button>
-    <button onclick="window.location.href='{% url 'pet_registration:register_breeding_pet' %}'">Cadastrar para Reprodução</button>
+   <button class="close-btn" onclick="closePopups()" aria-label="Fechar popup">&times;</button>
+   <h5>Cadastro</h5>
+   <button onclick="window.location.href='{% url 'pet_registration:register_lost_pet' %}'">Cadastrar Pet Perdido</button>
+   <button onclick="window.location.href='{% url 'pet_registration:register_adoption_pet' %}'">Cadastrar para Adoção</button>
+   <button onclick="window.location.href='{% url 'pet_registration:register_breeding_pet' %}'">Cadastrar para Reprodução</button>
 </div>
-
 <div id="popup-busca" class="popup">
-    <button class="close-btn" onclick="closePopups()" aria-label="Fechar popup">&times;</button>
-    <h5>Buscar</h5>
-    <button onclick="window.location.href='{% url 'search:lost_pets' %}'">Buscar Pets Perdidos</button>
-    <button onclick="window.location.href='{% url 'search:adoption_pets' %}'">Buscar para Adoção</button>
-    <button onclick="window.location.href='{% url 'search:breeding_pets' %}'">Buscar para Reprodução</button>
+   <button class="close-btn" onclick="closePopups()" aria-label="Fechar popup">&times;</button>
+   <h5>Buscar</h5>
+   <button onclick="window.location.href='{% url 'search:lost_pets' %}'">Buscar Pets Perdidos</button>
+   <button onclick="window.location.href='{% url 'search:adoption_pets' %}'">Buscar para Adoção</button>
+   <button onclick="window.location.href='{% url 'search:breeding_pets' %}'">Buscar para Reprodução</button>
 </div>
-
 <script>
-document.querySelectorAll('[data-popup]').forEach(link => {
-    link.addEventListener('click', e => {
-        e.preventDefault();
-        const popupId = link.dataset.popup;
-        closePopups();
-        const popup = document.getElementById(`popup-${popupId}`);
-        if (popup) {
-            popup.classList.add('active');
-        }
-    });
-});
+   document.querySelectorAll('[data-popup]').forEach(link => {
+       link.addEventListener('click', e => {
+           e.preventDefault();
+           const popupId = link.dataset.popup;
+           closePopups();
+           const popup = document.getElementById(`popup-${popupId}`);
+           if (popup) {
+               popup.classList.add('active');
+           }
+       });
+   });
 
-function closePopups() {
-    document.querySelectorAll('.popup').forEach(p => p.classList.remove('active'));
-}
+   function closePopups() {
+       document.querySelectorAll('.popup').forEach(p => p.classList.remove('active'));
+   }
 
-window.addEventListener('click', function(event) {
-    const isInsidePopup = event.target.closest('.popup');
-    const isPopupTrigger = event.target.closest('[data-popup]');
-    if (!isInsidePopup && !isPopupTrigger) {
-        closePopups();
-    }
-});
+   window.addEventListener('click', function(event) {
+       const isInsidePopup = event.target.closest('.popup');
+       const isPopupTrigger = event.target.closest('[data-popup]');
+       if (!isInsidePopup && !isPopupTrigger) {
+           closePopups();
+       }
+   });
 </script>
 {% endif %}

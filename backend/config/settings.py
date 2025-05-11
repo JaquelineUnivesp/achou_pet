@@ -184,6 +184,7 @@ CACHES = {
         'LOCATION': REDIS_URL,
         'OPTIONS': {
             'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+            'IGNORE_EXCEPTIONS': True,  # Isso evita que o site quebre se o Redis falhar
         }
     }
 }

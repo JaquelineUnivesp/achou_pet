@@ -9,7 +9,7 @@
 
 <div class="row">
   <div class="col-md-9">
-    <h1 class="display-1">Busca de Pets para <span class="color_project">Adoção</span></h1>
+    <h1 class="display-2">Busca de Pets para <span class="color_project">Adoção</span></h1>
     <p>Encontre o pet perfeito para você!</p>
   </div>
   <div class="col-md-3">
@@ -120,9 +120,8 @@
               <div class="card-body">
                 <h5 class="card-title">{{ pet.pet_name|default:"Pet sem nome" }}</h5>
                 <ul class="list-unstyled">
-                  <li><strong>Idade:</strong> {{ pet.approximate_age }}</li>
-                  <li><strong>Castrado:</strong> {{ pet.get_is_neutered_display }}</li>
-                  <li><strong>Vacinado:</strong> {{ pet.get_is_vaccinated_display }}</li>
+                  <li><strong>Sexo:</strong> {{ pet.approximate_age }}</li>
+                  <li><strong>Idade:</strong> {{ pet.sex }}</li>
                   <li><strong>Local:</strong> {{ pet.location|default:"Não informado" }}</li>
                 </ul>
               </div>

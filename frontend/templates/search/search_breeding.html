@@ -5,10 +5,12 @@
 
 
 
+    <!-- Mapa -->
+    <div id="map" style="height: 400px; width: 100%; margin-bottom: 20px; background-color: #e0e0e0;"></div>
 
         <div class="row">
         <div class="col-md-9">
- <h1 class="display-1 ">Busca de Pets para <span class="color_project">Reprodução</span></h1>
+ <h1 class="display-2 ">Busca de Pets para <span class="color_project">Reprodução</span></h1>
     <p class="">Encontre o parceiro ideal para seu pet!</p>
         </div>
         <div class="col-md-3 ">
@@ -29,8 +31,6 @@
 
 
 
-    <!-- Mapa -->
-    <div id="map" style="height: 400px; width: 100%; margin-bottom: 20px; background-color: #e0e0e0;"></div>
 
     <div class="search-container row">
         <!-- Sidebar com filtros -->
@@ -137,7 +137,7 @@
                 <h3>Resultados ({{ breeding_pets|length }})</h3>
                 <div class="row" id="pets-list">
                     {% for pet in breeding_pets %}
-                        <div class="col-md-4 mb-4 pet-item" data-lat="{{ pet.latitude }}" data-lng="{{ pet.longitude }}" data-location="{{ pet.location|default:'Não especificado' }}">
+                        <div class="col-md-3 mb-3 pet-item" data-lat="{{ pet.latitude }}" data-lng="{{ pet.longitude }}" data-location="{{ pet.location|default:'Não especificado' }}">
                             <div class="card h-100">
                                 {% if pet.photo_1 %}
                                     <img src="{{ pet.photo_1.url }}" class="card-img-top" alt="{{ pet.pet_name }}" style="height: 200px; object-fit: cover;">
@@ -152,12 +152,6 @@
                                         <li><strong>Espécie:</strong> {{ pet.get_species_display|default:"Não especificado" }}</li>
                                         <li><strong>Sexo:</strong> {{ pet.get_sex_display|default:"Não especificado" }}</li>
                                         <li><strong>Tamanho:</strong> {{ pet.get_size_by_age_display|default:"Não especificado" }}</li>
-                                        <li><strong>Idade:</strong> {{ pet.approximate_age|default:"Não especificada" }}</li>
-                                        <li><strong>Castrado:</strong> {{ pet.get_is_neutered_display }}</li>
-                                        <li><strong>Vacinado:</strong> {{ pet.get_is_vaccinated_display }}</li>
-                                        <li><strong>Pedigree:</strong> {{ pet.get_has_pedigree_display }}</li>
-                                        <li><strong>Já Cruzou:</strong> {{ pet.get_has_bred_before_display }}</li>
-                                        <li><strong>Divisão de Custos:</strong> {{ pet.cost_sharing|default:"Não especificado" }}</li>
                                         <li><strong>Local:</strong> <span class="pet-location" data-raw-location="{{ pet.location|default:'Não especificado' }}"></span></li>
                                     </ul>
                                 </div>

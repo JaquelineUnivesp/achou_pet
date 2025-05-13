@@ -22,7 +22,7 @@
 
 
 <div class="search-container row">
-  <aside class="sidebar col-md-3">
+  <aside class="col-md-3">
     <form method="GET" action="{% url 'search:adoption_pets' %}" class="p-3 border rounded" id="filter-form">
       {% csrf_token %}
       <div class="mb-3">
@@ -106,7 +106,7 @@
       <h3>Resultados ({{ adoption_pets|length }})</h3>
       <div class="row" id="pets-list">
         {% for pet in adoption_pets %}
-          <div class="col-md-4 mb-4 pet-item"
+          <div class="col-md-3 mb-3 pet-item"
                data-id="{{ pet.id }}"
                data-lat="{{ pet.latitude|floatformat:"6"|default:"" }}"
                data-lng="{{ pet.longitude|floatformat:"6"|default:"" }}"

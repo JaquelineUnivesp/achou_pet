@@ -33,23 +33,7 @@
 
             <ul class="navbar-nav ms-auto">
                 {% if user.is_authenticated %}
-                    <!-- Notificações -->
-                    <li class="nav-item position-relative">
-                        <a class="nav-link d-flex align-items-center" href="{% url 'notifications:notifications' %}">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-bell-fill" viewBox="0 0 16 16">
-                                <path d="M8 16a2 2 0 0 0 1.985-1.75H6.015A2 2 0 0 0 8 16zm.104-14a5 5 0 0 0-4.905 4.01c-.324 1.683-.882 3.058-1.588 4.148a1.007 1.007 0 0 0 .83 1.527h11.118a1.007 1.007 0 0 0 .83-1.527c-.706-1.09-1.264-2.465-1.588-4.148A5 5 0 0 0 8.104 2z"/>
-                            </svg>
-                            {% if unread_notifications_count > 0 %}
-                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                                    {{ unread_notifications_count }}
-                                    <span class="visually-hidden">notificações não lidas</span>
-                                </span>
-                            {% endif %}
-                        </a>
-                        <span class="t-12 d-block text-muted small text-center" style="font-size: 0.75rem;">
-                            Notificações
-                        </span>
-                    </li>
+
 
                     <!-- Menu do usuário -->
                     <li class="nav-item">

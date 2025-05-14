@@ -5,32 +5,15 @@
             <img src="{% static 'images/logo-3.svg' %}" alt="Logo Achou Pet" width="200">
         </a>
 
-        <ul>
-            <li class="nav-item hidden-mobile">
-         <a class="nav-link" href="{% url 'search:lost_pets' %}">
-            <span>Buscar pet perdido</span>
-         </a>
-      </li>
-
-                        <li class="nav-item hidden-mobile">
-         <a class="nav-link" href="{% url 'search:adoption_pets' %}">
-            <span>Buscar pet para Adoção</span>
-         </a>
-      </li>
 
 
-                                    <li class="nav-item hidden-mobile">
-         <a class="nav-link" href="{% url 'search:breeding_pets' %}">
-            <span>Buscar pet para Reprodução</span>
-         </a>
-      </li>
+        <ul class="nav nav-pills hidden-mobile">
 
-
-
-
-
-
+            <li class="nav-item"><a href="{% url 'search:lost_pets' %}" class="nav-link">Pet Perdido</a></li>
+            <li class="nav-item"><a href="{% url 'search:adoption_pets' %}" class="nav-link">Pet Adoção</a></li>
+            <li class="nav-item"><a href="{% url 'search:breeding_pets' %}" class="nav-link">Pet Reprodução</a></li>
         </ul>
+
 
 
 

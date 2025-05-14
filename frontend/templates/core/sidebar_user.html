@@ -216,12 +216,22 @@
             </div>
             <div class="offcanvas-body">
                <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
-                  <li><a class="dropdown-item" href="{% url 'pet_registration:register_lost_pet' %}">Cadastro Pet</a></li>
+                  <li><a class="dropdown-item" href="{% url 'accounts:profile' %}">Perfil</a></li>
+
                   <li><a class="dropdown-item" href="{% url 'notifications:chat' %}">Chat</a></li>
                   <li><a class="dropdown-item" href="{% url 'pet_registration:user_pets_list' %}">Pets do Usuário</a></li>
+                  <li>
+                     <hr class="dropdown-divider">
+                  </li>
+                  <li><a class="dropdown-item" href="{% url 'search:lost_pets' %}" >Pet Perdido</a></li>
+                  <li><a class="dropdown-item" href="{% url 'search:adoption_pets' %}" >Pet Adoção</a></li>
+                  <li><a class="dropdown-item" href="{% url 'search:breeding_pets' %}" >Pet Reprodução</a></li>
+                               <li>
+                     <hr class="dropdown-divider">
+                  </li>
+                  <li><a class="dropdown-item" href="{% url 'pet_registration:register_lost_pet' %}">Cadastro Pet</a></li>
                   <li><a class="dropdown-item" href="{% url 'pet_registration:register_adoption_pet' %}">Cadastro Adoção</a></li>
                   <li><a class="dropdown-item" href="{% url 'pet_registration:register_breeding_pet' %}">Cadastro Reprodução</a></li>
-                  <li><a class="dropdown-item" href="{% url 'accounts:profile' %}">Perfil</a></li>
 
                   <li>
                      <hr class="dropdown-divider">

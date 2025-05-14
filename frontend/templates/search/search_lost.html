@@ -3,6 +3,7 @@
 {% block title %}Buscar Pets Perdidos - Achou Pet{% endblock %}
 
 {% block content %}
+  <div id="map" style="height: 400px; width: 100%; margin-bottom: 20px; background-color: #e0e0e0;"></div>
 <div class="container mt-5">
   <!-- Cabeçalho -->
   <div class="row">
@@ -20,7 +21,7 @@
   </div>
 
   <!-- Mapa -->
-  <div id="map" style="height: 400px; width: 100%; margin-bottom: 20px; background-color: #e0e0e0;"></div>
+
 
   <div class="search-container row">
     <!-- Sidebar de Filtros -->
@@ -110,7 +111,7 @@
       <h3>Resultados ({{ lost_pets|length }})</h3>
       <div class="row" id="pets-list">
         {% for pet in lost_pets %}
-          <div class="col-md-4 mb-4 pet-item"
+          <div class="col-md-3 mb-3 pet-item"
                data-id="{{ pet.id }}"
                data-lat="{{ pet.latitude|floatformat:"6"|default:"" }}"
                data-lng="{{ pet.longitude|floatformat:"6"|default:"" }}"

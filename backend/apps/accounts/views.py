@@ -174,3 +174,12 @@ def edit_profile(request):
         'form': form,
         'user': user
     })
+
+
+from django.contrib.auth.views import PasswordResetView
+
+class CustomPasswordResetView(PasswordResetView):
+    template_name = 'account/password_reset.html'
+    success_url = '/accounts/password_reset/done/'
+    email_template_name = 'account/password_reset_email.html'
+    subject_template_name = 'account/password_reset_subject.txt'

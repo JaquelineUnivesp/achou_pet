@@ -128,10 +128,7 @@
                   <li><strong>Status:</strong> {{ pet.status|capfirst }}</li>
                   <li><strong>Espécie:</strong> {{ pet.species|capfirst }}</li>
                   <li><strong>Tamanho:</strong> {{ pet.size|capfirst }}</li>
-                  <li><strong>Raça:</strong> {{ pet.breed|default:"Não especificado" }}</li>
-                  <li><strong>Cor:</strong> {{ pet.color }}</li>
                   <li><strong>Sexo:</strong> {{ pet.sex|capfirst }}</li>
-                  <li><strong>Data de Perda:</strong> {{ pet.lost_date|date:"d \d\e F \d\e Y" }}</li>
                   <li><strong>Local:</strong> {{ pet.lost_location }}</li>
                 </ul>
                 <a href="{% url 'pet_registration:lost_pet_detail' pet_id=pet.id %}" class="btn btn-primary">Ver Detalhes</a>

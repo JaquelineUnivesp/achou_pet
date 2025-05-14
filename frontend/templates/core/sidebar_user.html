@@ -51,7 +51,7 @@
 
    .popup img { width: 40%;}
 
-   .popup span { width: 50%;}
+   .popup span { display: block; text-align: left;}
 
    #sidebar {
    position: fixed;
@@ -261,19 +261,19 @@
 
             <button class="btn btn-primary w-100" onclick="window.location.href='{% url 'pet_registration:register_lost_pet' %}'">
                 <img src="/static/images/pet-perdido.jpg" alt="" class="img-fluid mb-2">
-               <span>Cadastrar Pet Perdido</span>
+               <span>Cadastrar <br>Pet Perdido</span>
             </button>
         </div>
         <div class="col-12 col-md-4 mb-3">
             <button class="btn btn-primary w-100" onclick="window.location.href='{% url 'pet_registration:register_adoption_pet' %}'">
                <img src="/static/images/pet-adocao.jpg" alt="" class="img-fluid mb-2">
-               <span>Cadastrar para Adoção</span>
+               <span>Cadastrar <br>para Adoção</span>
             </button>
         </div>
         <div class="col-12 col-md-4 mb-3">
             <button class="btn btn-primary w-100" onclick="window.location.href='{% url 'pet_registration:register_breeding_pet' %}'">
                <img src="/static/images/pet-reproducao.jpg" alt="" class="img-fluid mb-2">
-               <span>Cadastrar para Reprodução</span>
+               <span>Cadastrar <br>para Reprodução</span>
             </button>
 
         </div>
@@ -288,19 +288,19 @@
         <div class="col-12 col-md-4 mb-3">
             <button class="btn btn-success w-100" onclick="window.location.href='{% url 'search:lost_pets' %}'">
                <img src="/static/images/pet-perdido.jpg" alt="" class="img-fluid mb-2">
-               <span>Buscar Pets Perdidos</span>
+               <span>Buscar <br>Pets Perdidos</span>
             </button>
         </div>
         <div class="col-12 col-md-4 mb-3">
             <button class="btn btn-success w-100" onclick="window.location.href='{% url 'search:adoption_pets' %}'">
                <img src="/static/images/pet-adocao.jpg" alt="" class="img-fluid mb-2">
-               <span>Buscar para Adoção</span>
+               <span>Buscar <br>para Adoção</span>
             </button>
         </div>
         <div class="col-12 col-md-4 mb-3">
             <button class="btn btn-success w-100" onclick="window.location.href='{% url 'search:breeding_pets' %}'">
                <img src="/static/images/pet-reproducao.jpg" alt="" class="img-fluid mb-2">
-               <span>Buscar para Reprodução</span>
+               <span>Buscar <br>para Reprodução</span>
             </button>
         </div>
     </div>

@@ -1,0 +1,120 @@
+{% load static %}
+{% csrf_token %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Achou Pet - Encontre pets perdidos, adote um amigo ou cadastre pets para reprodução. Conectamos pessoas que amam animais!">
+    <meta name="keywords" content="pets perdidos, adoção de animais, cadastro de pets, reprodução de pets, Achou Pet">
+    <meta name="author" content="Achou Pet">
+    <meta property="og:title" content="Achou Pet - Encontre, Adote, Conecte">
+    <meta property="og:description" content="Encontre pets perdidos, adote um amigo ou cadastre pets para reprodução. Conectamos pessoas que amam animais!">
+    <meta property="og:image" content="{% static 'images/achou_pet_logo_roxo.svg' %}">
+    <meta property="og:url" content="https://www.achoupet.com.br">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+
+    <link rel="icon" type="image/svg"  href="{% static 'images/favicon.svg' %}">
+    <title>Achou Pet - Encontre, Adote, Conecte</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+     <link rel="stylesheet" href="{% static 'css/custom.css' %}">
+
+    {% if request.user.is_authenticated %}
+
+    {% include "core/sidebar_user.html" %}
+
+
+
+
+
+
+    <script>
+const ws_scheme = window.location.protocol === "https:" ? "wss" : "ws";
+const ws = new WebSocket(ws_scheme + '://' + window.location.host + '/ws/chat/');
+
+
+      chatSocket.onmessage = function(event) {
+          const data = JSON.parse(event.data);
+          if (data.type === 'notification') {
+              const badge = document.querySelector('.nav-link .badge');
+              if (badge) {
+                  badge.innerText = parseInt(badge.innerText || 0) + 1;
+              } else {
+                  const link = document.querySelector('.nav-link[href$="/notifications/notifications/"]');
+                  if (link) {
+                      const span = document.createElement('span');
+                      span.className = "position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger";
+                      span.innerText = "1";
+                      link.appendChild(span);
+                  }
+              }
+
+              const list = document.getElementById('notifications-list');
+              if (list) {
+                  const newNotification = `
+                      <div class="alert alert-info">
+                          <p>${data.message} (${new Date().toLocaleString()})</p>
+                          <form method="post" style="display:inline;">
+                              <input type="hidden" name="notification_id" value="new">
+                              <button type="submit" name="mark_read" class="btn btn-sm btn-primary">Marcar como lida</button>
+                          </form>
+                      </div>`;
+                  list.insertAdjacentHTML('afterbegin', newNotification);
+              }
+          }
+      };
+
+      chatSocket.onclose = () => console.warn('WebSocket fechado');
+      chatSocket.onerror = e => console.error('Erro no WebSocket', e);
+    </script>
+    {% endif %}
+</head>
+<body>
+    {% include 'core/header.html' %}
+    <div class="row" style="padding-left: 30px ">
+        {% block content %}{% endblock %}
+    </div>
+
+    <footer class="footer p-5">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-6 text-center text-md-start mb-3 mb-md-0 ">
+                    <a href="{% url 'home' %}" class="text-decoration-none">
+                        <img src="{% static 'images/logo-branco.svg' %}" alt="Logo Achou Pet" width="150" class="mb-3">
+                    </a>
+                    <ul class="list-unstyled">
+                        <li><a href="{% url 'home' %}" class=" text-decoration-none">Home</a></li>
+                        <li><a href="{% url 'contato' %}" class=" text-decoration-none">Contato</a></li>
+                        <li><a href="{% url 'sobre' %}" class="text-decoration-none">Sobre</a></li>
+                        <li><a href="{% url 'como_funciona' %}" class="text-decoration-none">Como Funciona</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-6 text-center text-md-end">
+                   <p><a href="{% url 'privacidade' %}"  class="text-decoration-none" aria-label="Política de Privacidade">
+                        Termos de Privacidade
+                    </a></p>
+                    <p>
+                    <a href="{% url 'termos' %}" class="text-decoration-none" aria-label="Termos de Uso">
+                            Termos de Uso
+                    </a>
+                    </p>
+                     <p class="mb-0">&copy; 2025 Achou Pet. Todos os direitos reservados.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{% static 'js/api.js' %}"></script>
+</body>
+</html>

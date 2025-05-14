@@ -26,9 +26,10 @@
                      <p class="card-text">📍 {{ pet.lost_location }}</p>
                      <p class="card-text"><small class="text-muted">Data: {{ pet.lost_date|date:"d/m/Y" }}</small></p>
                      <div class="d-flex gap-2">
-                        <a href="{% url 'pet_registration:pet_detail' pet.id %}" class="btn btn-primary">Visualizar</a>
-                        <a href="{% url 'pet_registration:edit_pet' pet.id %}" class="btn btn-warning">Editar</a>
-                        <a href="{% url 'pet_registration:delete_pet' pet.id %}" class="btn btn-danger">Deletar</a>
+            <a href="{% url 'pet_registration:lost_pet_detail' pet.id %}" class="btn btn-primary">Visualizar</a>
+<a href="{% url 'pet_registration:edit_lost_pet' pet.id %}" class="btn btn-warning">Editar</a>
+<a href="{% url 'pet_registration:delete_lost_pet' pet.id %}" class="btn btn-danger">Deletar</a>
+
                      </div>
                   </div>
                </div>
@@ -93,6 +94,8 @@
                         <a href="{% url 'pet_registration:breeding_pet_detail' pet.id %}" class="btn btn-primary">Visualizar</a>
                         <a href="{% url 'pet_registration:edit_breeding_pet' pet.id %}" class="btn btn-warning">Editar</a>
                         <a href="{% url 'pet_registration:delete_breeding_pet' pet.id %}" class="btn btn-danger">Deletar</a>
+
+
                      </div>
                   </div>
                </div>

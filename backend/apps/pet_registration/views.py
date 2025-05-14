@@ -121,17 +121,15 @@ def user_pets_list(request):
 # Views para LostPet
 @login_required
 def pet_detail(request, pet_id):
-    # Obtendo o pet sem filtrar pelo usuário
-    pet = get_object_or_404(LostPet, id=pet_id)
-
-    # Verificando se o pet possui imagem
-    image_url = pet.photo_1.url if pet.photo_1 else None
-
-    context = {
-        'pet': pet,
-        'image_url': image_url
-    }
+    pet = get_object_or_404(LostPet.objects.select_related('owner'), id=pet_id)
+    context = {'pet': pet}
     return render(request, 'pet_registration/pet_detail.html', context)
+
+
+
+
+
+
 
 
 @login_required

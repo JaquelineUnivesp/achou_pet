@@ -49,7 +49,7 @@
    }
    @media (max-width: 768px) {
 
-   .popup img { width: 50%;}
+   .popup img { width: 40%;}
 
    #sidebar {
    position: fixed;
@@ -256,16 +256,20 @@
     <h5>Cadastro</h5>
     <div class="row text-center">
         <div class="col-12 col-md-4 mb-3">
-            <img src="/static/images/pet-perdido.jpg" alt="" class="img-fluid mb-2">
-            <button class="btn btn-primary w-100" onclick="window.location.href='{% url 'pet_registration:register_lost_pet' %}'">Cadastrar Pet Perdido</button>
+
+            <button class="btn btn-primary w-100" onclick="window.location.href='{% url 'pet_registration:register_lost_pet' %}'">
+                <img src="/static/images/pet-perdido.jpg" alt="" class="img-fluid mb-2">
+               Cadastrar Pet Perdido</button>
         </div>
         <div class="col-12 col-md-4 mb-3">
-            <img src="/static/images/pet-adocao.jpg" alt="" class="img-fluid mb-2">
-            <button class="btn btn-primary w-100" onclick="window.location.href='{% url 'pet_registration:register_adoption_pet' %}'">Cadastrar para Adoção</button>
+            <button class="btn btn-primary w-100" onclick="window.location.href='{% url 'pet_registration:register_adoption_pet' %}'">
+               <img src="/static/images/pet-adocao.jpg" alt="" class="img-fluid mb-2">
+               Cadastrar para Adoção</button>
         </div>
         <div class="col-12 col-md-4 mb-3">
-            <img src="/static/images/pet-reproducao.jpg" alt="" class="img-fluid mb-2">
-            <button class="btn btn-primary w-100" onclick="window.location.href='{% url 'pet_registration:register_breeding_pet' %}'">Cadastrar para Reprodução</button>
+            <button class="btn btn-primary w-100" onclick="window.location.href='{% url 'pet_registration:register_breeding_pet' %}'">
+               <img src="/static/images/pet-reproducao.jpg" alt="" class="img-fluid mb-2">
+               Cadastrar para Reprodução</button>
         </div>
     </div>
 </div>

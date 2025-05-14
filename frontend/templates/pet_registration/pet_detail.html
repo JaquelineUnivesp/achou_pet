@@ -103,7 +103,20 @@
 </div>
 {% endif %}
 
+<div class="mb-5">
+  {% if is_owner %}
+    <a href="{% url 'pet_registration:edit_lost_pet' pet.id %}" class="btn btn-primary me-2">
+      <i class="bi bi-pencil me-1"></i> Editar
+    </a>
+    <a href="{% url 'pet_registration:delete_lost_pet' pet.id %}" class="btn btn-danger me-2">
+      <i class="bi bi-trash me-1"></i> Deletar
+    </a>
+  {% endif %}
 
+  <a href="{% url 'pet_registration:user_pets_list' %}" class="btn btn-secondary">
+    <i class="bi bi-arrow-left me-1"></i> Voltar
+  </a>
+</div>
 
 </div>
 

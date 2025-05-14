@@ -174,5 +174,3 @@ def edit_profile(request):
         'form': form,
         'user': user
     })
-
-

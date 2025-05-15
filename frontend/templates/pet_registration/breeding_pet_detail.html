@@ -51,6 +51,14 @@
       <a href="https://wa.me/{{ pet.notification_phone|default:'5500000000000' }}" target="_blank" class="btn btn-success w-100 mt-3">
         <i class="bi bi-whatsapp me-2"></i>Enviar mensagem
       </a>
+            {% if request.user.is_authenticated and pet.owner and pet.owner.id != request.user.id %}
+        <a href="{% url 'notifications:chat_with_user' pet.owner.id %}" class="btn btn-outline-primary w-100 mt-2">
+          <i class="bi bi-chat-dots me-2"></i>Conversar por chat
+        </a>
+      {% endif %}
+
+
+
     </div>
   </div>
 

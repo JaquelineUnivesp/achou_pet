@@ -121,16 +121,17 @@ def user_pets_list(request):
 # Views para LostPet
 @login_required
 def pet_detail(request, pet_id):
-    pet = get_object_or_404(LostPet.objects.select_related('user'), id=pet_id)
-
-    # Verificar se o usuário logado é o dono do pet
-    is_owner = request.user == pet.user
+    pet = get_object_or_404(LostPet, id=pet_id)
+    is_authenticated = request.user.is_authenticated
 
     context = {
         'pet': pet,
-        'is_owner': is_owner
+        'is_authenticated': is_authenticated
     }
-    return render(request, 'pet_registration/pet_detail.html', context)
+    return render(request, 'pet_registration/lost_pet_detail.html', context)
+
+
+
 
 
 
@@ -164,8 +165,13 @@ def delete_pet(request, pet_id):
 # Views para PetAdoption
 @login_required
 def adoption_pet_detail(request, pet_id):
-    pet = get_object_or_404(PetAdoption.objects.select_related('owner'), id=pet_id)
-    context = {'pet': pet}
+    pet = get_object_or_404(PetAdoption, id=pet_id)
+    is_authenticated = request.user.is_authenticated
+
+    context = {
+        'pet': pet,
+        'is_authenticated': is_authenticated
+    }
     return render(request, 'pet_registration/adoption_pet_detail.html', context)
 
 @login_required
@@ -193,8 +199,13 @@ def delete_adoption_pet(request, pet_id):
 # Views para BreedingPet
 @login_required
 def breeding_pet_detail(request, pet_id):
-    pet = get_object_or_404(BreedingPet, id=pet_id, owner=request.user)
-    context = {'pet': pet}
+    pet = get_object_or_404(BreedingPet, id=pet_id)
+    is_authenticated = request.user.is_authenticated
+
+    context = {
+        'pet': pet,
+        'is_authenticated': is_authenticated
+    }
     return render(request, 'pet_registration/breeding_pet_detail.html', context)
 
 @login_required

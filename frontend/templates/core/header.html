@@ -1,6 +1,6 @@
 {% load static %}
-<nav class="navbar navbar-expand-lg" aria-label="Offcanvas navbar large">
-   <div class="container-fluid">
+<nav class="navbar navbar-expand-lg navbar-light bg-light" aria-label="Offcanvas navbar large">
+   <div class="container">
       <a class="navbar-brand" href="{% url 'home' %}">
          <img src="{% static 'images/logo-3.svg' %}" alt="Logo Achou Pet" width="200">
       </a>
@@ -14,9 +14,6 @@
          </div>
          <div class="offcanvas-body">
             <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
-               <li class="nav-item"><a class="nav-link" href="{% url 'home' %}">Home</a></li>
-               <li class="nav-item"><a class="nav-link" href="{% url 'como_funciona' %}">Como Funciona</a></li>
-               <li class="nav-item"><a class="nav-link" href="{% url 'sobre' %}">Sobre</a></li>
                <li class="nav-item"><a class="nav-link" href="{% url 'search:lost_pets' %}">Pets Perdidos</a></li>
                <li class="nav-item"><a class="nav-link" href="{% url 'search:adoption_pets' %}">Pets para Adoção</a></li>
                <li class="nav-item"><a class="nav-link" href="{% url 'search:breeding_pets' %}">Pets para Cruzamento</a></li>
@@ -55,3 +52,4 @@
 
 <!-- Bootstrap JS (garantir que está carregado corretamente) -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+

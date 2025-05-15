@@ -150,7 +150,7 @@
                                     <h5 class="card-title">{{ pet.pet_name|title|default:"Pet sem nome" }}</h5>
                                     <ul class="list-unstyled">
                                         <li><strong>Espécie:</strong> {{ pet.get_species_display|default:"Não especificado" }}</li>
-                                        <li><strong>Sexo:</strong> {{ pet.get_sex_display|default:"Não especificado" }}</li>
+                                        <li><strong>Tamanho:</strong> {{ pet.get_sex_display|default:"Não especificado" }}</li>
                                         <li><strong>Tamanho:</strong> {{ pet.get_size_by_age_display|default:"Não especificado" }}</li>
                                         <li><strong>Local:</strong> <span class="pet-location" data-raw-location="{{ pet.location|default:'Não especificado' }}"></span></li>
                                     </ul>

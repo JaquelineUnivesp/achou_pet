@@ -121,22 +121,16 @@ def user_pets_list(request):
 # Views para LostPet
 @login_required
 def pet_detail(request, pet_id):
-    pet = get_object_or_404(LostPet, id=pet_id)
-    is_authenticated = request.user.is_authenticated
+    pet = get_object_or_404(LostPet.objects.select_related('user'), id=pet_id)
+
+    # Verificar se o usuário logado é o dono do pet
+    is_owner = request.user == pet.user
 
     context = {
         'pet': pet,
-        'is_authenticated': is_authenticated
+        'is_owner': is_owner
     }
-    return render(request, 'pet_registration/lost_pet_detail.html', context)
-
-
-
-
-
-
-
-
+    return render(request, 'pet_registration/pet_detail.html', context)
 
 
 

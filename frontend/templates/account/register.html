@@ -3,132 +3,94 @@
 {% block title %}Cadastro - Achou Pet{% endblock %}
 
 {% block content %}
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-lg-8 col-xl-7">
-            <div class="card shadow border-0 p-4">
-                <div class="card-body">
-                    <h1 class="display-5 text-center color_project">Crie sua Conta</h1>
-                    <p class="text-muted text-center mb-4">Cadastre-se e comece a usar o Achou Pet</p>
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <div class="bg-white p-5 rounded-4 shadow-sm border">
+        <h2 class="text-center mb-2 fw-bold" style="font-size: 2.2rem;">Crie sua Conta</h2>
+        <p class="text-center text-muted mb-4">Cadastre-se e comece a usar o Achou Pet</p>
 
-{% if form.errors %}
-    <div class="alert alert-danger">
-        <strong>Erro ao cadastrar:</strong>
-        <ul class="mb-0 mt-2">
-            {% for field, errors in form.errors.items %}
+        {% if form.errors %}
+          <div class="alert alert-danger rounded-3">
+            <strong>Erro ao cadastrar:</strong>
+            <ul class="mb-0 mt-2">
+              {% for field, errors in form.errors.items %}
                 {% for error in errors %}
-                    <li><strong>{{ field|capfirst }}:</strong> {{ error }}</li>
+                  <li><strong>{{ field|capfirst }}:</strong> {{ error }}</li>
                 {% endfor %}
-            {% endfor %}
-        </ul>
-    </div>
-{% endif %}
+              {% endfor %}
+            </ul>
+          </div>
+        {% endif %}
 
-                    <form method="post" enctype="multipart/form-data">
-                        {% csrf_token %}
-                        <div class="row g-3">
-                            <div class="col-md-6">
-                                <label for="id_username" class="form-label">Usuário</label>
-                                {{ form.username }}
-                                {% if form.username.errors %}
-                                    <div class="text-danger small">{{ form.username.errors.0 }}</div>
-                                {% endif %}
-                            </div>
-
-                            <div class="col-md-6">
-                                <label for="id_email" class="form-label">E-mail</label>
-                                {{ form.email }}
-                                {% if form.email.errors %}
-                                    <div class="text-danger small">{{ form.email.errors.0 }}</div>
-                                {% endif %}
-                            </div>
-
-                            <div class="col-md-6">
-                                <label for="id_first_name" class="form-label">Nome</label>
-                                {{ form.first_name }}
-                                {% if form.first_name.errors %}
-                                    <div class="text-danger small">{{ form.first_name.errors.0 }}</div>
-                                {% endif %}
-                            </div>
-
-                            <div class="col-md-6">
-                                <label for="id_last_name" class="form-label">Sobrenome</label>
-                                {{ form.last_name }}
-                                {% if form.last_name.errors %}
-                                    <div class="text-danger small">{{ form.last_name.errors.0 }}</div>
-                                {% endif %}
-                            </div>
-
-                            <div class="col-md-6">
-                                <label for="id_notification_phone" class="form-label">Telefone</label>
-                                {{ form.notification_phone }}
-                                {% if form.notification_phone.errors %}
-                                    <div class="text-danger small">{{ form.notification_phone.errors.0 }}</div>
-                                {% endif %}
-                            </div>
-
-                            <div class="col-md-6">
-                                <label for="id_cpf" class="form-label">CPF</label>
-                                {{ form.cpf }}
-                                {% if form.cpf.errors %}
-                                    <div class="text-danger small">{{ form.cpf.errors.0 }}</div>
-                                {% endif %}
-                            </div>
-
-                            <div class="col-md-6">
-                                <label for="id_password" class="form-label">Senha</label>
-                                {{ form.password }}
-                                {% if form.password.errors %}
-                                    <div class="text-danger small">{{ form.password.errors.0 }}</div>
-                                {% endif %}
-                            </div>
-
-                            <div class="col-md-6">
-                                <label for="id_confirm_password" class="form-label">Confirmar senha</label>
-                                {{ form.confirm_password }}
-                                {% if form.confirm_password.errors %}
-                                    <div class="text-danger small">{{ form.confirm_password.errors.0 }}</div>
-                                {% endif %}
-                            </div>
-
-                            <div class="col-12">
-                                <label for="id_photo" class="form-label">Foto de Perfil</label>
-                                {{ form.photo }}
-                                {% if form.photo.errors %}
-                                    <div class="text-danger small">{{ form.photo.errors.0 }}</div>
-                                {% endif %}
-                            </div>
-
-                            <div class="col-12">
-                                <label class="form-label">Notificações</label>
-                                <div class="form-check form-check-inline">
-                                    {{ form.notify_chat }}
-                                    <label class="form-check-label" for="id_notify_chat">Chat</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    {{ form.notify_pet_found }}
-                                    <label class="form-check-label" for="id_notify_pet_found">Pet encontrado</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    {{ form.notify_other }}
-                                    <label class="form-check-label" for="id_notify_other">Outras</label>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="d-grid mt-4">
-                            <button type="submit" class="btn btn-lg btn-primary rounded-pill">
-                                Cadastrar
-                            </button>
-                        </div>
-                    </form>
-
-                    <p class="text-center mt-3">
-                        Já tem uma conta? <a href="{% url 'accounts:login' %}">Faça login</a>
-                    </p>
-                </div>
+        <form method="post" enctype="multipart/form-data">
+          {% csrf_token %}
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label for="id_username" class="form-label">Usuário</label>
+              {{ form.username|add_class:"form-control form-control-lg rounded-3" }}
             </div>
-        </div>
+            <div class="col-md-6">
+              <label for="id_email" class="form-label">E-mail</label>
+              {{ form.email|add_class:"form-control form-control-lg rounded-3" }}
+            </div>
+            <div class="col-md-6">
+              <label for="id_first_name" class="form-label">Nome</label>
+              {{ form.first_name|add_class:"form-control form-control-lg rounded-3" }}
+            </div>
+            <div class="col-md-6">
+              <label for="id_last_name" class="form-label">Sobrenome</label>
+              {{ form.last_name|add_class:"form-control form-control-lg rounded-3" }}
+            </div>
+            <div class="col-md-6">
+              <label for="id_notification_phone" class="form-label">Telefone</label>
+              {{ form.notification_phone|add_class:"form-control form-control-lg rounded-3" }}
+            </div>
+            <div class="col-md-6">
+              <label for="id_cpf" class="form-label">CPF</label>
+              {{ form.cpf|add_class:"form-control form-control-lg rounded-3" }}
+            </div>
+            <div class="col-md-6">
+              <label for="id_password" class="form-label">Senha</label>
+              {{ form.password|add_class:"form-control form-control-lg rounded-3" }}
+            </div>
+            <div class="col-md-6">
+              <label for="id_confirm_password" class="form-label">Confirmar Senha</label>
+              {{ form.confirm_password|add_class:"form-control form-control-lg rounded-3" }}
+            </div>
+            <div class="col-12">
+              <label for="id_photo" class="form-label">Foto de Perfil</label>
+              {{ form.photo|add_class:"form-control form-control-lg rounded-3" }}
+            </div>
+            <div class="col-12 mt-3">
+              <label class="form-label d-block mb-2">Notificações</label>
+              <div class="form-check form-check-inline">
+                {{ form.notify_chat }}
+                <label class="form-check-label ms-1" for="id_notify_chat">Chat</label>
+              </div>
+              <div class="form-check form-check-inline">
+                {{ form.notify_pet_found }}
+                <label class="form-check-label ms-1" for="id_notify_pet_found">Pet encontrado</label>
+              </div>
+              <div class="form-check form-check-inline">
+                {{ form.notify_other }}
+                <label class="form-check-label ms-1" for="id_notify_other">Outras</label>
+              </div>
+            </div>
+          </div>
+
+          <div class="d-grid mt-4">
+            <button type="submit" class="btn btn-lg rounded-pill text-white" style="background-color:#FF5722;">
+              Criar Conta
+            </button>
+          </div>
+        </form>
+
+        <p class="text-center mt-4">
+          Já tem uma conta? <a href="{% url 'accounts:login' %}">Faça login</a>
+        </p>
+      </div>
     </div>
+  </div>
 </div>
 {% endblock %}

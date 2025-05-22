@@ -33,17 +33,17 @@
     {% endif %}
   </div>
 
-  <!-- Status -->
+
   <div class="text-end mb-3">
-    <span class="badge bg-success fs-5">Para Adoção</span>
+    <span class="badge fs-5" style="  background-color: #F2CB05; border:#F2CB05;  color:#000; margin: 5px;">Para Adoção</span>
   </div>
 
-  <!-- Localização e Infos -->
+
   <div class="row">
-    <!-- Mapa -->
-    <div class="col-md-7 mb-4">
       <h5><strong>Última Localização</strong></h5>
       <p>{{ pet.location }}</p>
+    <div class="col-md-7 mb-4">
+
       <div id="map" style="height: 300px;" class="rounded shadow"></div>
     </div>
 

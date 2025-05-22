@@ -156,7 +156,7 @@
                                 </div>
                                 <div class="card-footer text-center">
 
-                                     <a href="{% url 'pet_registration:breeding_pet_detail' pet.id %}" class="btn btn-outline-primary btn-sm w-100 mt-2"  style="  background-color: #FF5722; border:#FF5722;">Ver detalhes</a>
+                                     <a href="{% url 'pet_registration:breeding_pet_detail' pet.id %}" class="btn btn-outline-primary btn-sm w-100 mt-2"  style="  background-color: #FF5722; border:#FF5722;  color:#FFF;">Ver detalhes</a>
                                 </div>
                             </div>
                         </div>
@@ -289,7 +289,7 @@
                         <br><br>
                         <h3>${pet.nome}</h3>
                         <strong>Endereço:</strong> ${formatAddress(pet.address) || 'Não especificado'}</p>
-                       <a href="/pet_registration/breeding_pet/${pet.id}/" class="btn btn-primary mt-2"  style="  background-color: #FF5722; border:#FF5722;">Ver detalhes</a>
+                       <a href="/pet_registration/breeding_pet/${pet.id}/" class="btn btn-primary mt-2"  style="  background-color: #FF5722; border:#FF5722;  color:#FFF;">Ver detalhes</a>
                     </div>
                 `;
                 marker.bindPopup(content);

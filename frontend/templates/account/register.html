@@ -6,8 +6,8 @@
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-lg-8 col-xl-7">
-            <div class="card shadow border-0 p-4">
-                <div class="card-body">
+            <div class=" p-4">
+                <div class="">
                     <h1 class="display-5 text-center color_project">Crie sua Conta</h1>
                     <p class="text-muted text-center mb-4">Cadastre-se e comece a usar o Achou Pet</p>
 
@@ -23,8 +23,10 @@
         </ul>
     </div>
 {% endif %}
-
-                    <form method="post" enctype="multipart/form-data">
+<style>
+    #cadastro input { width: 100%; padding: 5px; }
+</style>
+                    <form method="post" enctype="multipart/form-data" id="cadastro">
                         {% csrf_token %}
                         <div class="row g-3">
                             <div class="col-md-6">

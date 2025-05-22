@@ -13,7 +13,7 @@
     <p>Encontre o pet perfeito para você!</p>
   </div>
   <div class="col-md-3">
-    <button class="pill-button" style="  background-color: #F2CB05; border:#F2CB05;  color:#FFF;">
+    <button class="pill-button" style="  background-color: #F2CB05; border:#F2CB05;  color:#000;">
       <a href="{% url 'pet_registration:register_adoption_pet' %}" >Cadastrar Pet Adoção</a>
     </button>
   </div>
@@ -96,7 +96,7 @@
         <input type="number" name="distance" id="distance" value="{{ distance|default:'' }}" class="form-control" placeholder="Ex: 10">
       </div>
 
-      <button type="submit" class="btn btn-primary w-100" style="  background-color: #F2CB05; border:#F2CB05;  color:#FFF;">Filtrar</button>
+      <button type="submit" class="btn btn-primary w-100" style="  background-color: #F2CB05; border:#F2CB05;  color:#000;">Filtrar</button>
       <button type="button" class="btn btn-secondary w-100 mt-2" onclick="limparFiltros()">Limpar Filtros</button>
     </form>
   </aside>
@@ -189,7 +189,7 @@
             ${pet.imagem1 ? `<img src="${pet.imagem1}" style="width: 100%; height: 100px; object-fit: cover;">` : ''}
             <h3>${pet.nome}</h3>
             <strong>Endereço:</strong> ${pet.address || 'N/A'}</p>
-            <a href="/pet_registration/adoption_pet/${pet.id}/" class="btn btn-primary mt-2"  style="  background-color: #F2CB05; border:#F2CB05;  color:#FFF;"">Ver detalhes</a>
+            <a href="/pet_registration/adoption_pet/${pet.id}/" class="btn btn-primary mt-2"  style="  background-color: #F2CB05; border:#F2CB05;  color:#000;"">Ver detalhes</a>
           </div>`;
         L.marker([pet.latitude, pet.longitude], { icon }).addTo(map).bindPopup(popup);
       }

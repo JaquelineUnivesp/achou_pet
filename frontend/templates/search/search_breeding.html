@@ -150,14 +150,13 @@
                                     <h5 class="card-title">{{ pet.pet_name|title|default:"Pet sem nome" }}</h5>
                                     <ul class="list-unstyled">
                                         <li><strong>Espécie:</strong> {{ pet.get_species_display|default:"Não especificado" }}</li>
-                                        <li><strong>Tamanho:</strong> {{ pet.get_sex_display|default:"Não especificado" }}</li>
-                                        <li><strong>Tamanho:</strong> {{ pet.get_size_by_age_display|default:"Não especificado" }}</li>
+                                        <li><strong>Sexo:</strong> {{ pet.get_sex_display|default:"Não especificado" }}</li>
                                         <li><strong>Local:</strong> <span class="pet-location" data-raw-location="{{ pet.location|default:'Não especificado' }}"></span></li>
                                     </ul>
                                 </div>
                                 <div class="card-footer text-center">
 
-                                     <a href="{% url 'pet_registration:breeding_pet_detail' pet.id %}" class="btn btn-outline-primary btn-sm w-100 mt-2">Ver detalhes</a>
+                                     <a href="{% url 'pet_registration:breeding_pet_detail' pet.id %}" class="btn btn-outline-primary btn-sm w-100 mt-2"  style="  background-color: #FF5722; border:#FF5722;">Ver detalhes</a>
                                 </div>
                             </div>
                         </div>
@@ -289,12 +288,8 @@
                         ${pet.imagem1 ? `<img src="${pet.imagem1}" alt="Imagem do ${pet.nome}" style="width: 100%; height: 100px; object-fit: cover;">` : ''}
                         <br><br>
                         <h3>${pet.nome}</h3>
-                        <p><strong>Disponível desde ${dataFormatada}</strong><br>
-                        <strong>Espécie:</strong> ${pet.especie || 'Não especificada'}<br>
-                        <strong>Sexo:</strong> ${pet.sexo || 'Não especificado'}<br>
-                        <strong>Tamanho:</strong> ${pet.tamanho || 'Não especificado'}<br>
                         <strong>Endereço:</strong> ${formatAddress(pet.address) || 'Não especificado'}</p>
-                       <a href="/pet_registration/breeding_pet/${pet.id}/" class="btn btn-primary mt-2">Ver detalhes</a>
+                       <a href="/pet_registration/breeding_pet/${pet.id}/" class="btn btn-primary mt-2"  style="  background-color: #FF5722; border:#FF5722;">Ver detalhes</a>
                     </div>
                 `;
                 marker.bindPopup(content);

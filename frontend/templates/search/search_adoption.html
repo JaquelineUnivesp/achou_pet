@@ -120,13 +120,13 @@
               <div class="card-body">
                 <h5 class="card-title">{{ pet.pet_name|default:"Pet sem nome" }}</h5>
                 <ul class="list-unstyled">
-                  <li><strong>Sexo:</strong> {{ pet.approximate_age }}</li>
-                  <li><strong>Idade:</strong> {{ pet.sex }}</li>
+
+                  <li><strong>Sexo:</strong> {{ pet.sex }}</li>
                   <li><strong>Local:</strong> {{ pet.location|default:"Não informado" }}</li>
                 </ul>
               </div>
               <div class="card-footer text-center">
-                <a href="{% url 'pet_registration:adoption_pet_detail' pet.id %}" class="btn btn-outline-primary btn-sm w-100 mt-2">Ver detalhes</a>
+                <a href="{% url 'pet_registration:adoption_pet_detail' pet.id %}" class="btn btn-outline-primary btn-sm w-100 mt-2"  style="  background-color: #FF5722; border:#FF5722;">Ver detalhes</a>
               </div>
             </div>
           </div>
@@ -191,7 +191,7 @@
             <p><strong>Espécie:</strong> ${pet.especie || 'N/A'}<br>
             <strong>Sexo:</strong> ${pet.sexo || 'N/A'}<br>
             <strong>Endereço:</strong> ${pet.address || 'N/A'}</p>
-            <a href="/pet_registration/adoption_pet/${pet.id}/" class="btn btn-primary mt-2">Ver detalhes</a>
+            <a href="/pet_registration/adoption_pet/${pet.id}/" class="btn btn-primary mt-2"  style="  background-color: #FF5722; border:#FF5722;">Ver detalhes</a>
           </div>`;
         L.marker([pet.latitude, pet.longitude], { icon }).addTo(map).bindPopup(popup);
       }

@@ -101,7 +101,7 @@
         <label for="weight_max">Peso (máx)</label>
         <input type="number" name="weight_max" class="form-control mb-2" value="{{ weight_max }}">
 
-        <button type="submit" class="btn btn-primary mt-2 w-100">Filtrar</button>
+        <button type="submit" class="btn btn-primary mt-2 w-100" style="  background-color: #F2A649; border:#F2A649; color:#F2A649;">Filtrar</button>
         <a href="/search/lost/" class="btn btn-secondary mt-2 w-100">Limpar Filtros</a>
       </form>
     </aside>
@@ -177,7 +177,7 @@ document.addEventListener('DOMContentLoaded', function() {
             ${imagem ? `<img src="${imagem}" alt="${nome}" style="width:100%; height:120px; object-fit: cover; border-radius: 5px;" />` : ''}
             <h5 class="mt-2">${nome}</h5>
 
-            <a href="${popupUrl}" class="btn btn-outline-primary btn-sm"  style="  background-color: #FF5722; border:#FF5722; color:#FFF;">Ver detalhes</a>
+            <a href="${popupUrl}" class="btn btn-outline-primary btn-sm"  style="  background-color: #F2A649; border:#F2A649; color:#F2A649;">Ver detalhes</a>
           </div>
         `;
         L.marker([lat, lng], { icon: markerIcon }).addTo(map).bindPopup(content);

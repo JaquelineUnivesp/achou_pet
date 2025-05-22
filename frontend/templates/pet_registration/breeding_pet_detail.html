@@ -25,10 +25,16 @@
   </div>
 
   <div class="row">
-    <!-- Mapa -->
-    <div class="col-md-7 mb-4">
-      <h5><strong>Localização</strong></h5>
+<div class="text-end mb-3">
+    <span class="badge fs-5" style="  background-color: #e25d95; border:#e25d95;  color:#fff; margin: 5px;">Para Reprodução</span>
+  </div>
+
+
+        <h5><strong>Localização</strong></h5>
       <p>{{ pet.location|default:"Localização não informada" }}</p>
+
+    <div class="col-md-7 mb-4">
+
       <div id="map" style="height: 300px;" class="rounded shadow"></div>
     </div>
 

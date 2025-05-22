@@ -14,7 +14,7 @@
   </div>
   <div class="col-md-3">
     <button class="pill-button" style="  background-color: #F2CB05; border:#F2CB05;  color:#000;">
-      <a href="{% url 'pet_registration:register_adoption_pet' %}" >Cadastrar Pet Adoção</a>
+      <a href="{% url 'pet_registration:register_adoption_pet' %}" style="color:#000;">Cadastrar Pet Adoção</a>
     </button>
   </div>
 </div>
@@ -96,7 +96,7 @@
         <input type="number" name="distance" id="distance" value="{{ distance|default:'' }}" class="form-control" placeholder="Ex: 10">
       </div>
 
-      <button type="submit" class="btn btn-primary w-100" style="  background-color: #F2CB05; border:#F2CB05;  color:#000;">Filtrar</button>
+      <button type="submit" class="btn btn-primary w-100" style="  background-color: #F2CB05; border:#F2CB05;  color:#000;"><span style="color:#000;">Filtrar</span></button>
       <button type="button" class="btn btn-secondary w-100 mt-2" onclick="limparFiltros()">Limpar Filtros</button>
     </form>
   </aside>
@@ -126,7 +126,7 @@
                 </ul>
               </div>
               <div class="card-footer text-center">
-                <a href="{% url 'pet_registration:adoption_pet_detail' pet.id %}" class="btn btn-outline-primary btn-sm w-100 mt-2" style="  background-color: #F2CB05; border:#F2CB05;  color:#FFF;"">Ver detalhes</a>
+                <a href="{% url 'pet_registration:adoption_pet_detail' pet.id %}" class="btn btn-outline-primary btn-sm w-100 mt-2" style="  background-color: #F2CB05; border:#F2CB05;  color:#000;">Ver detalhes</a>
               </div>
             </div>
           </div>

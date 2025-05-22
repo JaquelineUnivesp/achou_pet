@@ -13,13 +13,13 @@
             <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
          </div>
          <div class="offcanvas-body">
-            <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
-               <li class="nav-item"><a class="nav-link" href="{% url 'search:lost_pets' %}" style="  background-color: #F2A649; border:#F2A649;  color:#FFF;">Pets Perdidos</a></li>
-               <li class="nav-item"><a class="nav-link" href="{% url 'search:adoption_pets' %}" style="  background-color: #F2CB05; border:#F2CB05;  color:#000;">Pets para Adoção</a></li>
-               <li class="nav-item"><a class="nav-link" href="{% url 'search:breeding_pets' %}"  style="  background-color: #e25d95; border:#e25d95;  color:#fff;">Pets para Cruzamento</a></li>
+            <ul class="navbar-nav bg-body-tertiary justify-content-end flex-grow-1 pe-3">
+               <li class="nav-item"><a class="nav-link" href="{% url 'search:lost_pets' %}" style="  background-color: #F2A649; border:#F2A649;  color:#FFF; margin: 5px">Pets Perdidos</a></li>
+               <li class="nav-item"><a class="nav-link" href="{% url 'search:adoption_pets' %}" style="  background-color: #F2CB05; border:#F2CB05;  color:#000; margin: 5px">Pets para Adoção</a></li>
+               <li class="nav-item"><a class="nav-link" href="{% url 'search:breeding_pets' %}"  style="  background-color: #e25d95; border:#e25d95;  color:#fff; margin: 5px">Pets para Cruzamento</a></li>
             </ul>
 
-            <ul class="navbar-nav ms-auto" style="display: none;">
+            <ul class="navbar-nav ms-auto " style="display: none;">
                {% if user.is_authenticated %}
                <li class="nav-item dropdown">
                   <a class="nav-link dropdown-toggle d-flex align-items-center gap-1" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">

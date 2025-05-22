@@ -176,6 +176,7 @@ document.addEventListener('DOMContentLoaded', function() {
           <div style="width: 220px">
             ${imagem ? `<img src="${imagem}" alt="${nome}" style="width:100%; height:120px; object-fit: cover; border-radius: 5px;" />` : ''}
             <h5 class="mt-2">${nome}</h5>
+            <p><strong>Local:</strong> {{ pet.lost_location }}</p>
             <a href="${popupUrl}" class="btn btn-outline-primary btn-sm"  style="  background-color: #FF5722; border:#FF5722;">Ver detalhes</a>
           </div>
         `;
